@@ -7,11 +7,8 @@ struct MainScene: Scene {
                 .frame(minWidth: 400, minHeight: 300)
         }
         .commands {
-            AboutCommand()
             SidebarCommands()
             ExportCommands()
-            AlwaysOnTopCommand()
-            MyCommands()
             CommandGroup(replacing: .newItem) { }
         }
 

@@ -22,19 +22,9 @@
 		4180AEDE283985190054FEA9 /* MyExportDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEDD283985190054FEA9 /* MyExportDocument.swift */; };
 		4180AEE128398F460054FEA9 /* PaneBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEE028398F460054FEA9 /* PaneBackground.swift */; };
 		4180AEE328398FE50054FEA9 /* Pane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEE228398FE50054FEA9 /* Pane.swift */; };
-		4180AEE728399E160054FEA9 /* MyCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEE628399E160054FEA9 /* MyCommands.swift */; };
-		4180AEEB2839A0280054FEA9 /* AboutCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEEA2839A0280054FEA9 /* AboutCommand.swift */; };
 		4180AEEE2839A0660054FEA9 /* Bundle+Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEED2839A0660054FEA9 /* Bundle+Name.swift */; };
 		4180AEF12839A0830054FEA9 /* Bundle+Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEF02839A0830054FEA9 /* Bundle+Version.swift */; };
 		4180AEF32839A0950054FEA9 /* Bundle+Copyright.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEF22839A0950054FEA9 /* Bundle+Copyright.swift */; };
-		4180AEF52839A1370054FEA9 /* NSWindow+AlwaysOnTop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEF42839A1370054FEA9 /* NSWindow+AlwaysOnTop.swift */; };
-		4180AEF92839A21F0054FEA9 /* AboutWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEF82839A21F0054FEA9 /* AboutWindow.swift */; };
-		4180AEFB2839A32F0054FEA9 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEFA2839A32F0054FEA9 /* AboutView.swift */; };
-		4180AEFE2839A3B30054FEA9 /* AttributionsWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEFD2839A3B30054FEA9 /* AttributionsWindow.swift */; };
-		4180AF022839A4BA0054FEA9 /* AttributionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AF012839A4BA0054FEA9 /* AttributionsView.swift */; };
-		4180AF052839A89A0054FEA9 /* DropTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AF042839A89A0054FEA9 /* DropTarget.swift */; };
-		4180AF072839AF320054FEA9 /* WindowReflection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AF062839AF320054FEA9 /* WindowReflection.swift */; };
-		4180AF092839B0870054FEA9 /* AlwaysOnTop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AF082839B0870054FEA9 /* AlwaysOnTop.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,19 +45,9 @@
 		4180AEDD283985190054FEA9 /* MyExportDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyExportDocument.swift; sourceTree = "<group>"; };
 		4180AEE028398F460054FEA9 /* PaneBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaneBackground.swift; sourceTree = "<group>"; };
 		4180AEE228398FE50054FEA9 /* Pane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pane.swift; sourceTree = "<group>"; };
-		4180AEE628399E160054FEA9 /* MyCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommands.swift; sourceTree = "<group>"; };
-		4180AEEA2839A0280054FEA9 /* AboutCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutCommand.swift; sourceTree = "<group>"; };
 		4180AEED2839A0660054FEA9 /* Bundle+Name.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Name.swift"; sourceTree = "<group>"; };
 		4180AEF02839A0830054FEA9 /* Bundle+Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Version.swift"; sourceTree = "<group>"; };
 		4180AEF22839A0950054FEA9 /* Bundle+Copyright.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Copyright.swift"; sourceTree = "<group>"; };
-		4180AEF42839A1370054FEA9 /* NSWindow+AlwaysOnTop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSWindow+AlwaysOnTop.swift"; sourceTree = "<group>"; };
-		4180AEF82839A21F0054FEA9 /* AboutWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutWindow.swift; sourceTree = "<group>"; };
-		4180AEFA2839A32F0054FEA9 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
-		4180AEFD2839A3B30054FEA9 /* AttributionsWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributionsWindow.swift; sourceTree = "<group>"; };
-		4180AF012839A4BA0054FEA9 /* AttributionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributionsView.swift; sourceTree = "<group>"; };
-		4180AF042839A89A0054FEA9 /* DropTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropTarget.swift; sourceTree = "<group>"; };
-		4180AF062839AF320054FEA9 /* WindowReflection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowReflection.swift; sourceTree = "<group>"; };
-		4180AF082839B0870054FEA9 /* AlwaysOnTop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlwaysOnTop.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -112,11 +92,8 @@
 			children = (
 				398DCB7A2C9A64DC00BB9310 /* Menu Bar */,
 				4180AEEC2839A0560054FEA9 /* Utilities */,
-				4180AF032839A87B0054FEA9 /* Custom Views */,
 				4180AEBE283976620054FEA9 /* Settings */,
 				4180AEE528399DDE0054FEA9 /* Export */,
-				4180AEF72839A2010054FEA9 /* About Window */,
-				4180AEE428399DC50054FEA9 /* My Menu Commands */,
 				4180AECA28397C3A0054FEA9 /* Panes */,
 				4180AEC3283979530054FEA9 /* MainView.swift */,
 				4180AEBC283975670054FEA9 /* MainScene.swift */,
@@ -166,14 +143,6 @@
 			path = "Pane Helper";
 			sourceTree = "<group>";
 		};
-		4180AEE428399DC50054FEA9 /* My Menu Commands */ = {
-			isa = PBXGroup;
-			children = (
-				4180AEE628399E160054FEA9 /* MyCommands.swift */,
-			);
-			path = "My Menu Commands";
-			sourceTree = "<group>";
-		};
 		4180AEE528399DDE0054FEA9 /* Export */ = {
 			isa = PBXGroup;
 			children = (
@@ -186,9 +155,7 @@
 		4180AEEC2839A0560054FEA9 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				4180AEF62839A13A0054FEA9 /* AppKit Extensions */,
 				4180AEEF2839A0720054FEA9 /* Bundle Extensions */,
-				4180AF062839AF320054FEA9 /* WindowReflection.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -201,43 +168,6 @@
 				4180AEF22839A0950054FEA9 /* Bundle+Copyright.swift */,
 			);
 			path = "Bundle Extensions";
-			sourceTree = "<group>";
-		};
-		4180AEF62839A13A0054FEA9 /* AppKit Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				4180AEF42839A1370054FEA9 /* NSWindow+AlwaysOnTop.swift */,
-			);
-			path = "AppKit Extensions";
-			sourceTree = "<group>";
-		};
-		4180AEF72839A2010054FEA9 /* About Window */ = {
-			isa = PBXGroup;
-			children = (
-				4180AEFC2839A3A80054FEA9 /* Attributions Window */,
-				4180AEEA2839A0280054FEA9 /* AboutCommand.swift */,
-				4180AEF82839A21F0054FEA9 /* AboutWindow.swift */,
-				4180AEFA2839A32F0054FEA9 /* AboutView.swift */,
-			);
-			path = "About Window";
-			sourceTree = "<group>";
-		};
-		4180AEFC2839A3A80054FEA9 /* Attributions Window */ = {
-			isa = PBXGroup;
-			children = (
-				4180AEFD2839A3B30054FEA9 /* AttributionsWindow.swift */,
-				4180AF012839A4BA0054FEA9 /* AttributionsView.swift */,
-			);
-			path = "Attributions Window";
-			sourceTree = "<group>";
-		};
-		4180AF032839A87B0054FEA9 /* Custom Views */ = {
-			isa = PBXGroup;
-			children = (
-				4180AF042839A89A0054FEA9 /* DropTarget.swift */,
-				4180AF082839B0870054FEA9 /* AlwaysOnTop.swift */,
-			);
-			path = "Custom Views";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -313,30 +243,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4180AF022839A4BA0054FEA9 /* AttributionsView.swift in Sources */,
 				4180AEC928397A0B0054FEA9 /* EmptyPane.swift in Sources */,
 				4180AEBD283975670054FEA9 /* MainScene.swift in Sources */,
 				4180AEF12839A0830054FEA9 /* Bundle+Version.swift in Sources */,
 				4180AEDC283984740054FEA9 /* ExportCommands.swift in Sources */,
-				4180AEFB2839A32F0054FEA9 /* AboutView.swift in Sources */,
 				4180AEEE2839A0660054FEA9 /* Bundle+Name.swift in Sources */,
 				4180AECE28397C880054FEA9 /* WhatsUpPane.swift in Sources */,
-				4180AF052839A89A0054FEA9 /* DropTarget.swift in Sources */,
-				4180AF092839B0870054FEA9 /* AlwaysOnTop.swift in Sources */,
 				4180AEC4283979530054FEA9 /* MainView.swift in Sources */,
 				4180AEE328398FE50054FEA9 /* Pane.swift in Sources */,
-				4180AF072839AF320054FEA9 /* WindowReflection.swift in Sources */,
 				4180AEC2283976F80054FEA9 /* GeneralSettingsView.swift in Sources */,
-				4180AEF52839A1370054FEA9 /* NSWindow+AlwaysOnTop.swift in Sources */,
-				4180AEF92839A21F0054FEA9 /* AboutWindow.swift in Sources */,
 				4180AEE128398F460054FEA9 /* PaneBackground.swift in Sources */,
 				4180AEDE283985190054FEA9 /* MyExportDocument.swift in Sources */,
 				4180AEF32839A0950054FEA9 /* Bundle+Copyright.swift in Sources */,
 				4180AED028397DB00054FEA9 /* MoreStuffPane.swift in Sources */,
 				4180AEC0283976740054FEA9 /* SettingsWindow.swift in Sources */,
-				4180AEFE2839A3B30054FEA9 /* AttributionsWindow.swift in Sources */,
-				4180AEE728399E160054FEA9 /* MyCommands.swift in Sources */,
-				4180AEEB2839A0280054FEA9 /* AboutCommand.swift in Sources */,
 				4180AEAE2839753E0054FEA9 /* Toki.swift in Sources */,
 				4180AECC28397C6F0054FEA9 /* HelloWorldPane.swift in Sources */,
 			);

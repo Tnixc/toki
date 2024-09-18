@@ -6,7 +6,6 @@ struct HelloWorldPane: View {
     Pane {
       VStack(spacing: 20) {
         Text("Hello, World!")
-        AlwaysOnTopCheckbox()
       }
     }
     .navigationSubtitle("Hello, World!")
