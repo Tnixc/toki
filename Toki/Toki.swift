@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct SidebarApp: App {
+struct Toki: App {
     
     /// Legacy app delegate.
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
