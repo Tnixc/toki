@@ -14,15 +14,10 @@
 		4180AEC0283976740054FEA9 /* SettingsWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEBF283976740054FEA9 /* SettingsWindow.swift */; };
 		4180AEC2283976F80054FEA9 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEC1283976F80054FEA9 /* GeneralSettingsView.swift */; };
 		4180AEC4283979530054FEA9 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEC3283979530054FEA9 /* MainView.swift */; };
-		4180AEC7283979FA0054FEA9 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEC6283979FA0054FEA9 /* Sidebar.swift */; };
 		4180AEC928397A0B0054FEA9 /* EmptyPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEC828397A0B0054FEA9 /* EmptyPane.swift */; };
 		4180AECC28397C6F0054FEA9 /* HelloWorldPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AECB28397C6F0054FEA9 /* HelloWorldPane.swift */; };
 		4180AECE28397C880054FEA9 /* WhatsUpPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AECD28397C880054FEA9 /* WhatsUpPane.swift */; };
 		4180AED028397DB00054FEA9 /* MoreStuffPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AECF28397DB00054FEA9 /* MoreStuffPane.swift */; };
-		4180AED228397F100054FEA9 /* GeneralSidebarSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AED128397F100054FEA9 /* GeneralSidebarSection.swift */; };
-		4180AED428397F790054FEA9 /* SidebarPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AED328397F790054FEA9 /* SidebarPane.swift */; };
-		4180AED7283980560054FEA9 /* MoreSidebarSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AED6283980560054FEA9 /* MoreSidebarSection.swift */; };
-		4180AED9283983150054FEA9 /* SidebarFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AED8283983150054FEA9 /* SidebarFooter.swift */; };
 		4180AEDC283984740054FEA9 /* ExportCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEDB283984740054FEA9 /* ExportCommands.swift */; };
 		4180AEDE283985190054FEA9 /* MyExportDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEDD283985190054FEA9 /* MyExportDocument.swift */; };
 		4180AEE128398F460054FEA9 /* PaneBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEE028398F460054FEA9 /* PaneBackground.swift */; };
@@ -54,15 +49,10 @@
 		4180AEBF283976740054FEA9 /* SettingsWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindow.swift; sourceTree = "<group>"; };
 		4180AEC1283976F80054FEA9 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		4180AEC3283979530054FEA9 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		4180AEC6283979FA0054FEA9 /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
 		4180AEC828397A0B0054FEA9 /* EmptyPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyPane.swift; sourceTree = "<group>"; };
 		4180AECB28397C6F0054FEA9 /* HelloWorldPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelloWorldPane.swift; sourceTree = "<group>"; };
 		4180AECD28397C880054FEA9 /* WhatsUpPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsUpPane.swift; sourceTree = "<group>"; };
 		4180AECF28397DB00054FEA9 /* MoreStuffPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreStuffPane.swift; sourceTree = "<group>"; };
-		4180AED128397F100054FEA9 /* GeneralSidebarSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSidebarSection.swift; sourceTree = "<group>"; };
-		4180AED328397F790054FEA9 /* SidebarPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarPane.swift; sourceTree = "<group>"; };
-		4180AED6283980560054FEA9 /* MoreSidebarSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreSidebarSection.swift; sourceTree = "<group>"; };
-		4180AED8283983150054FEA9 /* SidebarFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarFooter.swift; sourceTree = "<group>"; };
 		4180AEDB283984740054FEA9 /* ExportCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportCommands.swift; sourceTree = "<group>"; };
 		4180AEDD283985190054FEA9 /* MyExportDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyExportDocument.swift; sourceTree = "<group>"; };
 		4180AEE028398F460054FEA9 /* PaneBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaneBackground.swift; sourceTree = "<group>"; };
@@ -101,7 +91,9 @@
 				4180AEAC2839753E0054FEA9 /* Toki */,
 				4180AEAB2839753E0054FEA9 /* Products */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
 		};
 		4180AEAB2839753E0054FEA9 /* Products */ = {
 			isa = PBXGroup;
@@ -122,7 +114,6 @@
 				4180AF0D283A504E0054FEA9 /* Menu Bar Button */,
 				4180AEE428399DC50054FEA9 /* My Menu Commands */,
 				4180AECA28397C3A0054FEA9 /* Panes */,
-				4180AEC5283979E40054FEA9 /* Sidebar */,
 				4180AEC3283979530054FEA9 /* MainView.swift */,
 				4180AEBC283975670054FEA9 /* MainScene.swift */,
 				4180AEAD2839753E0054FEA9 /* Toki.swift */,
@@ -150,17 +141,6 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
-		4180AEC5283979E40054FEA9 /* Sidebar */ = {
-			isa = PBXGroup;
-			children = (
-				4180AED528397F8B0054FEA9 /* Sections */,
-				4180AEC6283979FA0054FEA9 /* Sidebar.swift */,
-				4180AED328397F790054FEA9 /* SidebarPane.swift */,
-				4180AED8283983150054FEA9 /* SidebarFooter.swift */,
-			);
-			path = Sidebar;
-			sourceTree = "<group>";
-		};
 		4180AECA28397C3A0054FEA9 /* Panes */ = {
 			isa = PBXGroup;
 			children = (
@@ -171,15 +151,6 @@
 				4180AEC828397A0B0054FEA9 /* EmptyPane.swift */,
 			);
 			path = Panes;
-			sourceTree = "<group>";
-		};
-		4180AED528397F8B0054FEA9 /* Sections */ = {
-			isa = PBXGroup;
-			children = (
-				4180AED128397F100054FEA9 /* GeneralSidebarSection.swift */,
-				4180AED6283980560054FEA9 /* MoreSidebarSection.swift */,
-			);
-			path = Sections;
 			sourceTree = "<group>";
 		};
 		4180AEDF28398F320054FEA9 /* Pane Helper */ = {
@@ -357,25 +328,20 @@
 				4180AEC4283979530054FEA9 /* MainView.swift in Sources */,
 				4180AEE328398FE50054FEA9 /* Pane.swift in Sources */,
 				4180AF11283A50770054FEA9 /* MenuBarPopup.swift in Sources */,
-				4180AEC7283979FA0054FEA9 /* Sidebar.swift in Sources */,
 				4180AF072839AF320054FEA9 /* WindowReflection.swift in Sources */,
 				4180AEC2283976F80054FEA9 /* GeneralSettingsView.swift in Sources */,
 				4180AEF52839A1370054FEA9 /* NSWindow+AlwaysOnTop.swift in Sources */,
 				4180AEF92839A21F0054FEA9 /* AboutWindow.swift in Sources */,
 				4180AEE128398F460054FEA9 /* PaneBackground.swift in Sources */,
-				4180AED7283980560054FEA9 /* MoreSidebarSection.swift in Sources */,
 				4180AEDE283985190054FEA9 /* MyExportDocument.swift in Sources */,
 				4180AF0F283A50660054FEA9 /* MenuBarButton.swift in Sources */,
 				4180AEF32839A0950054FEA9 /* Bundle+Copyright.swift in Sources */,
 				4180AED028397DB00054FEA9 /* MoreStuffPane.swift in Sources */,
 				4180AEC0283976740054FEA9 /* SettingsWindow.swift in Sources */,
-				4180AED9283983150054FEA9 /* SidebarFooter.swift in Sources */,
 				4180AEFE2839A3B30054FEA9 /* AttributionsWindow.swift in Sources */,
 				4180AEE728399E160054FEA9 /* MyCommands.swift in Sources */,
 				4180AEEB2839A0280054FEA9 /* AboutCommand.swift in Sources */,
-				4180AED228397F100054FEA9 /* GeneralSidebarSection.swift in Sources */,
 				4180AEAE2839753E0054FEA9 /* Toki.swift in Sources */,
-				4180AED428397F790054FEA9 /* SidebarPane.swift in Sources */,
 				4180AECC28397C6F0054FEA9 /* HelloWorldPane.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

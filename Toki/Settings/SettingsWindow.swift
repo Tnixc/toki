@@ -2,30 +2,30 @@ import SwiftUI
 
 struct SettingsWindow: View {
 
-    private enum Tabs: Hashable {
-        case general
-    }
+  private enum Tabs: Hashable {
+    case general
+  }
 
-    var body: some View {
-        TabView {
-            GeneralSettingsTab()
-                .tabItem {
-                    Label("General", systemImage: "gear")
-                }
-                .tag(Tabs.general)
+  var body: some View {
+    TabView {
+      GeneralSettingsTab()
+        .tabItem {
+          Label("General", systemImage: "gear")
         }
-        .padding(20)
-        .frame(width: 375, height: 150)
+        .tag(Tabs.general)
     }
-    
-    /// Show settings programmatically
-    static func show() {
-        NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
-    }
+    .padding(20)
+    .frame(width: 375, height: 150)
+  }
+
+  /// Show settings programmatically
+  static func show() {
+    NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
+  }
 }
 
 struct SettingsWindow_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsWindow()
-    }
+  static var previews: some View {
+    SettingsWindow()
+  }
 }

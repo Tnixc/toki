@@ -1,5 +1,5 @@
-import SwiftUI
 import AppKit
+import SwiftUI
 
 /// The WindowReflection is a view that peeks behind the curtain and finds the underlying NSWindow.
 ///
@@ -7,16 +7,16 @@ import AppKit
 /// .background(WindowReflection(window: $window))
 /// ```
 public struct WindowReflection: NSViewRepresentable {
-    
-    @Binding var window: NSWindow?
-    
-    public func makeNSView(context: Context) -> NSView {
-        let view = NSView()
-        DispatchQueue.main.async {
-            self.window = view.window
-        }
-        return view
+
+  @Binding var window: NSWindow?
+
+  public func makeNSView(context: Context) -> NSView {
+    let view = NSView()
+    DispatchQueue.main.async {
+      self.window = view.window
     }
-    
-    public func updateNSView(_ nsView: NSView, context: Context) {}
+    return view
+  }
+
+  public func updateNSView(_ nsView: NSView, context: Context) {}
 }
