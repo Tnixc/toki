@@ -4,7 +4,7 @@ struct MainScene: Scene {
   var body: some Scene {
     WindowGroup {
       MainView()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(minWidth: 300, maxWidth: .infinity, minHeight: 500, maxHeight: .infinity)
         .toolbar {
           Text("Hello world").monospaced()
         }
@@ -13,6 +13,7 @@ struct MainScene: Scene {
     .defaultSize(width: 800, height: 600)
     .windowStyle(.hiddenTitleBar)
     .windowToolbarStyle(.unified(showsTitle: false))
+    
     .commands {
       SidebarCommands()
       ExportCommands()

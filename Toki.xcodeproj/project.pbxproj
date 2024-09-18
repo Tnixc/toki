@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		39B90B9B2C9B07CE0002823D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 39B90B9A2C9B07CE0002823D /* SQLite */; };
+		39B90BA12C9B24A40002823D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 39B90BA02C9B24A40002823D /* SQLite */; };
 		4180AEAE2839753E0054FEA9 /* Toki.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEAD2839753E0054FEA9 /* Toki.swift */; };
 		4180AEB22839753F0054FEA9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4180AEB12839753F0054FEA9 /* Assets.xcassets */; };
 		4180AEB52839753F0054FEA9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4180AEB42839753F0054FEA9 /* Preview Assets.xcassets */; };
@@ -46,6 +48,11 @@
 			path = "Menu Bar";
 			sourceTree = "<group>";
 		};
+		39B90B9C2C9B1E1C0002823D /* Watcher */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Watcher;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +60,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39B90BA12C9B24A40002823D /* SQLite in Frameworks */,
+				39B90B9B2C9B07CE0002823D /* SQLite in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +89,7 @@
 		4180AEAC2839753E0054FEA9 /* Toki */ = {
 			isa = PBXGroup;
 			children = (
+				39B90B9C2C9B1E1C0002823D /* Watcher */,
 				398DCB7A2C9A64DC00BB9310 /* Menu Bar */,
 				4180AEEC2839A0560054FEA9 /* Utilities */,
 				4180AEBE283976620054FEA9 /* Settings */,
@@ -164,6 +174,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				398DCB7A2C9A64DC00BB9310 /* Menu Bar */,
+				39B90B9C2C9B1E1C0002823D /* Watcher */,
 			);
 			name = Toki;
 			productName = SidebarApp;
@@ -193,6 +204,9 @@
 				Base,
 			);
 			mainGroup = 4180AEA12839753E0054FEA9;
+			packageReferences = (
+				39B90B992C9B07CE0002823D /* XCRemoteSwiftPackageReference "SQLite.swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4180AEAB2839753E0054FEA9 /* Products */;
 			projectDirPath = "";
@@ -436,6 +450,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		39B90B992C9B07CE0002823D /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.15.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		39B90B9A2C9B07CE0002823D /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 39B90B992C9B07CE0002823D /* XCRemoteSwiftPackageReference "SQLite.swift" */;
+			productName = SQLite;
+		};
+		39B90BA02C9B24A40002823D /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 39B90B992C9B07CE0002823D /* XCRemoteSwiftPackageReference "SQLite.swift" */;
+			productName = SQLite;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4180AEA22839753E0054FEA9 /* Project object */;
 }
