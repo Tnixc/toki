@@ -14,14 +14,9 @@
 		4180AEC0283976740054FEA9 /* SettingsWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEBF283976740054FEA9 /* SettingsWindow.swift */; };
 		4180AEC2283976F80054FEA9 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEC1283976F80054FEA9 /* GeneralSettingsView.swift */; };
 		4180AEC4283979530054FEA9 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEC3283979530054FEA9 /* MainView.swift */; };
-		4180AEC928397A0B0054FEA9 /* EmptyPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEC828397A0B0054FEA9 /* EmptyPane.swift */; };
 		4180AECC28397C6F0054FEA9 /* HelloWorldPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AECB28397C6F0054FEA9 /* HelloWorldPane.swift */; };
-		4180AECE28397C880054FEA9 /* WhatsUpPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AECD28397C880054FEA9 /* WhatsUpPane.swift */; };
-		4180AED028397DB00054FEA9 /* MoreStuffPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AECF28397DB00054FEA9 /* MoreStuffPane.swift */; };
 		4180AEDC283984740054FEA9 /* ExportCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEDB283984740054FEA9 /* ExportCommands.swift */; };
 		4180AEDE283985190054FEA9 /* MyExportDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEDD283985190054FEA9 /* MyExportDocument.swift */; };
-		4180AEE128398F460054FEA9 /* PaneBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEE028398F460054FEA9 /* PaneBackground.swift */; };
-		4180AEE328398FE50054FEA9 /* Pane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEE228398FE50054FEA9 /* Pane.swift */; };
 		4180AEEE2839A0660054FEA9 /* Bundle+Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEED2839A0660054FEA9 /* Bundle+Name.swift */; };
 		4180AEF12839A0830054FEA9 /* Bundle+Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEF02839A0830054FEA9 /* Bundle+Version.swift */; };
 		4180AEF32839A0950054FEA9 /* Bundle+Copyright.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEF22839A0950054FEA9 /* Bundle+Copyright.swift */; };
@@ -37,14 +32,9 @@
 		4180AEBF283976740054FEA9 /* SettingsWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindow.swift; sourceTree = "<group>"; };
 		4180AEC1283976F80054FEA9 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		4180AEC3283979530054FEA9 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		4180AEC828397A0B0054FEA9 /* EmptyPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyPane.swift; sourceTree = "<group>"; };
 		4180AECB28397C6F0054FEA9 /* HelloWorldPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelloWorldPane.swift; sourceTree = "<group>"; };
-		4180AECD28397C880054FEA9 /* WhatsUpPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsUpPane.swift; sourceTree = "<group>"; };
-		4180AECF28397DB00054FEA9 /* MoreStuffPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreStuffPane.swift; sourceTree = "<group>"; };
 		4180AEDB283984740054FEA9 /* ExportCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportCommands.swift; sourceTree = "<group>"; };
 		4180AEDD283985190054FEA9 /* MyExportDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyExportDocument.swift; sourceTree = "<group>"; };
-		4180AEE028398F460054FEA9 /* PaneBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaneBackground.swift; sourceTree = "<group>"; };
-		4180AEE228398FE50054FEA9 /* Pane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pane.swift; sourceTree = "<group>"; };
 		4180AEED2839A0660054FEA9 /* Bundle+Name.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Name.swift"; sourceTree = "<group>"; };
 		4180AEF02839A0830054FEA9 /* Bundle+Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Version.swift"; sourceTree = "<group>"; };
 		4180AEF22839A0950054FEA9 /* Bundle+Copyright.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Copyright.swift"; sourceTree = "<group>"; };
@@ -125,22 +115,9 @@
 		4180AECA28397C3A0054FEA9 /* Panes */ = {
 			isa = PBXGroup;
 			children = (
-				4180AEDF28398F320054FEA9 /* Pane Helper */,
 				4180AECB28397C6F0054FEA9 /* HelloWorldPane.swift */,
-				4180AECD28397C880054FEA9 /* WhatsUpPane.swift */,
-				4180AECF28397DB00054FEA9 /* MoreStuffPane.swift */,
-				4180AEC828397A0B0054FEA9 /* EmptyPane.swift */,
 			);
 			path = Panes;
-			sourceTree = "<group>";
-		};
-		4180AEDF28398F320054FEA9 /* Pane Helper */ = {
-			isa = PBXGroup;
-			children = (
-				4180AEE028398F460054FEA9 /* PaneBackground.swift */,
-				4180AEE228398FE50054FEA9 /* Pane.swift */,
-			);
-			path = "Pane Helper";
 			sourceTree = "<group>";
 		};
 		4180AEE528399DDE0054FEA9 /* Export */ = {
@@ -243,19 +220,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4180AEC928397A0B0054FEA9 /* EmptyPane.swift in Sources */,
 				4180AEBD283975670054FEA9 /* MainScene.swift in Sources */,
 				4180AEF12839A0830054FEA9 /* Bundle+Version.swift in Sources */,
 				4180AEDC283984740054FEA9 /* ExportCommands.swift in Sources */,
 				4180AEEE2839A0660054FEA9 /* Bundle+Name.swift in Sources */,
-				4180AECE28397C880054FEA9 /* WhatsUpPane.swift in Sources */,
 				4180AEC4283979530054FEA9 /* MainView.swift in Sources */,
-				4180AEE328398FE50054FEA9 /* Pane.swift in Sources */,
 				4180AEC2283976F80054FEA9 /* GeneralSettingsView.swift in Sources */,
-				4180AEE128398F460054FEA9 /* PaneBackground.swift in Sources */,
 				4180AEDE283985190054FEA9 /* MyExportDocument.swift in Sources */,
 				4180AEF32839A0950054FEA9 /* Bundle+Copyright.swift in Sources */,
-				4180AED028397DB00054FEA9 /* MoreStuffPane.swift in Sources */,
 				4180AEC0283976740054FEA9 /* SettingsWindow.swift in Sources */,
 				4180AEAE2839753E0054FEA9 /* Toki.swift in Sources */,
 				4180AECC28397C6F0054FEA9 /* HelloWorldPane.swift in Sources */,
