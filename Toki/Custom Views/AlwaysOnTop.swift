@@ -3,23 +3,18 @@ import SwiftUI
 // MARK: - Always on Top
 
 /// Set this view as a background on e.g. the main view.
+
 struct AlwaysOnTop: View {
+    static let settingsKey = "window.setting.isAlwaysOnTop"
+    @SceneStorage(Self.settingsKey) var isAlwaysOnTop: Bool = false
 
-  static let settingsKey = "window.setting.isAlwaysOnTop"
-
-  @AppStorage(Self.settingsKey) var isAlwaysOnTop: Bool = false
-
-  @State var window: NSWindow?
-
-  var body: some View {
-    WindowReflection(window: $window)
-      .onReceive(window.publisher) { window in
-        window.alwaysOnTop = isAlwaysOnTop
-      }
-      .onChange(of: isAlwaysOnTop) { isOnTop in
-        window?.alwaysOnTop = isOnTop
-      }
-  }
+    var body: some View {
+        EmptyView()
+            .onChange(of: isAlwaysOnTop) { newValue in
+                guard let window = NSApp.windows.first else { return }
+                window.level = newValue ? .floating : .normal
+            }
+    }
 }
 
 // MARK: - Always on Top Command

@@ -35,8 +35,6 @@
 		4180AF052839A89A0054FEA9 /* DropTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AF042839A89A0054FEA9 /* DropTarget.swift */; };
 		4180AF072839AF320054FEA9 /* WindowReflection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AF062839AF320054FEA9 /* WindowReflection.swift */; };
 		4180AF092839B0870054FEA9 /* AlwaysOnTop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AF082839B0870054FEA9 /* AlwaysOnTop.swift */; };
-		4180AF0F283A50660054FEA9 /* MenuBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AF0E283A50660054FEA9 /* MenuBarButton.swift */; };
-		4180AF11283A50770054FEA9 /* MenuBarPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AF10283A50770054FEA9 /* MenuBarPopup.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,9 +68,15 @@
 		4180AF042839A89A0054FEA9 /* DropTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropTarget.swift; sourceTree = "<group>"; };
 		4180AF062839AF320054FEA9 /* WindowReflection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowReflection.swift; sourceTree = "<group>"; };
 		4180AF082839B0870054FEA9 /* AlwaysOnTop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlwaysOnTop.swift; sourceTree = "<group>"; };
-		4180AF0E283A50660054FEA9 /* MenuBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarButton.swift; sourceTree = "<group>"; };
-		4180AF10283A50770054FEA9 /* MenuBarPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarPopup.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		398DCB7A2C9A64DC00BB9310 /* Menu Bar */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Menu Bar";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		4180AEA72839753E0054FEA9 /* Frameworks */ = {
@@ -106,12 +110,12 @@
 		4180AEAC2839753E0054FEA9 /* Toki */ = {
 			isa = PBXGroup;
 			children = (
+				398DCB7A2C9A64DC00BB9310 /* Menu Bar */,
 				4180AEEC2839A0560054FEA9 /* Utilities */,
 				4180AF032839A87B0054FEA9 /* Custom Views */,
 				4180AEBE283976620054FEA9 /* Settings */,
 				4180AEE528399DDE0054FEA9 /* Export */,
 				4180AEF72839A2010054FEA9 /* About Window */,
-				4180AF0D283A504E0054FEA9 /* Menu Bar Button */,
 				4180AEE428399DC50054FEA9 /* My Menu Commands */,
 				4180AECA28397C3A0054FEA9 /* Panes */,
 				4180AEC3283979530054FEA9 /* MainView.swift */,
@@ -236,15 +240,6 @@
 			path = "Custom Views";
 			sourceTree = "<group>";
 		};
-		4180AF0D283A504E0054FEA9 /* Menu Bar Button */ = {
-			isa = PBXGroup;
-			children = (
-				4180AF0E283A50660054FEA9 /* MenuBarButton.swift */,
-				4180AF10283A50770054FEA9 /* MenuBarPopup.swift */,
-			);
-			path = "Menu Bar Button";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -259,6 +254,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				398DCB7A2C9A64DC00BB9310 /* Menu Bar */,
 			);
 			name = Toki;
 			productName = SidebarApp;
@@ -327,14 +325,12 @@
 				4180AF092839B0870054FEA9 /* AlwaysOnTop.swift in Sources */,
 				4180AEC4283979530054FEA9 /* MainView.swift in Sources */,
 				4180AEE328398FE50054FEA9 /* Pane.swift in Sources */,
-				4180AF11283A50770054FEA9 /* MenuBarPopup.swift in Sources */,
 				4180AF072839AF320054FEA9 /* WindowReflection.swift in Sources */,
 				4180AEC2283976F80054FEA9 /* GeneralSettingsView.swift in Sources */,
 				4180AEF52839A1370054FEA9 /* NSWindow+AlwaysOnTop.swift in Sources */,
 				4180AEF92839A21F0054FEA9 /* AboutWindow.swift in Sources */,
 				4180AEE128398F460054FEA9 /* PaneBackground.swift in Sources */,
 				4180AEDE283985190054FEA9 /* MyExportDocument.swift in Sources */,
-				4180AF0F283A50660054FEA9 /* MenuBarButton.swift in Sources */,
 				4180AEF32839A0950054FEA9 /* Bundle+Copyright.swift in Sources */,
 				4180AED028397DB00054FEA9 /* MoreStuffPane.swift in Sources */,
 				4180AEC0283976740054FEA9 /* SettingsWindow.swift in Sources */,
