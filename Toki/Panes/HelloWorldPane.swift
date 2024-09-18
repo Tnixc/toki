@@ -3,8 +3,8 @@ import SwiftUI
 struct HelloWorldPane: View {
 
   var body: some View {
-      VStack(spacing: 20) {
-        Text("Hello, World!")
+    VStack(spacing: 20) {
+      Text("Hello, World!")
     }
     .navigationSubtitle("Hello, World!")
   }

@@ -13,4 +13,5 @@ struct Toki: App {
     .menuBarExtraStyle(.window)
 
   }
+
 }

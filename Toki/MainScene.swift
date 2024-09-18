@@ -4,11 +4,13 @@ struct MainScene: Scene {
   var body: some Scene {
     WindowGroup {
       MainView()
-        .frame(minWidth: 400, minHeight: 300)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .toolbar {
           Text("Hello world").monospaced()
-        }.background(.ultraThinMaterial)
+        }
+        .background(VisualEffect().ignoresSafeArea())
     }
+    .defaultSize(width: 800, height: 600)
     .windowStyle(.hiddenTitleBar)
     .windowToolbarStyle(.unified(showsTitle: false))
     .commands {
@@ -21,4 +23,8 @@ struct MainScene: Scene {
       SettingsWindow()
     }
   }
+}
+struct VisualEffect: NSViewRepresentable {
+  func makeNSView(context: Self.Context) -> NSView { return NSVisualEffectView() }
+  func updateNSView(_ nsView: NSView, context: Context) {}
 }
