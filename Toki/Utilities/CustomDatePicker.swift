@@ -12,7 +12,7 @@ struct CustomDatePicker: View {
   }()
 
   var body: some View {
-    VStack(spacing: 20) {
+    VStack(alignment: .leading, spacing: 20) {
       HStack {
         NavigationButton(direction: .backward) {
           changeMonth(by: -1)
@@ -42,6 +42,7 @@ struct CustomDatePicker: View {
 
       LazyVGrid(
         columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 7),
+        alignment: .leading,
         spacing: 0
       ) {
         ForEach(0..<42, id: \.self) { index in
@@ -51,6 +52,7 @@ struct CustomDatePicker: View {
         }
       }
     }
+    .frame(width: 300, height: 350)
   }
 
   private func changeMonth(by value: Int) {
@@ -72,14 +74,14 @@ struct NavigationButton: View {
 
   var body: some View {
     Button(action: action) {
-      Image(
-        systemName: direction == .forward ? "arrow.right" : "arrow.left"
-      )
-      .frame(width: 44, height: 44)
+      Image(systemName: direction == .forward ? "arrow.right" : "arrow.left")
+        .fontWeight(.bold)
+        .frame(width: 44, height: 44)
+        .contentShape(Rectangle())
     }
     .buttonStyle(PlainButtonStyle())
     .cornerRadius(8)
-    .contentShape(Rectangle())
+
     .hoverEffect()
   }
 }
@@ -95,11 +97,14 @@ struct DateCell: View {
     if let date = getDate(for: index) {
       Button(action: {
         selectedDate = date
+
       }) {
         Text(String(calendar.component(.day, from: date)))
-          .frame(maxWidth: .infinity, maxHeight: .infinity)
-          .aspectRatio(1, contentMode: .fill)
+          .frame(width: 42, height: 42)
+
+          .contentShape(Rectangle())
       }
+
       .buttonStyle(PlainButtonStyle())
       .background(
         RoundedRectangle(cornerRadius: 8)
@@ -116,12 +121,11 @@ struct DateCell: View {
               == calendar.component(.month, from: currentMonth)
               ? .primary : .secondary
       )
-      .frame(height: 40)
+
       .hoverEffect()
     } else {
       Color.clear
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .aspectRatio(1, contentMode: .fill)
+        .frame(width: 40, height: 40)
     }
   }
 
