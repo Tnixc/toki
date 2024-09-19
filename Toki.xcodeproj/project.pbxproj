@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		39B90B9B2C9B07CE0002823D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 39B90B9A2C9B07CE0002823D /* SQLite */; };
 		39B90BA12C9B24A40002823D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 39B90BA02C9B24A40002823D /* SQLite */; };
+		39B90BA72C9B2BCE0002823D /* Hi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B90BA62C9B2BCA0002823D /* Hi.swift */; };
+		39B90BA92C9B6F0E0002823D /* TimelineViewDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B90BA82C9B6F0C0002823D /* TimelineViewDay.swift */; };
 		4180AEAE2839753E0054FEA9 /* Toki.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEAD2839753E0054FEA9 /* Toki.swift */; };
 		4180AEB22839753F0054FEA9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4180AEB12839753F0054FEA9 /* Assets.xcassets */; };
 		4180AEB52839753F0054FEA9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4180AEB42839753F0054FEA9 /* Preview Assets.xcassets */; };
@@ -25,6 +27,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		39B90BA62C9B2BCA0002823D /* Hi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hi.swift; sourceTree = "<group>"; };
+		39B90BA82C9B6F0C0002823D /* TimelineViewDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineViewDay.swift; sourceTree = "<group>"; };
 		4180AEAA2839753E0054FEA9 /* Toki.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Toki.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4180AEAD2839753E0054FEA9 /* Toki.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toki.swift; sourceTree = "<group>"; };
 		4180AEB12839753F0054FEA9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -51,6 +55,11 @@
 		39B90B9C2C9B1E1C0002823D /* Watcher */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Watcher;
+			sourceTree = "<group>";
+		};
+		39B90BA22C9B2B0A0002823D /* Reader */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Reader;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -89,6 +98,7 @@
 		4180AEAC2839753E0054FEA9 /* Toki */ = {
 			isa = PBXGroup;
 			children = (
+				39B90BA22C9B2B0A0002823D /* Reader */,
 				39B90B9C2C9B1E1C0002823D /* Watcher */,
 				398DCB7A2C9A64DC00BB9310 /* Menu Bar */,
 				4180AEEC2839A0560054FEA9 /* Utilities */,
@@ -125,6 +135,8 @@
 		4180AECA28397C3A0054FEA9 /* Panes */ = {
 			isa = PBXGroup;
 			children = (
+				39B90BA82C9B6F0C0002823D /* TimelineViewDay.swift */,
+				39B90BA62C9B2BCA0002823D /* Hi.swift */,
 				4180AECB28397C6F0054FEA9 /* HelloWorldPane.swift */,
 			);
 			path = Panes;
@@ -175,6 +187,7 @@
 			fileSystemSynchronizedGroups = (
 				398DCB7A2C9A64DC00BB9310 /* Menu Bar */,
 				39B90B9C2C9B1E1C0002823D /* Watcher */,
+				39B90BA22C9B2B0A0002823D /* Reader */,
 			);
 			name = Toki;
 			productName = SidebarApp;
@@ -189,7 +202,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1340;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					4180AEA92839753E0054FEA9 = {
 						CreatedOnToolsVersion = 13.4;
@@ -239,9 +252,11 @@
 				4180AEDC283984740054FEA9 /* ExportCommands.swift in Sources */,
 				4180AEEE2839A0660054FEA9 /* Bundle+Name.swift in Sources */,
 				4180AEC4283979530054FEA9 /* MainView.swift in Sources */,
+				39B90BA72C9B2BCE0002823D /* Hi.swift in Sources */,
 				4180AEC2283976F80054FEA9 /* GeneralSettingsView.swift in Sources */,
 				4180AEDE283985190054FEA9 /* MyExportDocument.swift in Sources */,
 				4180AEF32839A0950054FEA9 /* Bundle+Copyright.swift in Sources */,
+				39B90BA92C9B6F0E0002823D /* TimelineViewDay.swift in Sources */,
 				4180AEC0283976740054FEA9 /* SettingsWindow.swift in Sources */,
 				4180AEAE2839753E0054FEA9 /* Toki.swift in Sources */,
 				4180AECC28397C6F0054FEA9 /* HelloWorldPane.swift in Sources */,
@@ -255,6 +270,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -317,6 +333,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -373,6 +390,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Toki/Toki.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -383,6 +401,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Toki;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -403,6 +423,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Toki/Toki.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -413,6 +434,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Toki;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

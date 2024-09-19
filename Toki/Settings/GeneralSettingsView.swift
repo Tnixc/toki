@@ -5,21 +5,8 @@ struct GeneralSettingsTab: View {
   @AppStorage("settings.general.name") private var name: String = ""
 
   var body: some View {
-    Form {
-      Section {
-        TextField(
-          "Name:", text: $name,
-          onCommit: {
-            print("On commit!")
-          })
-        Text("This should describe the text field.")
-          .font(.caption)
-        Button(
-          "Apply",
-          action: {
-            print("Apply!")
-          })
-      }
+    VStack {
+      Text("Hello from settings")
     }
     .padding(20)
   }

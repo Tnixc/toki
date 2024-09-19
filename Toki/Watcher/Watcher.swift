@@ -1,5 +1,4 @@
 import AppKit
-import Foundation
 import SQLite
 
 typealias Expression = SQLite.Expression
