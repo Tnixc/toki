@@ -14,6 +14,7 @@ class TimelineViewDayLogic: ObservableObject {
   @Published var hoverPosition: CGFloat = 0
   @Published var selectedDate: DateComponents
   @Published var showDatePicker = false
+  @Published var currentHoverSegment: Int?
 
   let calendar = Calendar.current
   let day = Day()
@@ -51,6 +52,15 @@ class TimelineViewDayLogic: ObservableObject {
 
   func updateHoverPosition(at location: CGPoint, width: CGFloat) {
     hoverPosition = max(0, min(location.x, width))
+    let newSegment = segmentForLocation(location, width: width)
+    if newSegment != currentHoverSegment {
+      currentHoverSegment = newSegment
+      triggerHapticFeedback()
+    }
+  }
+
+  func segmentForLocation(_ location: CGPoint, width: CGFloat) -> Int {
+    Int((location.x / width) * CGFloat(segmentCount))
   }
 
   func xPositionForSegment(_ segment: Int, width: CGFloat) -> CGFloat {
@@ -166,6 +176,7 @@ class TimelineViewDayLogic: ObservableObject {
     let labels = hourLabels(for: width)
     return width / CGFloat(labels.count - 1)
   }
+
 }
 extension Array {
   func group<Key: Hashable>(by keyPath: (Element) -> Key) -> [Key: [Element]] {

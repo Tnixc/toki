@@ -184,6 +184,7 @@ struct TimelineViewDay: View {
           }
         case .ended:
           logic.isHovering = false
+          logic.currentHoverSegment = nil
         }
       }
       .frame(width: width, height: logic.timelineHeight)
