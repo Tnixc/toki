@@ -2,12 +2,12 @@ import SwiftUI
 
 struct TimelineViewDay: View {
   @State private var activities: [MinuteActivity] = []
-  @State private var hoveredApp: String = ""
+  @State private var hoveredSegment: Int? = nil
   @State private var hoverLocation: CGPoint?
-  @State private var isHoveredActivityDisplayed: Bool = false
   private let day = Day()
 
   private let timelineHeight: CGFloat = 100
+  private let segmentDuration: Int = 10  // 10-minute segments
 
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
@@ -38,14 +38,13 @@ struct TimelineViewDay: View {
               .frame(width: timelineWidth, height: timelineHeight)
 
             // Activity bars
-            ForEach(activities.indices, id: \.self) { index in
-              let activity = activities[index]
-              let xPosition = xPositionForDate(
-                activity.minute, width: timelineWidth)
-              let width = widthForDuration(1, totalWidth: timelineWidth)  // 1 minute duration
+            ForEach(0..<144, id: \.self) { segment in
+              let xPosition = xPositionForSegment(segment, width: timelineWidth)
+              let width = widthForSegment(width: timelineWidth)
+              let color = colorForSegment(segment)
 
               Rectangle()
-                .fill(isDisplayed(activity) ? Color.clear : Color.accentColor)
+                .fill(color)
                 .frame(width: width, height: timelineHeight)
                 .position(x: xPosition + width / 2, y: timelineHeight / 2)
             }
@@ -69,16 +68,15 @@ struct TimelineViewDay: View {
                 switch phase {
                 case .active(let location):
                   hoverLocation = location
-                  updateHoveredApp(at: location, width: timelineWidth)
+                  updateHoveredSegment(at: location, width: timelineWidth)
                 case .ended:
-                  hoveredApp = ""
+                  hoveredSegment = nil
                   hoverLocation = nil
-                  isHoveredActivityDisplayed = false
                 }
               }
 
             // Hover indicator
-            if let location = hoverLocation, !isHoveredActivityDisplayed {
+            if let location = hoverLocation {
               Rectangle()
                 .fill(Color.gray.opacity(0.3))
                 .frame(width: 2, height: timelineHeight)
@@ -88,35 +86,36 @@ struct TimelineViewDay: View {
           .frame(width: timelineWidth, height: timelineHeight)
           .border(Color.gray, width: 1)
 
-          if !isHoveredActivityDisplayed {
-            Text(hoveredApp)
-              .monospaced()
-              .font(.caption)
-              .padding(.top, 5)
+          if let segment = hoveredSegment {
+            VStack(alignment: .leading) {
+              Text(timeRangeForSegment(segment))
+                .font(.caption)
+                .monospaced()
+              ForEach(appsForSegment(segment), id: \.appName) { usage in
+                HStack {
+                  Text(usage.appName)
+                  Spacer()
+                  Text(formatDuration(usage.duration))
+                }
+                .font(.caption)
+                .monospaced()
+              }
+            }
+            .padding(.top, 5)
           }
         }
       }
     }
     .padding()
+    .frame(maxWidth: 600)
     .onAppear(perform: loadData)
   }
 
-  private func updateHoveredApp(at location: CGPoint, width: CGFloat) {
-    hoverLocation = location
-    let minute = Int((location.x / width) * 1440)
-    let date = Calendar.current.date(
-      byAdding: .minute, value: minute,
-      to: Calendar.current.startOfDay(for: Date()))!
-    if let activity = activities.first(where: {
-      $0.minute <= date && date < $0.minute.addingTimeInterval(60)
-    }) {
-      isHoveredActivityDisplayed = isDisplayed(activity)
-      hoveredApp = isHoveredActivityDisplayed ? "" : activity.appName
-    } else {
-      isHoveredActivityDisplayed = false
-      hoveredApp = ""
-    }
+  private func updateHoveredSegment(at location: CGPoint, width: CGFloat) {
+    let segment = Int((location.x / width) * 144)
+    hoveredSegment = segment
   }
+
   private func hourLabels(for width: CGFloat) -> [Int] {
     if width < 500 {
       return [0, 6, 12, 18, 24]
@@ -125,7 +124,6 @@ struct TimelineViewDay: View {
     }
   }
 
-  // New function to calculate the width for each hour label
   private func hourLabelWidth(for width: CGFloat) -> CGFloat {
     let labels = hourLabels(for: width)
     return width / CGFloat(labels.count - 1)
@@ -135,8 +133,27 @@ struct TimelineViewDay: View {
     activities = day.getActivityForDay(date: Date())
   }
 
-  private func isDisplayed(_ activity: MinuteActivity) -> Bool {
-    return activity.isIdle || activity.appName.lowercased() == "loginwindow"
+  private func colorForSegment(_ segment: Int) -> Color {
+    let startTime = Calendar.current.date(
+      byAdding: .minute, value: segment * segmentDuration,
+      to: Calendar.current.startOfDay(for: Date()))!
+    let endTime = startTime.addingTimeInterval(
+      TimeInterval(segmentDuration * 60))
+    let segmentActivities = activities.filter {
+      $0.minute >= startTime && $0.minute < endTime
+    }
+
+    if segmentActivities.allSatisfy({ $0.isIdle }) {
+      return Color.gray.opacity(0.3)
+    } else {
+      let mostUsedApp =
+        segmentActivities
+        .filter { !$0.isIdle }
+        .group(by: { $0.appName })
+        .max(by: { $0.value.count < $1.value.count })?
+        .key ?? "Unknown"
+      return colorForApp(mostUsedApp)
+    }
   }
 
   private func colorForApp(_ appName: String) -> Color {
@@ -145,14 +162,56 @@ struct TimelineViewDay: View {
     return Color(hue: hue, saturation: 0.7, brightness: 0.9)
   }
 
-  private func xPositionForDate(_ date: Date, width: CGFloat) -> CGFloat {
-    let calendar = Calendar.current
-    let components = calendar.dateComponents([.hour, .minute], from: date)
-    let totalMinutes = CGFloat(components.hour! * 60 + components.minute!)
-    return (totalMinutes / 1440.0) * width
+  private func xPositionForSegment(_ segment: Int, width: CGFloat) -> CGFloat {
+    return (CGFloat(segment) / 144.0) * width
   }
 
-  private func widthForDuration(_ minutes: Int, totalWidth: CGFloat) -> CGFloat {
-    return (CGFloat(minutes) / 1440.0) * totalWidth
+  private func widthForSegment(width: CGFloat) -> CGFloat {
+    return width / 144.0
+  }
+
+  private func timeRangeForSegment(_ segment: Int) -> String {
+    let startTime = Calendar.current.date(
+      byAdding: .minute, value: segment * segmentDuration,
+      to: Calendar.current.startOfDay(for: Date()))!
+    let endTime = startTime.addingTimeInterval(
+      TimeInterval(segmentDuration * 60))
+    let formatter = DateFormatter()
+    formatter.dateFormat = "HH:mm"
+    return
+      "\(formatter.string(from: startTime)) - \(formatter.string(from: endTime))"
+  }
+
+  private func appsForSegment(_ segment: Int) -> [AppUsage] {
+    let startTime = Calendar.current.date(
+      byAdding: .minute, value: segment * segmentDuration,
+      to: Calendar.current.startOfDay(for: Date()))!
+    let endTime = startTime.addingTimeInterval(
+      TimeInterval(segmentDuration * 60))
+    let segmentActivities = activities.filter {
+      $0.minute >= startTime && $0.minute < endTime
+    }
+
+    let appUsage =
+      segmentActivities
+      .filter { !$0.isIdle }
+      .group(by: { $0.appName })
+      .mapValues { activities in
+        TimeInterval(activities.count) * 60  // Each activity represents 1 minute
+      }
+
+    return appUsage.map { AppUsage(appName: $0.key, duration: $0.value) }
+      .sorted { $0.duration > $1.duration }
+  }
+
+  private func formatDuration(_ duration: TimeInterval) -> String {
+    let minutes = Int(duration) / 60
+    return "\(minutes) min"
+  }
+}
+
+extension Array {
+  func group<Key: Hashable>(by keyPath: (Element) -> Key) -> [Key: [Element]] {
+    return Dictionary(grouping: self, by: keyPath)
   }
 }
