@@ -60,7 +60,7 @@ class Watcher {
 
     do {
       try db.run(insert)
-      print("Logged activity: \(appName), Idle: \(idle)")
+      //      print("Logged activity: \(appName), Idle: \(idle)")
     } catch {
       print("Error inserting into database: \(error)")
     }

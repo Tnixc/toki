@@ -206,12 +206,17 @@ struct TimelineViewDay: View {
     .onChange(of: selectedDate) { newDate in
       loadData(for: newDate)
     }
-
+    .onChange(of: activities) { _ in
+      print("Activities changed, triggering view update")
+    }
   }
 
   // MARK: - Helper Methods
   private func updateHoverPosition(at location: CGPoint, width: CGFloat) {
     hoverPosition = max(0, min(location.x, width))
+  }
+  private var selectedDayStart: Date {
+    calendar.startOfDay(for: calendar.date(from: selectedDate) ?? Date())
   }
 
   private func hourLabels(for width: CGFloat) -> [Int] {
@@ -226,16 +231,16 @@ struct TimelineViewDay: View {
 
   private func loadData(for dateComponents: DateComponents) {
     if let date = calendar.date(from: dateComponents) {
-      print("Loading data for date: \(date)")
       activities = day.getActivityForDay(date: date)
-      print("Loaded \(activities.count) activities")
     }
   }
 
   private func changeDate(by days: Int) {
     if var newDate = calendar.date(from: selectedDate) {
-      newDate = calendar.date(byAdding: .day, value: days, to: newDate) ?? newDate
-      selectedDate = calendar.dateComponents([.year, .month, .day], from: newDate)
+      newDate =
+        calendar.date(byAdding: .day, value: days, to: newDate) ?? newDate
+      selectedDate = calendar.dateComponents(
+        [.year, .month, .day], from: newDate)
     }
   }
 
@@ -257,9 +262,9 @@ struct TimelineViewDay: View {
   }
 
   private func appsForSegment(_ segment: Int) -> [AppUsage] {
-    let startTime = Calendar.current.date(
+    let startTime = calendar.date(
       byAdding: .minute, value: segment * segmentDuration,
-      to: Calendar.current.startOfDay(for: Date())
+      to: selectedDayStart
     )!
     let endTime = startTime.addingTimeInterval(
       TimeInterval(segmentDuration * 60))
@@ -291,16 +296,17 @@ struct TimelineViewDay: View {
   }
 
   private func isSegmentActive(_ segment: Int) -> Bool {
-    let startTime = Calendar.current.date(
+    let startTime = calendar.date(
       byAdding: .minute, value: segment * segmentDuration,
-      to: Calendar.current.startOfDay(for: Date())
+      to: selectedDayStart
     )!
     let endTime = startTime.addingTimeInterval(
       TimeInterval(segmentDuration * 60))
     let segmentActivities = activities.filter {
       $0.minute >= startTime && $0.minute < endTime
     }
-    return segmentActivities.contains { !$0.isIdle }
+    let isActive = segmentActivities.contains { !$0.isIdle }
+    return isActive
   }
 
   private func mergeAdjacentSegments() -> [(Int, Int)] {

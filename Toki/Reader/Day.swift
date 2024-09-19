@@ -1,10 +1,15 @@
 import Foundation
 import SQLite
 
-struct MinuteActivity {
+struct MinuteActivity: Equatable {
   let minute: Date
   let appName: String
   let isIdle: Bool
+
+  static func == (lhs: MinuteActivity, rhs: MinuteActivity) -> Bool {
+    return lhs.minute == rhs.minute && lhs.appName == rhs.appName
+      && lhs.isIdle == rhs.isIdle
+  }
 }
 
 struct AppUsage {
@@ -30,7 +35,7 @@ class Day {
 
   func getActivityForDay(date: Date) -> [MinuteActivity] {
     let calendar = Calendar.current
-    let startOfDay = calendar.startOfDay(for: date)
+    let startOfDay = calendar.startOfDay(for: date)  // Use the provided date
     let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
 
     let query =
