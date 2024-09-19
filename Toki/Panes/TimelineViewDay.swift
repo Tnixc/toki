@@ -11,8 +11,8 @@ struct TimelineViewDay: View {
 
   // MARK: - Constants
   private let timelineHeight: CGFloat = 100
-  private let segmentDuration: Int = 10  // 10-minute segments
-  private let segmentCount: Int = 144  // 24 hours * 6 segments per hour
+  private let segmentDuration: Int = 20  // 20-minute segments
+  private let segmentCount: Int = 72  // 24 hours * 3 segments per hour
   private let hoverLineExtension: CGFloat = 10
 
   // MARK: - Body
@@ -35,37 +35,55 @@ struct TimelineViewDay: View {
                 .frame(width: hourLabelWidth(for: timelineWidth))
             }
           }
+          .padding(.vertical, 4)
           .frame(width: timelineWidth)
 
           // Timeline
           ZStack(alignment: .topLeading) {
             // Background
             RoundedRectangle(cornerRadius: 10)
-              .fill(
-                LinearGradient(
-                  gradient: Gradient(colors: [
-                    Color.blue.opacity(0.1),
-                    Color.blue.opacity(0.3),
-                  ]),
-                  startPoint: .top,
-                  endPoint: .bottom
-                )
-              )
+              .fill(Color.blue.opacity(0.1))
+
               .frame(width: timelineWidth, height: timelineHeight)
 
             // Activity bars
             ForEach(mergeAdjacentSegments(), id: \.0) {
-              startSegment, endSegment, opacity in
+              startSegment, endSegment in
               let startX = xPositionForSegment(
                 startSegment, width: timelineWidth)
               let endX = xPositionForSegment(
                 endSegment + 1, width: timelineWidth)
               let width = endX - startX
 
-              RoundedRectangle(cornerRadius: 5)
-                .fill(Color.blue.opacity(opacity))
-                .frame(width: width, height: timelineHeight)
-                .position(x: startX + width / 2, y: timelineHeight / 2)
+              ZStack {
+                RoundedRectangle(cornerRadius: 5)
+                  .fill(
+                    Gradient(colors: [
+                      Color.accentColor.opacity(0.8),
+                      Color.accentColor.opacity(0.7),
+                    ])
+                  )
+                  .padding(.vertical, hoverLineExtension)
+                  .frame(width: width, height: timelineHeight)
+
+                // Add the thin white gradient border
+                RoundedRectangle(cornerRadius: 5)
+                  .stroke(
+                    LinearGradient(
+                      gradient: Gradient(colors: [
+                        Color.gray.opacity(0.5),
+                        Color.clear.opacity(0.1),
+                      ]),
+                      startPoint: .top,
+                      endPoint: .bottom
+                    ),
+                    lineWidth: 1
+                  )
+                  .padding(.vertical, hoverLineExtension)
+                  .frame(width: width, height: timelineHeight)
+              }
+              .position(x: startX + width / 2, y: timelineHeight / 2)
+
             }
 
             // Hover overlay
@@ -100,31 +118,40 @@ struct TimelineViewDay: View {
           .clipShape(RoundedRectangle(cornerRadius: 10))
           .overlay(
             RoundedRectangle(cornerRadius: 10)
-              .stroke(Color.blue.opacity(0.3), lineWidth: 1)
+              .stroke(Color.accentColor.opacity(0.3), lineWidth: 1)
           )
           // Hover information
           VStack(alignment: .leading) {
             if isHovering {
               let segment = Int(
                 (hoverPosition / timelineWidth) * CGFloat(segmentCount))
-              Text(timeRangeForSegment(segment))
-                .font(.caption)
-                .monospaced()
-              ForEach(appsForSegment(segment), id: \.appName) { usage in
-                HStack {
-                  Text(usage.appName)
-                  Spacer()
-                  Text(formatDuration(usage.duration))
+              VStack(alignment: .leading, spacing: 4) {
+                Text(timeRangeForSegment(segment))
+                  .font(.caption)
+                  .monospaced()
+                ForEach(appsForSegment(segment), id: \.appName) { usage in
+                  HStack {
+                    Text(usage.appName)
+                    Spacer()
+                    Text(formatDuration(usage.duration))
+                  }
+                  .font(.caption)
+                  .monospaced()
                 }
-                .font(.caption)
-                .monospaced()
               }
+              .padding(8)
+              .background(.thickMaterial)
+              .cornerRadius(8)
+              .shadow(radius: 2)
+              .frame(maxWidth: 200)
+              .offset(
+                x: max(0, min(hoverPosition - 100, timelineWidth - 200)),
+                y: hoverLineExtension
+              )
+              .transition(.opacity)
             }
           }
-          .frame(height: 60)  // Fixed height to prevent layout shifts
-          .opacity(isHovering ? 1 : 0)
-          .animation(.easeInOut(duration: 0.1), value: isHovering)
-          .animation(.easeInOut(duration: 0.1), value: hoverPosition)
+
         }
       }
     }
@@ -206,33 +233,56 @@ struct TimelineViewDay: View {
       }
 
     return appUsage.map { AppUsage(appName: $0.key, duration: $0.value) }
-      .sorted { $0.duration > $1.duration }
+      .sorted { (usage1, usage2) -> Bool in
+        if usage1.duration == usage2.duration {
+          return usage1.appName < usage2.appName  // Sort alphabetically if durations are equal
+        }
+        return usage1.duration > usage2.duration  // Sort by duration (descending) otherwise
+      }
   }
 
   private func formatDuration(_ duration: TimeInterval) -> String {
     let minutes = Int(duration) / 60
     return "\(minutes) min"
   }
+  private func isSegmentActive(_ segment: Int) -> Bool {
+    let startTime = Calendar.current.date(
+      byAdding: .minute, value: segment * segmentDuration,
+      to: Calendar.current.startOfDay(for: Date())
+    )!
+    let endTime = startTime.addingTimeInterval(
+      TimeInterval(segmentDuration * 60))
+    let segmentActivities = activities.filter {
+      $0.minute >= startTime && $0.minute < endTime
+    }
+    return segmentActivities.contains { !$0.isIdle }
+  }
 
-  private func mergeAdjacentSegments() -> [(Int, Int, Double)] {
-    var mergedSegments: [(Int, Int, Double)] = []
-    var currentStart = 0
-    var currentOpacity = opacityForSegment(0)
+  private func mergeAdjacentSegments() -> [(Int, Int)] {
+    var mergedSegments: [(Int, Int)] = []
+    var currentStart: Int?
 
-    for segment in 1..<segmentCount {
-      let opacity = opacityForSegment(segment)
-      if opacity != currentOpacity {
-        mergedSegments.append((currentStart, segment - 1, currentOpacity))
-        currentStart = segment
-        currentOpacity = opacity
+    for segment in 0..<segmentCount {
+      if isSegmentActive(segment) {
+        if currentStart == nil {
+          currentStart = segment
+        }
+      } else {
+        if let start = currentStart {
+          mergedSegments.append((start, segment - 1))
+          currentStart = nil
+        }
       }
     }
 
-    // Add the last segment
-    mergedSegments.append((currentStart, segmentCount - 1, currentOpacity))
+    // Add the last segment if it's active
+    if let start = currentStart {
+      mergedSegments.append((start, segmentCount - 1))
+    }
 
     return mergedSegments
   }
+
 }
 
 // MARK: - Helper Extensions
