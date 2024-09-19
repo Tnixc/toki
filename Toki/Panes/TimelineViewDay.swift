@@ -1,360 +1,200 @@
 import SwiftUI
 
 struct TimelineViewDay: View {
-  // MARK: - Properties
-  @State private var activities: [MinuteActivity] = []
-  @State private var hoveredSegment: Int? = nil
-  @State private var isHovering: Bool = false
-  @State private var hoverPosition: CGFloat = 0
-  @State private var selectedDate: DateComponents
-  @State private var showDatePicker = false
+  @StateObject private var logic = TimelineViewDayLogic()
 
-  private let calendar = Calendar.current
-
-  init() {
-    let today = Date()
-    _selectedDate = State(
-      initialValue: calendar.dateComponents([.year, .month, .day], from: today))
-  }
-
-  private let day = Day()
-
-  // MARK: - Constants
-  private let timelineHeight: CGFloat = 100
-  private let segmentDuration: Int = 10  // 20-minute segments
-  private let segmentCount: Int = 144  // 24 hours * 6 segments per hour
-  private let hoverLineExtension: CGFloat = 10
-
-  // MARK: - Body
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
-      HStack {
-        Text("Timeline")
-          .font(.title)
-          .monospaced()
-
-        Spacer()
-
-        // Date navigation
-        HStack {
-          Button(action: { changeDate(by: -1) }) {
-            Image(systemName: "chevron.left")
-          }
-
-          Button(action: { showDatePicker.toggle() }) {
-            Text(dateString)
-              .monospaced()
-          }
-          .popover(isPresented: $showDatePicker) {
-            DatePicker(
-              "Select Date",
-              selection: Binding(
-                get: { calendar.date(from: selectedDate) ?? Date() },
-                set: { newDate in
-                  selectedDate = calendar.dateComponents(
-                    [.year, .month, .day], from: newDate)
-                }
-              ),
-              in: ...Date(),
-              displayedComponents: .date
-            )
-            .datePickerStyle(GraphicalDatePickerStyle())
-            .padding()
-          }
-          Button(action: { changeDate(by: 1) }) {
-            Image(systemName: "chevron.right")
-          }
-
-        }
-      }
+      headerView
 
       GeometryReader { geometry in
         let timelineWidth = geometry.size.width
 
         VStack(alignment: .leading, spacing: 0) {
-          // Hour labels
-
-          HStack(alignment: .top, spacing: 0) {
-            ForEach(hourLabels(for: timelineWidth), id: \.self) { hour in
-              Text("\(hour)")
-                .font(.subheadline)
-                .monospaced()
-                .frame(width: hourLabelWidth(for: timelineWidth))
-            }
-          }
-          .padding(.vertical, 4)
-          .frame(width: timelineWidth)
-
-          // Timeline
-          ZStack(alignment: .topLeading) {
-            if isHovering {
-              let segment = Int(
-                (hoverPosition / timelineWidth) * CGFloat(segmentCount))
-              VStack(alignment: .leading, spacing: 4) {
-                Text(timeRangeForSegment(segment))
-                  .font(.subheadline)
-                  .monospaced()
-                ForEach(appsForSegment(segment), id: \.appName) { usage in
-                  HStack {
-                    Text(usage.appName)
-                    Spacer()
-                    Text(formatDuration(usage.duration))
-                  }
-                  .font(.caption)
-                  .monospaced()
-                }
-              }
-              .zIndex(99)
-              .padding(8)
-              .background(.thickMaterial)
-              .cornerRadius(8)
-              .shadow(color: Color.black.opacity(0.1), radius: 8, y: 4)
-              .frame(maxWidth: 200)
-              .offset(
-                x: max(0, min(hoverPosition - 100, timelineWidth - 200)),
-                y: timelineHeight + hoverLineExtension
-              )
-              .transition(.opacity)
-            }
-
-            // Background
-            RoundedRectangle(cornerRadius: 10)
-              .fill(Color.blue.opacity(0.1))
-              .frame(width: timelineWidth, height: timelineHeight)
-
-            // Activity bars
-            ForEach(mergeAdjacentSegments(), id: \.0) {
-              startSegment, endSegment in
-              let startX = xPositionForSegment(
-                startSegment, width: timelineWidth)
-              let endX = xPositionForSegment(
-                endSegment + 1, width: timelineWidth)
-              let width = endX - startX
-
-              ZStack {
-                RoundedRectangle(cornerRadius: 5)
-                  .fill(
-                    Gradient(colors: [
-                      Color.accentColor.opacity(0.8),
-                      Color.accentColor.opacity(0.7),
-                    ])
-                  )
-                  .padding(.vertical, hoverLineExtension)
-                  .frame(width: width, height: timelineHeight)
-
-                // Add the thin white gradient border
-                RoundedRectangle(cornerRadius: 5)
-                  .stroke(
-                    LinearGradient(
-                      gradient: Gradient(colors: [
-                        Color.gray.opacity(0.5),
-                        Color.clear.opacity(0.1),
-                      ]),
-                      startPoint: .top,
-                      endPoint: .bottom
-                    ),
-                    lineWidth: 1
-                  )
-                  .padding(.vertical, hoverLineExtension)
-                  .frame(width: width, height: timelineHeight)
-              }
-              .position(x: startX + width / 2, y: timelineHeight / 2)
-
-            }
-            Rectangle()
-              .fill(Color.white.opacity(0.7))
-              .frame(width: 2, height: timelineHeight + 2 * hoverLineExtension)
-              .position(x: hoverPosition, y: timelineHeight / 2)
-              .opacity(isHovering ? 1 : 0)
-              .animation(.spring(duration: 0.5), value: isHovering)
-              .animation(.spring(duration: 0.5), value: hoverPosition)
-
-            // Hover overlay
-            Rectangle()
-              .fill(Color.clear)
-              .frame(width: timelineWidth, height: timelineHeight)
-              .contentShape(Rectangle())
-              .onContinuousHover { phase in
-                switch phase {
-                case .active(let location):
-                  withAnimation(.spring(duration: 0.1)) {
-                    isHovering = true
-                    updateHoverPosition(at: location, width: timelineWidth)
-                  }
-                case .ended:
-                  isHovering = false
-                }
-
-              }
-              .frame(width: timelineWidth, height: timelineHeight)
-              .clipShape(RoundedRectangle(cornerRadius: 10))
-              .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                  .stroke(Color.accentColor.opacity(0.3), lineWidth: 1)
-              )
-            // Hover information
-          }
-
+          hourLabelsView(width: timelineWidth)
+          timelineView(width: timelineWidth)
         }
       }
     }
     .padding()
     .frame(maxWidth: 600)
     .onAppear {
-      loadData(for: selectedDate)
+      logic.loadData(for: logic.selectedDate)
     }
-    .onChange(of: selectedDate) { newDate in
-      loadData(for: newDate)
-    }
-    .onChange(of: activities) { _ in
-      print("Activities changed, triggering view update")
+    .onChange(of: logic.selectedDate) { newDate in
+      logic.loadData(for: newDate)
     }
   }
 
-  // MARK: - Helper Methods
-  private func updateHoverPosition(at location: CGPoint, width: CGFloat) {
-    hoverPosition = max(0, min(location.x, width))
-  }
-  private var selectedDayStart: Date {
-    calendar.startOfDay(for: calendar.date(from: selectedDate) ?? Date())
-  }
-
-  private func hourLabels(for width: CGFloat) -> [Int] {
-    width < 500
-      ? [0, 6, 12, 18, 24] : stride(from: 0, through: 24, by: 2).map { $0 }
-  }
-
-  private func hourLabelWidth(for width: CGFloat) -> CGFloat {
-    let labels = hourLabels(for: width)
-    return width / CGFloat(labels.count - 1)
-  }
-
-  private func loadData(for dateComponents: DateComponents) {
-    if let date = calendar.date(from: dateComponents) {
-      activities = day.getActivityForDay(date: date)
+  private var headerView: some View {
+    HStack {
+      Text("Timeline").font(.title).monospaced()
+      Spacer()
+      dateNavigationView
     }
   }
 
-  private func changeDate(by days: Int) {
-    if var newDate = calendar.date(from: selectedDate) {
-      newDate =
-        calendar.date(byAdding: .day, value: days, to: newDate) ?? newDate
-      selectedDate = calendar.dateComponents(
-        [.year, .month, .day], from: newDate)
-    }
-  }
-
-  private func xPositionForSegment(_ segment: Int, width: CGFloat) -> CGFloat {
-    (CGFloat(segment) / CGFloat(segmentCount)) * width
-  }
-
-  private func timeRangeForSegment(_ segment: Int) -> String {
-    let startTime = Calendar.current.date(
-      byAdding: .minute, value: segment * segmentDuration,
-      to: Calendar.current.startOfDay(for: Date())
-    )!
-    let endTime = startTime.addingTimeInterval(
-      TimeInterval(segmentDuration * 60))
-    let formatter = DateFormatter()
-    formatter.dateFormat = "HH:mm"
-    return
-      "\(formatter.string(from: startTime)) - \(formatter.string(from: endTime))"
-  }
-
-  private func appsForSegment(_ segment: Int) -> [AppUsage] {
-    let startTime = calendar.date(
-      byAdding: .minute, value: segment * segmentDuration,
-      to: selectedDayStart
-    )!
-    let endTime = startTime.addingTimeInterval(
-      TimeInterval(segmentDuration * 60))
-    let segmentActivities = activities.filter {
-      $0.minute >= startTime && $0.minute < endTime
-    }
-
-    let appUsage =
-      segmentActivities
-      .filter { !$0.isIdle }
-      .group(by: { $0.appName })
-      .mapValues { activities in
-        TimeInterval(activities.count) * 60  // Each activity represents 1 minute
+  private var dateNavigationView: some View {
+    HStack {
+      Button(action: { logic.changeDate(by: -1) }) {
+        Image(systemName: "chevron.left")
       }
 
-    let v = appUsage.map { AppUsage(appName: $0.key, duration: $0.value) }
-      .sorted { (usage1, usage2) -> Bool in
-        if usage1.duration == usage2.duration {
-          return usage1.appName < usage2.appName  // Sort alphabetically if durations are equal
+      Button(action: { logic.showDatePicker.toggle() }) {
+        Text(logic.dateString).monospaced()
+      }
+      .popover(isPresented: $logic.showDatePicker) {
+        DatePicker(
+          "Select Date",
+          selection: Binding(
+            get: { logic.calendar.date(from: logic.selectedDate) ?? Date() },
+            set: { newDate in
+              logic.selectedDate = logic.calendar.dateComponents(
+                [.year, .month, .day], from: newDate)
+            }
+          ),
+          in: ...Date(),
+          displayedComponents: .date
+        )
+        .datePickerStyle(GraphicalDatePickerStyle())
+        .padding()
+      }
+
+      Button(action: { logic.changeDate(by: 1) }) {
+        Image(systemName: "chevron.right")
+      }
+    }
+  }
+
+  private func hourLabelsView(width: CGFloat) -> some View {
+    HStack(alignment: .top, spacing: 0) {
+      ForEach(logic.hourLabels(for: width), id: \.self) { hour in
+        Text("\(hour)")
+          .font(.subheadline)
+          .monospaced()
+          .frame(width: logic.hourLabelWidth(for: width))
+      }
+    }
+    .padding(.vertical, 4)
+    .frame(width: width)
+  }
+
+  private func timelineView(width: CGFloat) -> some View {
+    ZStack(alignment: .topLeading) {
+      hoverInformationView(width: width)
+      backgroundView(width: width)
+      activityBarsView(width: width)
+      hoverLineView(width: width)
+      hoverOverlayView(width: width)
+    }
+  }
+
+  private func hoverInformationView(width: CGFloat) -> some View {
+    Group {
+      if logic.isHovering {
+        let segment = Int(
+          (logic.hoverPosition / width) * CGFloat(logic.segmentCount))
+        VStack(alignment: .leading, spacing: 4) {
+          Text(logic.timeRangeForSegment(segment))
+            .font(.subheadline)
+            .monospaced()
+          ForEach(logic.appsForSegment(segment), id: \.appName) { usage in
+            HStack {
+              Text(usage.appName)
+              Spacer()
+              Text(logic.formatDuration(usage.duration))
+            }
+            .font(.caption)
+            .monospaced()
+          }
         }
-        return usage1.duration > usage2.duration  // Sort by duration (descending) otherwise
+        .zIndex(99)
+        .padding(8)
+        .background(.thickMaterial)
+        .cornerRadius(8)
+        .shadow(color: Color.black.opacity(0.1), radius: 8, y: 4)
+        .frame(maxWidth: 200)
+        .offset(
+          x: max(0, min(logic.hoverPosition - 100, width - 200)),
+          y: logic.timelineHeight + logic.hoverLineExtension
+        )
+        .transition(.opacity)
       }
-    return v.filter { ($0.appName) != "loginwindow" }
-  }
-
-  private func formatDuration(_ duration: TimeInterval) -> String {
-    let minutes = Int(duration) / 60
-    return "\(minutes) min"
-  }
-
-  private func isSegmentActive(_ segment: Int) -> Bool {
-    let startTime = calendar.date(
-      byAdding: .minute, value: segment * segmentDuration,
-      to: selectedDayStart
-    )!
-    let endTime = startTime.addingTimeInterval(
-      TimeInterval(segmentDuration * 60))
-    let segmentActivities = activities.filter {
-      $0.minute >= startTime && $0.minute < endTime
     }
-    let isActive = segmentActivities.contains { !$0.isIdle }
-    return isActive
   }
 
-  private func mergeAdjacentSegments() -> [(Int, Int)] {
-    var mergedSegments: [(Int, Int)] = []
-    var currentStart: Int?
+  private func backgroundView(width: CGFloat) -> some View {
+    RoundedRectangle(cornerRadius: 10)
+      .fill(Color.blue.opacity(0.1))
+      .frame(width: width, height: logic.timelineHeight)
+  }
 
-    for segment in 0..<segmentCount {
-      if isSegmentActive(segment) {
-        if currentStart == nil {
-          currentStart = segment
+  private func activityBarsView(width: CGFloat) -> some View {
+    ForEach(logic.mergeAdjacentSegments(), id: \.0) {
+      startSegment, endSegment in
+      let startX = logic.xPositionForSegment(startSegment, width: width)
+      let endX = logic.xPositionForSegment(endSegment + 1, width: width)
+      let barWidth = endX - startX
+
+      ZStack {
+        RoundedRectangle(cornerRadius: 5)
+          .fill(
+            Gradient(colors: [
+              Color.accentColor.opacity(0.8), Color.accentColor.opacity(0.7),
+            ])
+          )
+          .padding(.vertical, logic.hoverLineExtension)
+          .frame(width: barWidth, height: logic.timelineHeight)
+
+        RoundedRectangle(cornerRadius: 5)
+          .stroke(
+            LinearGradient(
+              gradient: Gradient(colors: [
+                Color.gray.opacity(0.5), Color.clear.opacity(0.1),
+              ]),
+              startPoint: .top,
+              endPoint: .bottom),
+            lineWidth: 1
+          )
+          .padding(.vertical, logic.hoverLineExtension)
+          .frame(width: barWidth, height: logic.timelineHeight)
+      }
+      .position(x: startX + barWidth / 2, y: logic.timelineHeight / 2)
+    }
+  }
+
+  private func hoverLineView(width: CGFloat) -> some View {
+    Rectangle()
+      .fill(Color.white.opacity(0.7))
+      .frame(
+        width: 2, height: logic.timelineHeight + 2 * logic.hoverLineExtension
+      )
+      .position(x: logic.hoverPosition, y: logic.timelineHeight / 2)
+      .opacity(logic.isHovering ? 1 : 0)
+      .animation(.spring(duration: 0.5), value: logic.isHovering)
+      .animation(.spring(duration: 0.5), value: logic.hoverPosition)
+  }
+
+  private func hoverOverlayView(width: CGFloat) -> some View {
+    Rectangle()
+      .fill(Color.clear)
+      .frame(width: width, height: logic.timelineHeight)
+      .contentShape(Rectangle())
+      .onContinuousHover { phase in
+        switch phase {
+        case .active(let location):
+          withAnimation(.spring(duration: 0.1)) {
+            logic.isHovering = true
+            logic.updateHoverPosition(at: location, width: width)
+          }
+        case .ended:
+          logic.isHovering = false
         }
-      } else {
-        if let start = currentStart {
-          mergedSegments.append((start, segment - 1))
-          currentStart = nil
-        }
       }
-    }
-
-    // Add the last segment if it's active
-    if let start = currentStart {
-      mergedSegments.append((start, segmentCount - 1))
-    }
-
-    return mergedSegments
-  }
-  private var dateString: String {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .medium
-    formatter.timeStyle = .none
-
-    if let date = calendar.date(from: selectedDate) {
-      if calendar.isDateInToday(date) {
-        return "Today"
-      } else if calendar.isDateInYesterday(date) {
-        return "Yesterday"
-      } else {
-        return formatter.string(from: date)
-      }
-    }
-    return "Unknown"
-  }
-
-}
-
-// MARK: - Helper Extensions
-extension Array {
-  func group<Key: Hashable>(by keyPath: (Element) -> Key) -> [Key: [Element]] {
-    return Dictionary(grouping: self, by: keyPath)
+      .frame(width: width, height: logic.timelineHeight)
+      .clipShape(RoundedRectangle(cornerRadius: 10))
+      .overlay(
+        RoundedRectangle(cornerRadius: 10).stroke(
+          Color.accentColor.opacity(0.3), lineWidth: 1))
   }
 }
