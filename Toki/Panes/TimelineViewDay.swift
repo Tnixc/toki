@@ -3,11 +3,13 @@ import SwiftUI
 struct TimelineViewDay: View {
   @State private var activities: [MinuteActivity] = []
   @State private var hoveredSegment: Int? = nil
-  @State private var hoverLocation: CGPoint?
+  @State private var isHovering: Bool = false
   private let day = Day()
 
   private let timelineHeight: CGFloat = 100
-  private let segmentDuration: Int = 10  // 10-minute segments
+  private let segmentDuration: Int = 10  // 20-minute segments
+  private let segmentCount: Int = 144  // 24 hours * 3 segments per hour
+  private let hoverLineExtension: CGFloat = 20
 
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
@@ -33,26 +35,34 @@ struct TimelineViewDay: View {
           // Timeline
           ZStack(alignment: .topLeading) {
             // Background
-            Rectangle()
-              .fill(Color.gray.opacity(0.1))
+            RoundedRectangle(cornerRadius: 10)
+              .fill(
+                LinearGradient(
+                  gradient: Gradient(colors: [
+                    Color.blue.opacity(0.1), Color.blue.opacity(0.3),
+                  ]), startPoint: .top, endPoint: .bottom)
+              )
               .frame(width: timelineWidth, height: timelineHeight)
 
             // Activity bars
-            ForEach(0..<144, id: \.self) { segment in
-              let xPosition = xPositionForSegment(segment, width: timelineWidth)
-              let width = widthForSegment(width: timelineWidth)
-              let color = colorForSegment(segment)
+            ForEach(mergeAdjacentSegments(), id: \.0) {
+              startSegment, endSegment, opacity in
+              let startX = xPositionForSegment(
+                startSegment, width: timelineWidth)
+              let endX = xPositionForSegment(
+                endSegment + 1, width: timelineWidth)
+              let width = endX - startX
 
-              Rectangle()
-                .fill(color)
+              RoundedRectangle(cornerRadius: 5)
+                .fill(Color.blue.opacity(opacity))
                 .frame(width: width, height: timelineHeight)
-                .position(x: xPosition + width / 2, y: timelineHeight / 2)
+                .position(x: startX + width / 2, y: timelineHeight / 2)
             }
 
             // Hour separators
             ForEach(1..<24) { hour in
               Rectangle()
-                .fill(Color.gray.opacity(0.5))
+                .fill(Color.white.opacity(0.5))
                 .frame(width: 1, height: timelineHeight)
                 .position(
                   x: CGFloat(hour) * (timelineWidth / 24), y: timelineHeight / 2
@@ -67,26 +77,31 @@ struct TimelineViewDay: View {
               .onContinuousHover { phase in
                 switch phase {
                 case .active(let location):
-                  hoverLocation = location
+                  isHovering = true
                   updateHoveredSegment(at: location, width: timelineWidth)
                 case .ended:
                   hoveredSegment = nil
-                  hoverLocation = nil
+                  isHovering = false
                 }
               }
 
-            // Hover indicator
-            if let location = hoverLocation {
-              Rectangle()
-                .fill(Color.gray.opacity(0.3))
-                .frame(width: 2, height: timelineHeight)
-                .position(x: location.x, y: timelineHeight / 2)
-            }
           }
           .frame(width: timelineWidth, height: timelineHeight)
-          .border(Color.gray, width: 1)
+          .clipShape(RoundedRectangle(cornerRadius: 10))
+          .overlay(
+            RoundedRectangle(cornerRadius: 10)
+              .stroke(Color.blue.opacity(0.3), lineWidth: 1)
+          )
+          if let segment = hoveredSegment, isHovering {
+            let xPosition = xPositionForSegment(segment, width: timelineWidth)
+            Rectangle()
+              .fill(Color.white.opacity(0.7))
+              .frame(width: 2, height: timelineHeight + 2 * hoverLineExtension)
+              .position(x: xPosition, y: timelineHeight / -2)
+              .offset(y: hoverLineExtension / 2)
+          }
 
-          if let segment = hoveredSegment {
+          if let segment = hoveredSegment, isHovering {
             VStack(alignment: .leading) {
               Text(timeRangeForSegment(segment))
                 .font(.caption)
@@ -112,8 +127,8 @@ struct TimelineViewDay: View {
   }
 
   private func updateHoveredSegment(at location: CGPoint, width: CGFloat) {
-    let segment = Int((location.x / width) * 144)
-    hoveredSegment = segment
+    let segment = Int((location.x / width) * CGFloat(segmentCount))
+    hoveredSegment = max(0, min(segment, segmentCount - 1))
   }
 
   private func hourLabels(for width: CGFloat) -> [Int] {
@@ -162,12 +177,28 @@ struct TimelineViewDay: View {
     return Color(hue: hue, saturation: 0.7, brightness: 0.9)
   }
 
+  private func opacityForSegment(_ segment: Int) -> Double {
+    let startTime = Calendar.current.date(
+      byAdding: .minute, value: segment * segmentDuration,
+      to: Calendar.current.startOfDay(for: Date()))!
+    let endTime = startTime.addingTimeInterval(
+      TimeInterval(segmentDuration * 60))
+    let segmentActivities = activities.filter {
+      $0.minute >= startTime && $0.minute < endTime
+    }
+
+    let activeCount = segmentActivities.filter { !$0.isIdle }.count
+    let totalCount = segmentActivities.count
+
+    return totalCount > 0 ? Double(activeCount) / Double(totalCount) : 0
+  }
+
   private func xPositionForSegment(_ segment: Int, width: CGFloat) -> CGFloat {
-    return (CGFloat(segment) / 144.0) * width
+    return (CGFloat(segment) / CGFloat(segmentCount)) * width
   }
 
   private func widthForSegment(width: CGFloat) -> CGFloat {
-    return width / 144.0
+    return width / CGFloat(segmentCount)
   }
 
   private func timeRangeForSegment(_ segment: Int) -> String {
@@ -208,6 +239,26 @@ struct TimelineViewDay: View {
     let minutes = Int(duration) / 60
     return "\(minutes) min"
   }
+  private func mergeAdjacentSegments() -> [(Int, Int, Double)] {
+    var mergedSegments: [(Int, Int, Double)] = []
+    var currentStart = 0
+    var currentOpacity = opacityForSegment(0)
+
+    for segment in 1..<segmentCount {
+      let opacity = opacityForSegment(segment)
+      if opacity != currentOpacity {
+        mergedSegments.append((currentStart, segment - 1, currentOpacity))
+        currentStart = segment
+        currentOpacity = opacity
+      }
+    }
+
+    // Add the last segment
+    mergedSegments.append((currentStart, segmentCount - 1, currentOpacity))
+
+    return mergedSegments
+  }
+
 }
 
 extension Array {
