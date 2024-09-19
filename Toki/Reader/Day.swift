@@ -45,14 +45,18 @@ class Day {
 
     do {
       for activity in try db.prepare(query) {
-        let activityMinute = calendar.date(bySetting: .second, value: 0, of: activity[timestamp])!
+        let activityMinute = calendar.date(
+          bySetting: .second, value: 0, of: activity[timestamp])!
 
         if currentMinute != activityMinute {
           if let minute = currentMinute {
-            let mostUsedApp = currentMinuteApps.max(by: { $0.value < $1.value })?.key ?? "Unknown"
+            let mostUsedApp =
+              currentMinuteApps.max(by: { $0.value < $1.value })?.key
+              ?? "Unknown"
             let isIdle = currentMinuteIdleCount > 5  // More than half of the checks were idle
             minuteActivities.append(
-              MinuteActivity(minute: minute, appName: mostUsedApp, isIdle: isIdle))
+              MinuteActivity(
+                minute: minute, appName: mostUsedApp, isIdle: isIdle))
           }
 
           currentMinute = activityMinute
@@ -68,7 +72,8 @@ class Day {
 
       // Add the last minute
       if let minute = currentMinute {
-        let mostUsedApp = currentMinuteApps.max(by: { $0.value < $1.value })?.key ?? "Unknown"
+        let mostUsedApp =
+          currentMinuteApps.max(by: { $0.value < $1.value })?.key ?? "Unknown"
         let isIdle = currentMinuteIdleCount > 5
         minuteActivities.append(
           MinuteActivity(minute: minute, appName: mostUsedApp, isIdle: isIdle))
@@ -112,8 +117,10 @@ class Day {
       print("Error querying database: \(error)")
     }
 
-    let sortedUsage = appUsage.map { AppUsage(appName: $0.key, duration: $0.value) }
-      .sorted { $0.duration > $1.duration }
+    let sortedUsage = appUsage.map {
+      AppUsage(appName: $0.key, duration: $0.value)
+    }
+    .sorted { $0.duration > $1.duration }
 
     return sortedUsage
   }

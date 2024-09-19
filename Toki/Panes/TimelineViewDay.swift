@@ -6,21 +6,67 @@ struct TimelineViewDay: View {
   @State private var hoveredSegment: Int? = nil
   @State private var isHovering: Bool = false
   @State private var hoverPosition: CGFloat = 0
+  @State private var selectedDate: DateComponents
+  @State private var showDatePicker = false
+
+  private let calendar = Calendar.current
+
+  init() {
+    let today = Date()
+    _selectedDate = State(
+      initialValue: calendar.dateComponents([.year, .month, .day], from: today))
+  }
 
   private let day = Day()
 
   // MARK: - Constants
   private let timelineHeight: CGFloat = 100
   private let segmentDuration: Int = 10  // 20-minute segments
-  private let segmentCount: Int = 144  // 24 hours * 3 segments per hour
+  private let segmentCount: Int = 144  // 24 hours * 6 segments per hour
   private let hoverLineExtension: CGFloat = 10
 
   // MARK: - Body
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
-      Text("Today's Timeline")
-        .font(.title)
-        .monospaced()
+      HStack {
+        Text("Timeline")
+          .font(.title)
+          .monospaced()
+
+        Spacer()
+
+        // Date navigation
+        HStack {
+          Button(action: { changeDate(by: -1) }) {
+            Image(systemName: "chevron.left")
+          }
+
+          Button(action: { showDatePicker.toggle() }) {
+            Text(dateString)
+              .monospaced()
+          }
+          .popover(isPresented: $showDatePicker) {
+            DatePicker(
+              "Select Date",
+              selection: Binding(
+                get: { calendar.date(from: selectedDate) ?? Date() },
+                set: { newDate in
+                  selectedDate = calendar.dateComponents(
+                    [.year, .month, .day], from: newDate)
+                }
+              ),
+              in: ...Date(),
+              displayedComponents: .date
+            )
+            .datePickerStyle(GraphicalDatePickerStyle())
+            .padding()
+          }
+          Button(action: { changeDate(by: 1) }) {
+            Image(systemName: "chevron.right")
+          }
+
+        }
+      }
 
       GeometryReader { geometry in
         let timelineWidth = geometry.size.width
@@ -122,6 +168,7 @@ struct TimelineViewDay: View {
               .opacity(isHovering ? 1 : 0)
               .animation(.spring(duration: 0.5), value: isHovering)
               .animation(.spring(duration: 0.5), value: hoverPosition)
+
             // Hover overlay
             Rectangle()
               .fill(Color.clear)
@@ -153,7 +200,12 @@ struct TimelineViewDay: View {
     }
     .padding()
     .frame(maxWidth: 600)
-    .onAppear(perform: loadData)
+    .onAppear {
+      loadData(for: selectedDate)
+    }
+    .onChange(of: selectedDate) { newDate in
+      loadData(for: newDate)
+    }
 
   }
 
@@ -172,8 +224,19 @@ struct TimelineViewDay: View {
     return width / CGFloat(labels.count - 1)
   }
 
-  private func loadData() {
-    activities = day.getActivityForDay(date: Date())
+  private func loadData(for dateComponents: DateComponents) {
+    if let date = calendar.date(from: dateComponents) {
+      print("Loading data for date: \(date)")
+      activities = day.getActivityForDay(date: date)
+      print("Loaded \(activities.count) activities")
+    }
+  }
+
+  private func changeDate(by days: Int) {
+    if var newDate = calendar.date(from: selectedDate) {
+      newDate = calendar.date(byAdding: .day, value: days, to: newDate) ?? newDate
+      selectedDate = calendar.dateComponents([.year, .month, .day], from: newDate)
+    }
   }
 
   private func xPositionForSegment(_ segment: Int, width: CGFloat) -> CGFloat {
@@ -212,19 +275,21 @@ struct TimelineViewDay: View {
         TimeInterval(activities.count) * 60  // Each activity represents 1 minute
       }
 
-    return appUsage.map { AppUsage(appName: $0.key, duration: $0.value) }
+    let v = appUsage.map { AppUsage(appName: $0.key, duration: $0.value) }
       .sorted { (usage1, usage2) -> Bool in
         if usage1.duration == usage2.duration {
           return usage1.appName < usage2.appName  // Sort alphabetically if durations are equal
         }
         return usage1.duration > usage2.duration  // Sort by duration (descending) otherwise
       }
+    return v.filter { ($0.appName) != "loginwindow" }
   }
 
   private func formatDuration(_ duration: TimeInterval) -> String {
     let minutes = Int(duration) / 60
     return "\(minutes) min"
   }
+
   private func isSegmentActive(_ segment: Int) -> Bool {
     let startTime = Calendar.current.date(
       byAdding: .minute, value: segment * segmentDuration,
@@ -261,6 +326,22 @@ struct TimelineViewDay: View {
     }
 
     return mergedSegments
+  }
+  private var dateString: String {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .medium
+    formatter.timeStyle = .none
+
+    if let date = calendar.date(from: selectedDate) {
+      if calendar.isDateInToday(date) {
+        return "Today"
+      } else if calendar.isDateInYesterday(date) {
+        return "Yesterday"
+      } else {
+        return formatter.string(from: date)
+      }
+    }
+    return "Unknown"
   }
 
 }
