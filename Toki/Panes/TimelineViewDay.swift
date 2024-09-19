@@ -11,8 +11,8 @@ struct TimelineViewDay: View {
 
   // MARK: - Constants
   private let timelineHeight: CGFloat = 100
-  private let segmentDuration: Int = 20  // 20-minute segments
-  private let segmentCount: Int = 72  // 24 hours * 3 segments per hour
+  private let segmentDuration: Int = 10  // 20-minute segments
+  private let segmentCount: Int = 144  // 24 hours * 3 segments per hour
   private let hoverLineExtension: CGFloat = 10
 
   // MARK: - Body
@@ -27,10 +27,11 @@ struct TimelineViewDay: View {
 
         VStack(alignment: .leading, spacing: 0) {
           // Hour labels
+
           HStack(alignment: .top, spacing: 0) {
             ForEach(hourLabels(for: timelineWidth), id: \.self) { hour in
               Text("\(hour)")
-                .font(.caption)
+                .font(.subheadline)
                 .monospaced()
                 .frame(width: hourLabelWidth(for: timelineWidth))
             }
@@ -40,10 +41,39 @@ struct TimelineViewDay: View {
 
           // Timeline
           ZStack(alignment: .topLeading) {
+            if isHovering {
+              let segment = Int(
+                (hoverPosition / timelineWidth) * CGFloat(segmentCount))
+              VStack(alignment: .leading, spacing: 4) {
+                Text(timeRangeForSegment(segment))
+                  .font(.subheadline)
+                  .monospaced()
+                ForEach(appsForSegment(segment), id: \.appName) { usage in
+                  HStack {
+                    Text(usage.appName)
+                    Spacer()
+                    Text(formatDuration(usage.duration))
+                  }
+                  .font(.caption)
+                  .monospaced()
+                }
+              }
+              .zIndex(99)
+              .padding(8)
+              .background(.thickMaterial)
+              .cornerRadius(8)
+              .shadow(color: Color.black.opacity(0.1), radius: 8, y: 4)
+              .frame(maxWidth: 200)
+              .offset(
+                x: max(0, min(hoverPosition - 100, timelineWidth - 200)),
+                y: timelineHeight + hoverLineExtension
+              )
+              .transition(.opacity)
+            }
+
             // Background
             RoundedRectangle(cornerRadius: 10)
               .fill(Color.blue.opacity(0.1))
-
               .frame(width: timelineWidth, height: timelineHeight)
 
             // Activity bars
@@ -85,7 +115,13 @@ struct TimelineViewDay: View {
               .position(x: startX + width / 2, y: timelineHeight / 2)
 
             }
-
+            Rectangle()
+              .fill(Color.white.opacity(0.7))
+              .frame(width: 2, height: timelineHeight + 2 * hoverLineExtension)
+              .position(x: hoverPosition, y: timelineHeight / 2)
+              .opacity(isHovering ? 1 : 0)
+              .animation(.spring(duration: 0.5), value: isHovering)
+              .animation(.spring(duration: 0.5), value: hoverPosition)
             // Hover overlay
             Rectangle()
               .fill(Color.clear)
@@ -94,62 +130,22 @@ struct TimelineViewDay: View {
               .onContinuousHover { phase in
                 switch phase {
                 case .active(let location):
-                  withAnimation(.easeInOut(duration: 0.1)) {
+                  withAnimation(.spring(duration: 0.1)) {
                     isHovering = true
                     updateHoverPosition(at: location, width: timelineWidth)
                   }
                 case .ended:
-                  withAnimation(.easeInOut(duration: 0.1)) {
-                    isHovering = false
-                  }
+                  isHovering = false
                 }
-              }
 
-            // Hover indicator
-            Rectangle()
-              .fill(Color.white.opacity(0.7))
-              .frame(width: 2, height: timelineHeight + 2 * hoverLineExtension)
-              .position(x: hoverPosition, y: timelineHeight / 2)
-              .opacity(isHovering ? 1 : 0)
-              .animation(.easeInOut(duration: 0.5), value: isHovering)
-              .animation(.easeInOut(duration: 0.5), value: hoverPosition)
-          }
-          .frame(width: timelineWidth, height: timelineHeight)
-          .clipShape(RoundedRectangle(cornerRadius: 10))
-          .overlay(
-            RoundedRectangle(cornerRadius: 10)
-              .stroke(Color.accentColor.opacity(0.3), lineWidth: 1)
-          )
-          // Hover information
-          VStack(alignment: .leading) {
-            if isHovering {
-              let segment = Int(
-                (hoverPosition / timelineWidth) * CGFloat(segmentCount))
-              VStack(alignment: .leading, spacing: 4) {
-                Text(timeRangeForSegment(segment))
-                  .font(.caption)
-                  .monospaced()
-                ForEach(appsForSegment(segment), id: \.appName) { usage in
-                  HStack {
-                    Text(usage.appName)
-                    Spacer()
-                    Text(formatDuration(usage.duration))
-                  }
-                  .font(.caption)
-                  .monospaced()
-                }
               }
-              .padding(8)
-              .background(.thickMaterial)
-              .cornerRadius(8)
-              .shadow(radius: 2)
-              .frame(maxWidth: 200)
-              .offset(
-                x: max(0, min(hoverPosition - 100, timelineWidth - 200)),
-                y: hoverLineExtension
+              .frame(width: timelineWidth, height: timelineHeight)
+              .clipShape(RoundedRectangle(cornerRadius: 10))
+              .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                  .stroke(Color.accentColor.opacity(0.3), lineWidth: 1)
               )
-              .transition(.opacity)
-            }
+            // Hover information
           }
 
         }
@@ -158,6 +154,7 @@ struct TimelineViewDay: View {
     .padding()
     .frame(maxWidth: 600)
     .onAppear(perform: loadData)
+
   }
 
   // MARK: - Helper Methods
@@ -177,23 +174,6 @@ struct TimelineViewDay: View {
 
   private func loadData() {
     activities = day.getActivityForDay(date: Date())
-  }
-
-  private func opacityForSegment(_ segment: Int) -> Double {
-    let startTime = Calendar.current.date(
-      byAdding: .minute, value: segment * segmentDuration,
-      to: Calendar.current.startOfDay(for: Date())
-    )!
-    let endTime = startTime.addingTimeInterval(
-      TimeInterval(segmentDuration * 60))
-    let segmentActivities = activities.filter {
-      $0.minute >= startTime && $0.minute < endTime
-    }
-
-    let activeCount = segmentActivities.filter { !$0.isIdle }.count
-    let totalCount = segmentActivities.count
-
-    return totalCount > 0 ? Double(activeCount) / Double(totalCount) : 0
   }
 
   private func xPositionForSegment(_ segment: Int, width: CGFloat) -> CGFloat {
