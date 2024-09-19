@@ -3,6 +3,7 @@
 ## Core
 
 - [ ] Frontmost app tracking
+- [ ] Purge function (old and reguarly)
 - [ ] Idle detection
 - [ ] Day view
 - [ ] Clock in and clock out
@@ -13,6 +14,7 @@
 - [ ] Clock in reminders via notifications
 - [ ] Clock out reminders via overlay
 - [ ] Data export to CSV
+- [ ] Updater
 
 ## Extras
 
