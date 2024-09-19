@@ -4,6 +4,8 @@ struct TimelineViewDay: View {
   @State private var activities: [MinuteActivity] = []
   @State private var hoveredSegment: Int? = nil
   @State private var isHovering: Bool = false
+  @State private var hoverPosition: CGFloat = 0
+
   private let day = Day()
 
   private let timelineHeight: CGFloat = 100
@@ -78,9 +80,8 @@ struct TimelineViewDay: View {
                 switch phase {
                 case .active(let location):
                   isHovering = true
-                  updateHoveredSegment(at: location, width: timelineWidth)
+                  updateHoverPosition(at: location, width: timelineWidth)
                 case .ended:
-                  hoveredSegment = nil
                   isHovering = false
                 }
               }
@@ -92,16 +93,18 @@ struct TimelineViewDay: View {
             RoundedRectangle(cornerRadius: 10)
               .stroke(Color.blue.opacity(0.3), lineWidth: 1)
           )
-          if let segment = hoveredSegment, isHovering {
-            let xPosition = xPositionForSegment(segment, width: timelineWidth)
+
+          if isHovering {
             Rectangle()
               .fill(Color.white.opacity(0.7))
               .frame(width: 2, height: timelineHeight + 2 * hoverLineExtension)
-              .position(x: xPosition, y: timelineHeight / -2)
-              .offset(y: hoverLineExtension / 2)
+              .position(x: hoverPosition, y: timelineHeight / 2)
+              .animation(.interactiveSpring(), value: hoverPosition)
           }
 
-          if let segment = hoveredSegment, isHovering {
+          if isHovering {
+            let segment = Int(
+              (hoverPosition / timelineWidth) * CGFloat(segmentCount))
             VStack(alignment: .leading) {
               Text(timeRangeForSegment(segment))
                 .font(.caption)
@@ -117,6 +120,8 @@ struct TimelineViewDay: View {
               }
             }
             .padding(.top, 5)
+            .transition(.opacity)
+            .animation(.easeInOut(duration: 0.2), value: segment)
           }
         }
       }
@@ -126,9 +131,8 @@ struct TimelineViewDay: View {
     .onAppear(perform: loadData)
   }
 
-  private func updateHoveredSegment(at location: CGPoint, width: CGFloat) {
-    let segment = Int((location.x / width) * CGFloat(segmentCount))
-    hoveredSegment = max(0, min(segment, segmentCount - 1))
+  private func updateHoverPosition(at location: CGPoint, width: CGFloat) {
+    hoverPosition = max(0, min(location.x, width))
   }
 
   private func hourLabels(for width: CGFloat) -> [Int] {
