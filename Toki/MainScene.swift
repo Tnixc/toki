@@ -8,14 +8,14 @@ struct MainScene: Scene {
           minWidth: 300, maxWidth: .infinity, minHeight: 500,
           maxHeight: .infinity
         )
-      
+
         .toolbar {
           Text("Hello world").monospaced()
         }
-      
+
         .background(VisualEffect().ignoresSafeArea())
     }
-    
+
     .defaultSize(width: 800, height: 600)
     .windowStyle(.hiddenTitleBar)
     .windowToolbarStyle(.unified(showsTitle: false))

@@ -11,7 +11,7 @@ struct Hi: View {
       VStack(alignment: .leading, spacing: 20) {
         Text("Today's Activity")
           .font(.title)
-        
+
         ForEach(activities, id: \.minute) { activity in
           HStack {
             Text(formatDate(activity.minute))
