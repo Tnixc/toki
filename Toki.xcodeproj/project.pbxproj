@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		39B14DB32C9CE173003A457D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B14DB12C9CE173003A457D /* Utils.swift */; };
 		39B14DBB2C9CE1A9003A457D /* TimelineViewDayLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B14DBA2C9CE1A9003A457D /* TimelineViewDayLogic.swift */; };
+		39B14DBD2C9CE3DD003A457D /* CustomDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B14DBC2C9CE3DD003A457D /* CustomDatePicker.swift */; };
 		39B90B9B2C9B07CE0002823D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 39B90B9A2C9B07CE0002823D /* SQLite */; };
 		39B90BA12C9B24A40002823D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 39B90BA02C9B24A40002823D /* SQLite */; };
 		39B90BA92C9B6F0E0002823D /* TimelineViewDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B90BA82C9B6F0C0002823D /* TimelineViewDay.swift */; };
@@ -27,7 +29,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		39B14DB12C9CE173003A457D /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		39B14DBA2C9CE1A9003A457D /* TimelineViewDayLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineViewDayLogic.swift; sourceTree = "<group>"; };
+		39B14DBC2C9CE3DD003A457D /* CustomDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDatePicker.swift; sourceTree = "<group>"; };
 		39B90BA82C9B6F0C0002823D /* TimelineViewDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineViewDay.swift; sourceTree = "<group>"; };
 		4180AEAA2839753E0054FEA9 /* Toki.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Toki.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4180AEAD2839753E0054FEA9 /* Toki.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toki.swift; sourceTree = "<group>"; };
@@ -154,7 +158,9 @@
 		4180AEEC2839A0560054FEA9 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				39B14DBC2C9CE3DD003A457D /* CustomDatePicker.swift */,
 				4180AEEF2839A0720054FEA9 /* Bundle Extensions */,
+				39B14DB12C9CE173003A457D /* Utils.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -249,6 +255,7 @@
 			files = (
 				4180AEBD283975670054FEA9 /* MainScene.swift in Sources */,
 				4180AEF12839A0830054FEA9 /* Bundle+Version.swift in Sources */,
+				39B14DBD2C9CE3DD003A457D /* CustomDatePicker.swift in Sources */,
 				4180AEDC283984740054FEA9 /* ExportCommands.swift in Sources */,
 				4180AEEE2839A0660054FEA9 /* Bundle+Name.swift in Sources */,
 				4180AEC4283979530054FEA9 /* MainView.swift in Sources */,
@@ -260,6 +267,7 @@
 				4180AEC0283976740054FEA9 /* SettingsWindow.swift in Sources */,
 				4180AEAE2839753E0054FEA9 /* Toki.swift in Sources */,
 				4180AECC28397C6F0054FEA9 /* HelloWorldPane.swift in Sources */,
+				39B14DB32C9CE173003A457D /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

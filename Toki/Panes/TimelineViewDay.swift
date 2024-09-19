@@ -44,22 +44,17 @@ struct TimelineViewDay: View {
         Text(logic.dateString).monospaced()
       }
       .popover(isPresented: $logic.showDatePicker) {
-        DatePicker(
-          "Select Date",
-          selection: Binding(
+        CustomDatePicker(
+          selectedDate: Binding(
             get: { logic.calendar.date(from: logic.selectedDate) ?? Date() },
             set: { newDate in
               logic.selectedDate = logic.calendar.dateComponents(
                 [.year, .month, .day], from: newDate)
             }
-          ),
-          in: ...Date(),
-          displayedComponents: .date
+          )
         )
-        .datePickerStyle(GraphicalDatePickerStyle())
         .padding()
       }
-
       Button(action: { logic.changeDate(by: 1) }) {
         Image(systemName: "chevron.right")
       }
