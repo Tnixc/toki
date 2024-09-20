@@ -184,7 +184,7 @@ struct TimelineViewDay: View {
       let barWidth = endX - startX
 
       ZStack {
-        // This creates the joined appearance
+        // Outer shape (joined appearance)
         RoundedRectangle(cornerRadius: 5)
           .fill(Color.clear)
           .padding(.vertical, logic.hoverLineExtension)
@@ -200,11 +200,14 @@ struct TimelineViewDay: View {
                     Color.gray.opacity(0.5), Color.clear.opacity(0.1),
                   ]),
                   startPoint: .top,
-                  endPoint: .bottom),
+                  endPoint: .bottom
+                ),
                 lineWidth: 1
-              ).padding(.vertical, logic.hoverLineExtension / 2)
+              )
+              .padding(.vertical, logic.hoverLineExtension / 2)
           )
-        // This creates the individual colored segments
+
+        // Inner colored segments
         HStack(spacing: 0) {
           ForEach(startSegment...endSegment, id: \.self) { segment in
             Rectangle()
