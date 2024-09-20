@@ -30,8 +30,9 @@ class Watcher {
   }
 
   func start() {
-    timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(INTERVAL), repeats: true) {
-      [weak self] _ in
+    timer = Timer.scheduledTimer(
+      withTimeInterval: TimeInterval(INTERVAL), repeats: true
+    ) { [weak self] _ in
       self?.checkActivity()
     }
   }
@@ -40,7 +41,6 @@ class Watcher {
     timer?.invalidate()
     timer = nil
   }
-
   private func checkActivity() {
     let frontmostApp = NSWorkspace.shared.frontmostApplication
     let appName = frontmostApp?.localizedName ?? "Unknown"
@@ -61,7 +61,6 @@ class Watcher {
       )
       do {
         try db.run(insert)
-        //      print("Logged activity: \(appName), Idle: \(idle)")
       } catch {
         print("Error inserting into database: \(error)")
       }
