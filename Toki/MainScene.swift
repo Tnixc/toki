@@ -31,6 +31,7 @@ struct MainScene: Scene {
     }
   }
 }
+
 struct VisualEffect: NSViewRepresentable {
   func makeNSView(context: Self.Context) -> NSView {
     return NSVisualEffectView()

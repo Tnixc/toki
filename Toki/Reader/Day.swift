@@ -1,13 +1,13 @@
 import Foundation
 import SQLite
 
-struct MinuteActivity: Equatable {
-  let minute: Date
+struct ActivityEntry: Equatable {
+  let timestamp: Date
   let appName: String
   let isIdle: Bool
 
-  static func == (lhs: MinuteActivity, rhs: MinuteActivity) -> Bool {
-    return lhs.minute == rhs.minute && lhs.appName == rhs.appName
+  static func == (lhs: ActivityEntry, rhs: ActivityEntry) -> Bool {
+    return lhs.timestamp == rhs.timestamp && lhs.appName == rhs.appName
       && lhs.isIdle == rhs.isIdle
   }
 }
@@ -28,14 +28,13 @@ class Day {
     let path = NSSearchPathForDirectoriesInDomains(
       .documentDirectory, .userDomainMask, true
     ).first!
-
     db = try! Connection("\(path)/activities.sqlite3")
     activities = Table("activities")
   }
 
-  func getActivityForDay(date: Date) -> [MinuteActivity] {
+  func getActivityForDay(date: Date) -> [ActivityEntry] {
     let calendar = Calendar.current
-    let startOfDay = calendar.startOfDay(for: date)  // Use the provided date
+    let startOfDay = calendar.startOfDay(for: date)
     let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
 
     let query =
@@ -43,51 +42,22 @@ class Day {
       .filter(timestamp >= startOfDay && timestamp < endOfDay)
       .order(timestamp.asc)
 
-    var minuteActivities: [MinuteActivity] = []
-    var currentMinute: Date?
-    var currentMinuteApps: [String: Int] = [:]
-    var currentMinuteIdleCount = 0
+    var activityEntries: [ActivityEntry] = []
 
     do {
       for activity in try db.prepare(query) {
-        let activityMinute = calendar.date(
-          bySetting: .second, value: 0, of: activity[timestamp])!
-
-        if currentMinute != activityMinute {
-          if let minute = currentMinute {
-            let mostUsedApp =
-              currentMinuteApps.max(by: { $0.value < $1.value })?.key
-              ?? "Unknown"
-            let isIdle = currentMinuteIdleCount > 5  // More than half of the checks were idle
-            minuteActivities.append(
-              MinuteActivity(
-                minute: minute, appName: mostUsedApp, isIdle: isIdle))
-          }
-
-          currentMinute = activityMinute
-          currentMinuteApps = [:]
-          currentMinuteIdleCount = 0
-        }
-
-        currentMinuteApps[activity[appName], default: 0] += 1
-        if activity[isIdle] {
-          currentMinuteIdleCount += 1
-        }
-      }
-
-      // Add the last minute
-      if let minute = currentMinute {
-        let mostUsedApp =
-          currentMinuteApps.max(by: { $0.value < $1.value })?.key ?? "Unknown"
-        let isIdle = currentMinuteIdleCount > 5
-        minuteActivities.append(
-          MinuteActivity(minute: minute, appName: mostUsedApp, isIdle: isIdle))
+        activityEntries.append(
+          ActivityEntry(
+            timestamp: activity[timestamp],
+            appName: activity[appName],
+            isIdle: activity[isIdle]
+          ))
       }
     } catch {
       print("Error querying database: \(error)")
     }
 
-    return minuteActivities
+    return activityEntries
   }
 
   func getMostUsedApps(for date: Date) -> [AppUsage] {
@@ -101,7 +71,7 @@ class Day {
       .select(appName, timestamp)
       .order(timestamp.asc)
 
-    var usages = [String: Double]()
+    var usages = [String: TimeInterval]()
     do {
       for row in try db.prepare(query) {
         let currentApp = row[appName]
@@ -114,8 +84,8 @@ class Day {
     let sortedUsage = usages.map {
       AppUsage(appName: $0.key, duration: $0.value)
     }
-    .sorted { $0.duration > $1.duration }
 
+    .sorted { $0.duration > $1.duration }
     return sortedUsage
   }
 }

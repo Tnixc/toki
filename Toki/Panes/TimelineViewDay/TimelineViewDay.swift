@@ -163,7 +163,7 @@ struct TimelineViewDay: View {
         .shadow(color: Color.black.opacity(0.1), radius: 8, y: 4)
         .frame(maxWidth: 200)
         .offset(
-          x: max(-20, min(logic.hoverPosition - 100, width - 200)),
+          x: max(0, min(logic.hoverPosition - 100, width - 200)),
           y: logic.timelineHeight + logic.hoverLineExtension
         )
       }
@@ -277,7 +277,7 @@ struct TimelineViewDay: View {
     VStack(alignment: .leading, spacing: 10) {
       Text(!logic.mostUsedApps.isEmpty ? "Most Used Apps" : "No data")
         .font(.headline)
-      ForEach(logic.mostUsedApps.prefix(5), id: \.appName) { appUsage in
+      ForEach(logic.mostUsedApps, id: \.appName) { appUsage in
         HStack {
           Circle()
             .fill(logic.colorForApp(appUsage.appName))
