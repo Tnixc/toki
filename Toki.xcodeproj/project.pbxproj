@@ -18,7 +18,6 @@
 		4180AEC0283976740054FEA9 /* SettingsWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEBF283976740054FEA9 /* SettingsWindow.swift */; };
 		4180AEC2283976F80054FEA9 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEC1283976F80054FEA9 /* GeneralSettingsView.swift */; };
 		4180AEC4283979530054FEA9 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEC3283979530054FEA9 /* MainView.swift */; };
-		4180AECC28397C6F0054FEA9 /* HelloWorldPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AECB28397C6F0054FEA9 /* HelloWorldPane.swift */; };
 		4180AEDC283984740054FEA9 /* ExportCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEDB283984740054FEA9 /* ExportCommands.swift */; };
 		4180AEDE283985190054FEA9 /* MyExportDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEDD283985190054FEA9 /* MyExportDocument.swift */; };
 		4180AEEE2839A0660054FEA9 /* Bundle+Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEED2839A0660054FEA9 /* Bundle+Name.swift */; };
@@ -38,7 +37,6 @@
 		4180AEBF283976740054FEA9 /* SettingsWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindow.swift; sourceTree = "<group>"; };
 		4180AEC1283976F80054FEA9 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		4180AEC3283979530054FEA9 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		4180AECB28397C6F0054FEA9 /* HelloWorldPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelloWorldPane.swift; sourceTree = "<group>"; };
 		4180AEDB283984740054FEA9 /* ExportCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportCommands.swift; sourceTree = "<group>"; };
 		4180AEDD283985190054FEA9 /* MyExportDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyExportDocument.swift; sourceTree = "<group>"; };
 		4180AEED2839A0660054FEA9 /* Bundle+Name.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Name.swift"; sourceTree = "<group>"; };
@@ -141,7 +139,6 @@
 			isa = PBXGroup;
 			children = (
 				39B14DBE2C9D00FB003A457D /* TimelineViewDay */,
-				4180AECB28397C6F0054FEA9 /* HelloWorldPane.swift */,
 			);
 			path = Panes;
 			sourceTree = "<group>";
@@ -265,7 +262,6 @@
 				4180AEF32839A0950054FEA9 /* Bundle+Copyright.swift in Sources */,
 				4180AEC0283976740054FEA9 /* SettingsWindow.swift in Sources */,
 				4180AEAE2839753E0054FEA9 /* Toki.swift in Sources */,
-				4180AECC28397C6F0054FEA9 /* HelloWorldPane.swift in Sources */,
 				39B14DB32C9CE173003A457D /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

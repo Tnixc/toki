@@ -261,7 +261,6 @@ struct TimelineViewDay: View {
 
   private func timelineConfigView() -> some View {
     HStack {
-
       Toggle(isOn: $logic.showAppColors) {
         Text("App Colors")
       }
