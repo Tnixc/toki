@@ -81,7 +81,7 @@ struct NavigationButton: View {
         .contentShape(Rectangle())
     }
     .buttonStyle(PlainButtonStyle())
-    .cornerRadius(8)
+    .cornerRadius(10)
 
     .hoverEffect()
   }
@@ -123,7 +123,7 @@ struct DateCell: View {
           .contentShape(Rectangle())
       }
       .buttonStyle(PlainButtonStyle())
-      .background(RoundedRectangle(cornerRadius: 8).fill(bg))
+      .background(RoundedRectangle(cornerRadius: 10).fill(bg))
       .foregroundColor(fg)
       .disabled(date > today)
       .modifier(ConditionalHoverEffect(isEnabled: date <= today))
@@ -169,7 +169,7 @@ struct HoverEffect: ViewModifier {
   func body(content: Content) -> some View {
     content
       .background(
-        RoundedRectangle(cornerRadius: 8)
+        RoundedRectangle(cornerRadius: 10)
           .fill(isHovered ? Color.gray.opacity(0.2) : Color.clear)
       )
       .onHover { hovering in

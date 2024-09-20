@@ -2,10 +2,12 @@
 
 ## Core
 
-- [ ] Frontmost app tracking
+- [x] Frontmost app tracking
 - [ ] Purge function (old and reguarly)
-- [ ] Idle detection
-- [ ] Day view
+- [x] Idle detection
+- [x] Day view
+- [x] Show app colors
+- [ ] Show app icons
 - [ ] Clock in and clock out
 - [ ] hotkey to summon window
 - [ ] Menu bar only mode

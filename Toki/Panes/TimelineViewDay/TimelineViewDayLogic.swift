@@ -16,7 +16,6 @@ class TimelineViewDayLogic: ObservableObject {
   @Published var selectedDate: DateComponents
   @Published var showDatePicker = false
   @Published var currentHoverSegment: Int?
-  @Published var scrollOffset: CGFloat = 0
   @Published var mostUsedApps: [AppUsage] = []
   @Published var showAppColors: Bool {
     didSet {
@@ -49,6 +48,7 @@ class TimelineViewDayLogic: ObservableObject {
   func loadData(for dateComponents: DateComponents) {
     if let date = calendar.date(from: dateComponents) {
       activities = day.getActivityForDay(date: date)
+      mostUsedApps = day.getMostUsedApps(for: date)
     }
   }
 
@@ -115,17 +115,24 @@ class TimelineViewDayLogic: ObservableObject {
         TimeInterval(activities.count) * 60  // Each activity represents 1 minute
       }
 
-    return appUsage.map { AppUsage(appName: $0.key, duration: $0.value) }
+    let v = appUsage.map { AppUsage(appName: $0.key, duration: $0.value) }
       .sorted { (usage1, usage2) -> Bool in
         if usage1.duration == usage2.duration {
           return usage1.appName < usage2.appName  // Sort alphabetically if durations are equal
         }
         return usage1.duration > usage2.duration  // Sort by duration (descending) otherwise
       }
+    print(v)
+    return v
   }
 
   func formatDuration(_ duration: TimeInterval) -> String {
     let minutes = Int(duration) / 60
+    if minutes > 59 {
+      let hours = minutes / 60
+      let remainingMinutes = minutes % 60
+      return "\(hours)h \(remainingMinutes)m"
+    }
     return "\(minutes) min"
   }
 

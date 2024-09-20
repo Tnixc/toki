@@ -21,7 +21,10 @@ struct TimelineViewDay: View {
         }
       }
       .frame(height: 125)  // NOTE: Height
-      timelineConfigView()
+      timelineConfigView().contentTransition(.interpolate).animation(
+        .snappy, value: logic.selectedDate)
+      mostUsedAppsView()
+
       Spacer()
 
     }
@@ -70,7 +73,7 @@ struct TimelineViewDay: View {
       }
       .background(Color.primary.opacity(0.05))
       .frame(width: 40, height: 40)
-      .clipShape(RoundedRectangle(cornerRadius: 8))
+      .clipShape(RoundedRectangle(cornerRadius: 10))
       .buttonStyle(.borderless)
       .hoverEffect()
 
@@ -79,12 +82,10 @@ struct TimelineViewDay: View {
           .padding(.horizontal, 10)
           .frame(width: 120, height: 40)
           .contentShape(Rectangle())
-          .animation(.snappy, value: logic.dateString)
-          .contentTransition(.numericText())
       }
       .background(Color.primary.opacity(0.05))
       .frame(height: 40)
-      .clipShape(RoundedRectangle(cornerRadius: 8))
+      .clipShape(RoundedRectangle(cornerRadius: 10))
       .buttonStyle(.borderless)
       .hoverEffect()
       .popover(isPresented: $logic.showDatePicker) {
@@ -144,29 +145,27 @@ struct TimelineViewDay: View {
           Text(logic.timeRangeForSegment(segment))
             .font(.subheadline)
             .monospaced()
-            .animation(.snappy, value: logic.dateString)
-            .contentTransition(.identity)
 
           ForEach(logic.appsForSegment(segment), id: \.appName) { usage in
-            HStack {
+            HStack(spacing: 6) {
+              Circle()
+                .fill(logic.colorForApp(usage.appName))
+                .frame(width: 8, height: 8)
               Text(usage.appName)
               Spacer()
               Text(logic.formatDuration(usage.duration))
             }
             .font(.caption)
             .monospaced()
-            .animation(.snappy, value: logic.dateString)
-            .contentTransition(.identity)
           }
         }
         .zIndex(99)
         .padding(8)
         .background(.thickMaterial)
-        .cornerRadius(8)
+        .cornerRadius(10)
         .shadow(color: Color.black.opacity(0.1), radius: 8, y: 4)
         .frame(maxWidth: 200)
         .offset(
-          //          x: max(0, min(logic.hoverPosition - 100, width - 200)),
           x: max(-20, min(logic.hoverPosition - 100, width - 200)),
           y: logic.timelineHeight + logic.hoverLineExtension
         )
@@ -265,6 +264,38 @@ struct TimelineViewDay: View {
       Text("Show App Colors")
     }
     .toggleStyle(SwitchToggleStyle(tint: .accentColor))
-    .zIndex(-9)
+    .padding()
+    .background(Color.secondary.opacity(0.1))
+    .cornerRadius(10)
+    .zIndex(-1)
+  }
+
+  private func mostUsedAppsView() -> some View {
+    VStack(alignment: .leading, spacing: 10) {
+      Text("Most Used Apps")
+        .font(.headline)
+        .padding(.bottom, 4)
+
+      ForEach(logic.mostUsedApps.prefix(5), id: \.appName) { appUsage in
+        HStack {
+          Circle()
+            .fill(logic.colorForApp(appUsage.appName))
+            .frame(width: 10, height: 10)
+          Text(appUsage.appName)
+            .font(.subheadline)
+          Spacer()
+          Text(logic.formatDuration(appUsage.duration))
+            .font(.subheadline)
+            .foregroundColor(.secondary)
+        }
+        .transition(.blurReplace)
+        .id("\(logic.selectedDate)\(appUsage.appName)")
+      }
+    }
+    .animation(.snappy, value: logic.selectedDate)
+    .padding()
+    .zIndex(-1)
+    .background(Color.secondary.opacity(0.1))
+    .cornerRadius(10)
   }
 }
