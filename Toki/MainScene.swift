@@ -8,9 +8,10 @@ struct MainScene: Scene {
           minWidth: 400, maxWidth: .infinity, minHeight: 500,
           maxHeight: .infinity
         )
+        .padding(.top, 1)
 
         .toolbar {
-          Text("Toki <3")
+          Rectangle().hidden()
         }
 
         .background(VisualEffect().ignoresSafeArea())
