@@ -198,19 +198,12 @@ class TimelineViewDayLogic: ObservableObject {
 
     return appUsage.map { AppUsage(appName: $0.key, duration: $0.value) }
       .sorted { (app1, app2) -> Bool in
-        if app1.duration >= 60 && app2.duration >= 60 {
-          // Both apps have duration >= 60 seconds, sort by duration descending
-          return app1.duration > app2.duration
-        } else if app1.duration < 60 && app2.duration < 60 {
-          // Both apps have duration < 60 seconds, sort by app name
+        if Int(app1.duration / 60) == Int(app2.duration / 60) {
           return app1.appName < app2.appName
         } else {
-          // One app has duration >= 60 seconds, the other < 60 seconds
-          // Place the app with duration >= 60 seconds first
-          return app1.duration >= 60
+          return app1.duration > app2.duration
         }
       }
-
   }
 
   func formatDuration(_ duration: TimeInterval) -> String {

@@ -1,3 +1,4 @@
+import Foundation
 import SwiftUI
 
 struct TimelineViewDay: View {
@@ -49,19 +50,6 @@ struct TimelineViewDay: View {
         .font(.title)
         .animation(.snappy, value: logic.dateString)
         .contentTransition(.numericText())
-    }
-  }
-
-  private var headerContent: some View {
-    Group {
-      let day_name = formatDate(components: logic.selectedDate)
-      Text("\(day_name)'s Timeline")
-        .font(.title)
-        .animation(.snappy, value: logic.dateString)
-        .contentTransition(.numericText())
-
-      Spacer()
-      dateNavigationView
     }
   }
 
@@ -235,8 +223,12 @@ struct TimelineViewDay: View {
       )
       .position(x: logic.hoverPosition, y: logic.timelineHeight / 2)
       .opacity(logic.isHovering ? 1 : 0)
-      .animation(.snappy(duration: 0.3), value: logic.isHovering)
-      .animation(.snappy(duration: 0.3), value: logic.hoverPosition)
+      .animation(
+        .spring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.3),
+        value: logic.isHovering
+      ).animation(
+        .spring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.3),
+        value: logic.hoverPosition)
   }
 
   private func hoverOverlayView(width: CGFloat) -> some View {
@@ -272,12 +264,15 @@ struct TimelineViewDay: View {
       }
       .frame(minHeight: 42)
       HStack {
-        Toggle(isOn: $logic.showAppColors) {
+        HStack {
           Text("App Colors")
+          Toggle(isOn: $logic.showAppColors) {}
+            .toggleStyle(SwitchToggleStyle(tint: .accentColor)).scaleEffect(
+              0.8, anchor: .leading)
         }
-        .toggleStyle(SwitchToggleStyle(tint: .accentColor))
       }
-      .padding()
+      .padding(.leading)
+      .padding(.trailing, 6)
       .frame(height: 40)
       .background(Color.secondary.opacity(0.1))
       .cornerRadius(10)
@@ -287,28 +282,36 @@ struct TimelineViewDay: View {
 
   private func mostUsedAppsView() -> some View {
     VStack(alignment: .leading, spacing: 10) {
-      Text(!logic.mostUsedApps.isEmpty ? "Most Used Apps" : "No data")
+      Text(logic.mostUsedApps.isEmpty ? "No data" : "Most Used Apps")
         .font(.headline)
-      ForEach(logic.mostUsedApps, id: \.appName) { appUsage in
-        HStack {
-          Circle()
-            .fill(logic.colorForApp(appUsage.appName))
-            .frame(width: 10, height: 10)
-          Text(appUsage.appName)
-            .font(.subheadline)
-          Spacer()
-          Text(logic.formatDuration(appUsage.duration))
-            .font(.subheadline)
-            .foregroundColor(.secondary)
+        .transition(.opacity)
+        .id("header-\(logic.mostUsedApps.isEmpty)")
+
+      if !logic.mostUsedApps.isEmpty {
+        ForEach(logic.mostUsedApps, id: \.appName) { appUsage in
+          HStack {
+            Circle()
+              .fill(logic.colorForApp(appUsage.appName))
+              .frame(width: 10, height: 10)
+            Text(appUsage.appName)
+              .font(.subheadline)
+            Spacer()
+            Text(logic.formatDuration(appUsage.duration))
+              .font(.subheadline)
+              .foregroundColor(.secondary)
+          }
+          .transition(.scale(scale: 0.9).combined(with: .opacity))
         }
-        .transition(.blurReplace)
-        .id("\(logic.selectedDate)\(appUsage.appName)")
       }
     }
-    .animation(.snappy, value: logic.selectedDate)
+    .animation(
+      .spring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.3),
+      value: logic.mostUsedApps
+    )
     .padding()
-    .zIndex(-1)
     .background(Color.secondary.opacity(0.1))
     .cornerRadius(10)
+    .transition(.scale.combined(with: .opacity))
+    .zIndex(-1)
   }
 }

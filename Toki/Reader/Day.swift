@@ -12,9 +12,12 @@ struct ActivityEntry: Equatable {
   }
 }
 
-struct AppUsage {
+struct AppUsage: Equatable {
   let appName: String
   let duration: TimeInterval
+  static func == (lhs: AppUsage, rhs: AppUsage) -> Bool {
+    return lhs.duration == rhs.duration && lhs.appName == rhs.appName
+  }
 }
 
 class Day {

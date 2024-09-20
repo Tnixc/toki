@@ -13,7 +13,6 @@ struct MainScene: Scene {
         .toolbar {
           Rectangle().hidden()
         }
-
         .background(VisualEffect().ignoresSafeArea())
     }
 
