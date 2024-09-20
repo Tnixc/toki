@@ -110,6 +110,7 @@ struct TimelineViewDay: View {
         )
         .padding()
       }
+
       Button(action: { logic.changeDate(by: 1) }) {
         Image(systemName: "chevron.right").fontWeight(.bold)
           .contentShape(Rectangle())
@@ -120,6 +121,7 @@ struct TimelineViewDay: View {
       .clipShape(RoundedRectangle(cornerRadius: 8))
       .buttonStyle(.borderless)
       .hoverEffect()
+      .disabled(logic.isTodaySelected)
     }
   }
 
@@ -147,7 +149,8 @@ struct TimelineViewDay: View {
   private func hoverInformationView(width: CGFloat) -> some View {
     Group {
       if logic.isHovering {
-        let segment = Int((logic.hoverPosition / width) * CGFloat(logic.segmentCount))
+        let segment = Int(
+          (logic.hoverPosition / width) * CGFloat(logic.segmentCount))
         VStack(alignment: .leading, spacing: 4) {
           Text(logic.timeRangeForSegment(segment))
             .font(.subheadline)
@@ -189,7 +192,8 @@ struct TimelineViewDay: View {
   }
 
   private func activityBarsView(width: CGFloat) -> some View {
-    ForEach(logic.mergeAdjacentSegments(), id: \.0) { startSegment, endSegment in
+    ForEach(logic.mergeAdjacentSegments(), id: \.0) {
+      startSegment, endSegment in
       let startX = logic.xPositionForSegment(startSegment, width: width)
       let endX = logic.xPositionForSegment(endSegment + 1, width: width)
       let barWidth = endX - startX

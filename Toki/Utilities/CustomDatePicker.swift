@@ -28,6 +28,8 @@ struct CustomDatePicker: View {
         NavigationButton(direction: .forward) {
           changeMonth(by: 1)
         }
+        .disabled(
+          calendar.isDate(currentMonth, equalTo: Date(), toGranularity: .month))
       }
       .padding(.horizontal)
 
@@ -42,13 +44,12 @@ struct CustomDatePicker: View {
 
       LazyVGrid(
         columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 7),
-        alignment: .leading,
-        spacing: 0
+        alignment: .leading, spacing: 0
       ) {
         ForEach(0..<42, id: \.self) { index in
           DateCell(
             index: index, currentMonth: currentMonth,
-            selectedDate: $selectedDate)
+            selectedDate: $selectedDate, today: Date())
         }
       }
     }
@@ -59,7 +60,7 @@ struct CustomDatePicker: View {
     if let newDate = calendar.date(
       byAdding: .month, value: value, to: currentMonth)
     {
-      currentMonth = newDate
+      currentMonth = min(newDate, Date())
     }
   }
 }
@@ -90,39 +91,42 @@ struct DateCell: View {
   let index: Int
   let currentMonth: Date
   @Binding var selectedDate: Date
+  let today: Date
 
   private let calendar = Calendar.current
 
   var body: some View {
     if let date = getDate(for: index) {
+      let fg =
+        if date > today {
+          Color.secondary.opacity(0.5)
+        } else if calendar.isDate(date, inSameDayAs: selectedDate) {
+          Color.white
+        } else if calendar.isDateInToday(date) {
+          Color.blue
+        } else if calendar.component(.month, from: date)
+          == calendar.component(.month, from: currentMonth)
+        { Color.primary } else { Color.secondary }
+      let bg =
+        if calendar.isDate(date, inSameDayAs: selectedDate) {
+          Color.blue
+        } else {
+          Color.clear
+        }
       Button(action: {
-        selectedDate = date
-
+        if date <= today {
+          selectedDate = date
+        }
       }) {
         Text(String(calendar.component(.day, from: date)))
           .frame(width: 42, height: 42)
-
           .contentShape(Rectangle())
       }
-
       .buttonStyle(PlainButtonStyle())
-      .background(
-        RoundedRectangle(cornerRadius: 8)
-          .fill(
-            calendar.isDate(date, inSameDayAs: selectedDate)
-              ? Color.blue : Color.clear)
-      )
-      .foregroundColor(
-        calendar.isDate(date, inSameDayAs: selectedDate)
-          ? .white
-          : calendar.isDateInToday(date)
-            ? .blue
-            : calendar.component(.month, from: date)
-              == calendar.component(.month, from: currentMonth)
-              ? .primary : .secondary
-      )
-
-      .hoverEffect()
+      .background(RoundedRectangle(cornerRadius: 8).fill(bg))
+      .foregroundColor(fg)
+      .disabled(date > today)
+      .modifier(ConditionalHoverEffect(isEnabled: date <= today))
     } else {
       Color.clear
         .frame(width: 40, height: 40)
@@ -171,6 +175,17 @@ struct HoverEffect: ViewModifier {
       .onHover { hovering in
         isHovered = hovering
       }
+  }
+}
+struct ConditionalHoverEffect: ViewModifier {
+  let isEnabled: Bool
+
+  func body(content: Content) -> some View {
+    if isEnabled {
+      content.hoverEffect()
+    } else {
+      content
+    }
   }
 }
 

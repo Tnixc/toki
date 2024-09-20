@@ -44,12 +44,18 @@ class TimelineViewDayLogic: ObservableObject {
     }
   }
 
+  var isTodaySelected: Bool {
+    calendar.isDateInToday(calendar.date(from: selectedDate) ?? Date())
+  }
+
   func changeDate(by days: Int) {
     if var newDate = calendar.date(from: selectedDate) {
       newDate =
         calendar.date(byAdding: .day, value: days, to: newDate) ?? newDate
-      selectedDate = calendar.dateComponents(
-        [.year, .month, .day], from: newDate)
+      if newDate <= Date() {
+        selectedDate = calendar.dateComponents(
+          [.year, .month, .day], from: newDate)
+      }
     }
   }
 
