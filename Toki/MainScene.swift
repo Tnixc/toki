@@ -5,12 +5,12 @@ struct MainScene: Scene {
     WindowGroup {
       MainView()
         .frame(
-          minWidth: 300, maxWidth: .infinity, minHeight: 500,
+          minWidth: 400, maxWidth: .infinity, minHeight: 500,
           maxHeight: .infinity
         )
 
         .toolbar {
-          Text("Hello world").monospaced()
+          Text("Toki <3")
         }
 
         .background(VisualEffect().ignoresSafeArea())

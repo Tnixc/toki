@@ -1,5 +1,17 @@
 import SwiftUI
 
+struct TimelineConfigView: View {
+  @Binding var showAppColors: Bool
+
+  var body: some View {
+    Toggle(isOn: $showAppColors) {
+      Text("Show App Colors")
+    }
+    .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+    .zIndex(-9)
+  }
+}
+
 struct TimelineViewDay: View {
   @StateObject private var logic = TimelineViewDayLogic()
 
@@ -9,26 +21,52 @@ struct TimelineViewDay: View {
 
       GeometryReader { geometry in
         let timelineWidth = geometry.size.width
-
         VStack(alignment: .leading, spacing: 0) {
-          hourLabelsView(width: timelineWidth)
-          timelineView(width: timelineWidth)
+          hourLabelsView(width: timelineWidth - 20)
+            .padding(.horizontal, 10)
+          ZStack(alignment: .topLeading) {
+            timelineView(width: timelineWidth)
+            hoverInformationView(width: timelineWidth)
+              .contentTransition(.interpolate)
+              .animation(.spring(), value: logic.selectedDate)
+          }
         }
       }
+      .frame(height: 125)  // Adjust this height as needed
+      TimelineConfigView(showAppColors: $logic.showAppColors)
+      Spacer()
     }
     .padding()
     .frame(maxWidth: 600)
     .onAppear {
       logic.loadData(for: logic.selectedDate)
     }
-    .onChange(of: logic.selectedDate) { newDate in
-      logic.loadData(for: newDate)
+    .onChange(of: logic.selectedDate) {
+      logic.loadData(for: logic.selectedDate)
     }
   }
 
   private var headerView: some View {
     HStack {
-      Text("Timeline").font(.title).monospaced()
+      let day_name = formatDate(components: logic.selectedDate)
+      Text("\(day_name)'s Timeline")
+        .font(.title)
+        .animation(.snappy, value: logic.dateString)
+        .contentTransition(.numericText())
+
+      Spacer()
+      dateNavigationView
+    }
+  }
+
+  private var headerContent: some View {
+    Group {
+      let day_name = formatDate(components: logic.selectedDate)
+      Text("\(day_name)'s Timeline")
+        .font(.title)
+        .animation(.snappy, value: logic.dateString)
+        .contentTransition(.numericText())
+
       Spacer()
       dateNavigationView
     }
@@ -37,12 +75,29 @@ struct TimelineViewDay: View {
   private var dateNavigationView: some View {
     HStack {
       Button(action: { logic.changeDate(by: -1) }) {
-        Image(systemName: "chevron.left")
+        Image(systemName: "chevron.left").fontWeight(.bold)
+          .contentShape(Rectangle())
+          .frame(width: 40, height: 40)
       }
+      .background(Color.primary.opacity(0.05))
+      .frame(width: 40, height: 40)
+      .clipShape(RoundedRectangle(cornerRadius: 8))
+      .buttonStyle(.borderless)
+      .hoverEffect()
 
       Button(action: { logic.showDatePicker.toggle() }) {
-        Text(logic.dateString).monospaced()
+        Text(logic.dateString).fontWeight(.bold)
+          .padding(.horizontal, 10)
+          .frame(width: 120, height: 40)
+          .contentShape(Rectangle())
+          .animation(.snappy, value: logic.dateString)
+          .contentTransition(.numericText())
       }
+      .background(Color.primary.opacity(0.05))
+      .frame(height: 40)
+      .clipShape(RoundedRectangle(cornerRadius: 8))
+      .buttonStyle(.borderless)
+      .hoverEffect()
       .popover(isPresented: $logic.showDatePicker) {
         CustomDatePicker(
           selectedDate: Binding(
@@ -56,8 +111,15 @@ struct TimelineViewDay: View {
         .padding()
       }
       Button(action: { logic.changeDate(by: 1) }) {
-        Image(systemName: "chevron.right")
+        Image(systemName: "chevron.right").fontWeight(.bold)
+          .contentShape(Rectangle())
+          .frame(width: 40, height: 40)
       }
+      .background(Color.primary.opacity(0.05))
+      .frame(width: 40, height: 40)
+      .clipShape(RoundedRectangle(cornerRadius: 8))
+      .buttonStyle(.borderless)
+      .hoverEffect()
     }
   }
 
@@ -66,7 +128,6 @@ struct TimelineViewDay: View {
       ForEach(logic.hourLabels(for: width), id: \.self) { hour in
         Text("\(hour)")
           .font(.subheadline)
-          .monospaced()
           .frame(width: logic.hourLabelWidth(for: width))
       }
     }
@@ -76,7 +137,6 @@ struct TimelineViewDay: View {
 
   private func timelineView(width: CGFloat) -> some View {
     ZStack(alignment: .topLeading) {
-      hoverInformationView(width: width)
       backgroundView(width: width)
       activityBarsView(width: width)
       hoverLineView(width: width)
@@ -87,12 +147,14 @@ struct TimelineViewDay: View {
   private func hoverInformationView(width: CGFloat) -> some View {
     Group {
       if logic.isHovering {
-        let segment = Int(
-          (logic.hoverPosition / width) * CGFloat(logic.segmentCount))
+        let segment = Int((logic.hoverPosition / width) * CGFloat(logic.segmentCount))
         VStack(alignment: .leading, spacing: 4) {
           Text(logic.timeRangeForSegment(segment))
             .font(.subheadline)
             .monospaced()
+            .animation(.snappy, value: logic.dateString)
+            .contentTransition(.identity)
+
           ForEach(logic.appsForSegment(segment), id: \.appName) { usage in
             HStack {
               Text(usage.appName)
@@ -101,6 +163,8 @@ struct TimelineViewDay: View {
             }
             .font(.caption)
             .monospaced()
+            .animation(.snappy, value: logic.dateString)
+            .contentTransition(.identity)
           }
         }
         .zIndex(99)
@@ -110,49 +174,58 @@ struct TimelineViewDay: View {
         .shadow(color: Color.black.opacity(0.1), radius: 8, y: 4)
         .frame(maxWidth: 200)
         .offset(
-          x: max(0, min(logic.hoverPosition - 100, width - 200)),
+          //          x: max(0, min(logic.hoverPosition - 100, width - 200)),
+          x: max(-20, min(logic.hoverPosition - 100, width - 200)),
           y: logic.timelineHeight + logic.hoverLineExtension
         )
-        .transition(.opacity)
       }
     }
   }
 
   private func backgroundView(width: CGFloat) -> some View {
     RoundedRectangle(cornerRadius: 10)
-      .fill(Color.blue.opacity(0.1))
+      .fill(Color.accentColor.opacity(0.1))
       .frame(width: width, height: logic.timelineHeight)
   }
 
   private func activityBarsView(width: CGFloat) -> some View {
-    ForEach(logic.mergeAdjacentSegments(), id: \.0) {
-      startSegment, endSegment in
+    ForEach(logic.mergeAdjacentSegments(), id: \.0) { startSegment, endSegment in
       let startX = logic.xPositionForSegment(startSegment, width: width)
       let endX = logic.xPositionForSegment(endSegment + 1, width: width)
       let barWidth = endX - startX
 
       ZStack {
+        // This creates the joined appearance
         RoundedRectangle(cornerRadius: 5)
-          .fill(
-            Gradient(colors: [
-              Color.accentColor.opacity(0.8), Color.accentColor.opacity(0.7),
-            ])
-          )
+          .fill(Color.clear)
           .padding(.vertical, logic.hoverLineExtension)
-          .frame(width: barWidth, height: logic.timelineHeight)
-
-        RoundedRectangle(cornerRadius: 5)
-          .stroke(
-            LinearGradient(
-              gradient: Gradient(colors: [
-                Color.gray.opacity(0.5), Color.clear.opacity(0.1),
-              ]),
-              startPoint: .top,
-              endPoint: .bottom),
-            lineWidth: 1
+          .frame(
+            width: barWidth,
+            height: logic.timelineHeight - logic.hoverLineExtension
           )
-          .padding(.vertical, logic.hoverLineExtension)
-          .frame(width: barWidth, height: logic.timelineHeight)
+          .overlay(
+            RoundedRectangle(cornerRadius: 5)
+              .stroke(
+                LinearGradient(
+                  gradient: Gradient(colors: [
+                    Color.gray.opacity(0.5), Color.clear.opacity(0.1),
+                  ]),
+                  startPoint: .top,
+                  endPoint: .bottom),
+                lineWidth: 1
+              ).padding(.vertical, logic.hoverLineExtension / 2)
+          )
+        // This creates the individual colored segments
+        HStack(spacing: 0) {
+          ForEach(startSegment...endSegment, id: \.self) { segment in
+            Rectangle()
+              .fill(logic.colorForSegment(segment))
+              .frame(width: barWidth / CGFloat(endSegment - startSegment + 1))
+          }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 5))
+        .padding(.vertical, logic.hoverLineExtension)
+        .frame(width: barWidth, height: logic.timelineHeight)
       }
       .position(x: startX + barWidth / 2, y: logic.timelineHeight / 2)
     }
@@ -166,8 +239,8 @@ struct TimelineViewDay: View {
       )
       .position(x: logic.hoverPosition, y: logic.timelineHeight / 2)
       .opacity(logic.isHovering ? 1 : 0)
-      .animation(.spring(duration: 0.5), value: logic.isHovering)
-      .animation(.spring(duration: 0.5), value: logic.hoverPosition)
+      .animation(.snappy(duration: 0.3), value: logic.isHovering)
+      .animation(.snappy(duration: 0.3), value: logic.hoverPosition)
   }
 
   private func hoverOverlayView(width: CGFloat) -> some View {

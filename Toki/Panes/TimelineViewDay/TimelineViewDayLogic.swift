@@ -8,6 +8,7 @@
 import SwiftUI
 
 class TimelineViewDayLogic: ObservableObject {
+
   @Published var activities: [MinuteActivity] = []
   @Published var hoveredSegment: Int? = nil
   @Published var isHovering: Bool = false
@@ -15,6 +16,8 @@ class TimelineViewDayLogic: ObservableObject {
   @Published var selectedDate: DateComponents
   @Published var showDatePicker = false
   @Published var currentHoverSegment: Int?
+  @Published var showAppColors: Bool = false
+  private var appColors: [String: Color] = [:]
 
   let calendar = Calendar.current
   let day = Day()
@@ -175,6 +178,31 @@ class TimelineViewDayLogic: ObservableObject {
   func hourLabelWidth(for width: CGFloat) -> CGFloat {
     let labels = hourLabels(for: width)
     return width / CGFloat(labels.count - 1)
+  }
+  func colorForApp(_ appName: String) -> Color {
+    let hash = appName.unicodeScalars.reduce(0) { $0 + $1.value }
+    let hue = Double(hash % 360) / 360.0
+
+    let newColor = Color(
+      hue: hue,
+      saturation: 0.5,
+      brightness: 0.8
+    )
+    appColors[appName] = newColor
+    return newColor
+  }
+
+  func colorForSegment(_ segment: Int) -> Color {
+    if showAppColors, let dominantApp = dominantAppForSegment(segment) {
+      return colorForApp(dominantApp)
+    } else {
+      return Color.accentColor.opacity(0.8)
+    }
+  }
+
+  func dominantAppForSegment(_ segment: Int) -> String? {
+    let apps = appsForSegment(segment)
+    return apps.max(by: { $0.duration < $1.duration })?.appName
   }
 
 }

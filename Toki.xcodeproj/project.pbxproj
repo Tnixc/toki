@@ -8,11 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		39B14DB32C9CE173003A457D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B14DB12C9CE173003A457D /* Utils.swift */; };
-		39B14DBB2C9CE1A9003A457D /* TimelineViewDayLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B14DBA2C9CE1A9003A457D /* TimelineViewDayLogic.swift */; };
 		39B14DBD2C9CE3DD003A457D /* CustomDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B14DBC2C9CE3DD003A457D /* CustomDatePicker.swift */; };
 		39B90B9B2C9B07CE0002823D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 39B90B9A2C9B07CE0002823D /* SQLite */; };
 		39B90BA12C9B24A40002823D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 39B90BA02C9B24A40002823D /* SQLite */; };
-		39B90BA92C9B6F0E0002823D /* TimelineViewDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B90BA82C9B6F0C0002823D /* TimelineViewDay.swift */; };
 		4180AEAE2839753E0054FEA9 /* Toki.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEAD2839753E0054FEA9 /* Toki.swift */; };
 		4180AEB22839753F0054FEA9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4180AEB12839753F0054FEA9 /* Assets.xcassets */; };
 		4180AEB52839753F0054FEA9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4180AEB42839753F0054FEA9 /* Preview Assets.xcassets */; };
@@ -30,9 +28,7 @@
 
 /* Begin PBXFileReference section */
 		39B14DB12C9CE173003A457D /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		39B14DBA2C9CE1A9003A457D /* TimelineViewDayLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineViewDayLogic.swift; sourceTree = "<group>"; };
 		39B14DBC2C9CE3DD003A457D /* CustomDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDatePicker.swift; sourceTree = "<group>"; };
-		39B90BA82C9B6F0C0002823D /* TimelineViewDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineViewDay.swift; sourceTree = "<group>"; };
 		4180AEAA2839753E0054FEA9 /* Toki.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Toki.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4180AEAD2839753E0054FEA9 /* Toki.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toki.swift; sourceTree = "<group>"; };
 		4180AEB12839753F0054FEA9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -54,6 +50,11 @@
 		398DCB7A2C9A64DC00BB9310 /* Menu Bar */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "Menu Bar";
+			sourceTree = "<group>";
+		};
+		39B14DBE2C9D00FB003A457D /* TimelineViewDay */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TimelineViewDay;
 			sourceTree = "<group>";
 		};
 		39B90B9C2C9B1E1C0002823D /* Watcher */ = {
@@ -139,8 +140,7 @@
 		4180AECA28397C3A0054FEA9 /* Panes */ = {
 			isa = PBXGroup;
 			children = (
-				39B14DBA2C9CE1A9003A457D /* TimelineViewDayLogic.swift */,
-				39B90BA82C9B6F0C0002823D /* TimelineViewDay.swift */,
+				39B14DBE2C9D00FB003A457D /* TimelineViewDay */,
 				4180AECB28397C6F0054FEA9 /* HelloWorldPane.swift */,
 			);
 			path = Panes;
@@ -192,6 +192,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				398DCB7A2C9A64DC00BB9310 /* Menu Bar */,
+				39B14DBE2C9D00FB003A457D /* TimelineViewDay */,
 				39B90B9C2C9B1E1C0002823D /* Watcher */,
 				39B90BA22C9B2B0A0002823D /* Reader */,
 			);
@@ -261,9 +262,7 @@
 				4180AEC4283979530054FEA9 /* MainView.swift in Sources */,
 				4180AEC2283976F80054FEA9 /* GeneralSettingsView.swift in Sources */,
 				4180AEDE283985190054FEA9 /* MyExportDocument.swift in Sources */,
-				39B14DBB2C9CE1A9003A457D /* TimelineViewDayLogic.swift in Sources */,
 				4180AEF32839A0950054FEA9 /* Bundle+Copyright.swift in Sources */,
-				39B90BA92C9B6F0E0002823D /* TimelineViewDay.swift in Sources */,
 				4180AEC0283976740054FEA9 /* SettingsWindow.swift in Sources */,
 				4180AEAE2839753E0054FEA9 /* Toki.swift in Sources */,
 				4180AECC28397C6F0054FEA9 /* HelloWorldPane.swift in Sources */,
@@ -327,7 +326,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -384,7 +383,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -416,7 +415,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = space.tnixc.Toki;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -449,7 +448,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = space.tnixc.Toki;
 				PRODUCT_NAME = "$(TARGET_NAME)";
