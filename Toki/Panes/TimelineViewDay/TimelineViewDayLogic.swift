@@ -16,7 +16,14 @@ class TimelineViewDayLogic: ObservableObject {
   @Published var selectedDate: DateComponents
   @Published var showDatePicker = false
   @Published var currentHoverSegment: Int?
-  @Published var showAppColors: Bool = false
+  @Published var scrollOffset: CGFloat = 0
+  @Published var mostUsedApps: [AppUsage] = []
+  @Published var showAppColors: Bool {
+    didSet {
+      SettingsManager.shared.set(showAppColors, forKey: "showAppColors")
+    }
+  }
+
   private var appColors: [String: Color] = [:]
 
   let calendar = Calendar.current
@@ -32,6 +39,7 @@ class TimelineViewDayLogic: ObservableObject {
     let today = Date()
     self.selectedDate = calendar.dateComponents(
       [.year, .month, .day], from: today)
+    self.showAppColors = SettingsManager.shared.bool(forKey: "showAppColors")
   }
 
   var selectedDayStart: Date {
@@ -107,14 +115,13 @@ class TimelineViewDayLogic: ObservableObject {
         TimeInterval(activities.count) * 60  // Each activity represents 1 minute
       }
 
-    let v = appUsage.map { AppUsage(appName: $0.key, duration: $0.value) }
+    return appUsage.map { AppUsage(appName: $0.key, duration: $0.value) }
       .sorted { (usage1, usage2) -> Bool in
         if usage1.duration == usage2.duration {
           return usage1.appName < usage2.appName  // Sort alphabetically if durations are equal
         }
         return usage1.duration > usage2.duration  // Sort by duration (descending) otherwise
       }
-    return v.filter { ($0.appName) != "loginwindow" }
   }
 
   func formatDuration(_ duration: TimeInterval) -> String {
@@ -187,15 +194,8 @@ class TimelineViewDayLogic: ObservableObject {
   }
   func colorForApp(_ appName: String) -> Color {
     let hash = appName.unicodeScalars.reduce(0) { $0 + $1.value }
-    let hue = Double(hash % 360) / 360.0
-
-    let newColor = Color(
-      hue: hue,
-      saturation: 0.5,
-      brightness: 0.8
-    )
-    appColors[appName] = newColor
-    return newColor
+    let index = Int(hash) % Int(colorSet.count)
+    return colorSet[Int(index)]
   }
 
   func colorForSegment(_ segment: Int) -> Color {

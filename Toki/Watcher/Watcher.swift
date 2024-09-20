@@ -52,17 +52,18 @@ class Watcher {
           .combinedSessionState, eventType: .keyDown)) > IDLE_TIME
 
     // Log to database
-    let insert = activities.insert(
-      timestamp <- Date(),
-      self.appName <- appName,
-      isIdle <- idle
-    )
-
-    do {
-      try db.run(insert)
-      //      print("Logged activity: \(appName), Idle: \(idle)")
-    } catch {
-      print("Error inserting into database: \(error)")
+    if appName != "loginwindow" {
+      let insert = activities.insert(
+        timestamp <- Date(),
+        self.appName <- appName,
+        isIdle <- idle
+      )
+      do {
+        try db.run(insert)
+        //      print("Logged activity: \(appName), Idle: \(idle)")
+      } catch {
+        print("Error inserting into database: \(error)")
+      }
     }
   }
 }

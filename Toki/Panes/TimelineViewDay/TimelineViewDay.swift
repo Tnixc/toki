@@ -1,17 +1,5 @@
 import SwiftUI
 
-struct TimelineConfigView: View {
-  @Binding var showAppColors: Bool
-
-  var body: some View {
-    Toggle(isOn: $showAppColors) {
-      Text("Show App Colors")
-    }
-    .toggleStyle(SwitchToggleStyle(tint: .accentColor))
-    .zIndex(-9)
-  }
-}
-
 struct TimelineViewDay: View {
   @StateObject private var logic = TimelineViewDayLogic()
 
@@ -32,9 +20,10 @@ struct TimelineViewDay: View {
           }
         }
       }
-      .frame(height: 125)  // Adjust this height as needed
-      TimelineConfigView(showAppColors: $logic.showAppColors)
+      .frame(height: 125)  // NOTE: Height
+      timelineConfigView()
       Spacer()
+
     }
     .padding()
     .frame(maxWidth: 600)
@@ -269,5 +258,13 @@ struct TimelineViewDay: View {
       .overlay(
         RoundedRectangle(cornerRadius: 10).stroke(
           Color.accentColor.opacity(0.3), lineWidth: 1))
+  }
+
+  private func timelineConfigView() -> some View {
+    Toggle(isOn: $logic.showAppColors) {
+      Text("Show App Colors")
+    }
+    .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+    .zIndex(-9)
   }
 }
