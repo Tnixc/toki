@@ -45,9 +45,6 @@ struct TimelineViewDay: View {
         .font(.title)
         .animation(.snappy, value: logic.dateString)
         .contentTransition(.numericText())
-
-      Spacer()
-      dateNavigationView
     }
   }
 
@@ -260,13 +257,19 @@ struct TimelineViewDay: View {
   }
 
   private func timelineConfigView() -> some View {
-    Toggle(isOn: $logic.showAppColors) {
-      Text("Show App Colors")
+    HStack {
+
+      Toggle(isOn: $logic.showAppColors) {
+        Text("App Colors")
+      }
+      .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+      .padding()
+      .frame(height: 42)
+      .background(Color.secondary.opacity(0.1))
+      .cornerRadius(10)
+      Spacer()
+      dateNavigationView
     }
-    .toggleStyle(SwitchToggleStyle(tint: .accentColor))
-    .padding()
-    .background(Color.secondary.opacity(0.1))
-    .cornerRadius(10)
     .zIndex(-1)
   }
 
