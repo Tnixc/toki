@@ -3,6 +3,7 @@ import SQLite
 
 typealias Expression = SQLite.Expression
 class Watcher {
+  public let INTERVAL = 6
   private let IDLE_TIME = 60
   private var timer: Timer?
   private let db: Connection
@@ -29,7 +30,7 @@ class Watcher {
   }
 
   func start() {
-    timer = Timer.scheduledTimer(withTimeInterval: 6, repeats: true) {
+    timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(INTERVAL), repeats: true) {
       [weak self] _ in
       self?.checkActivity()
     }

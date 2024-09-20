@@ -272,10 +272,8 @@ struct TimelineViewDay: View {
 
   private func mostUsedAppsView() -> some View {
     VStack(alignment: .leading, spacing: 10) {
-      Text("Most Used Apps")
+      Text(!logic.mostUsedApps.isEmpty ? "Most Used Apps" : "No data")
         .font(.headline)
-        .padding(.bottom, 4)
-
       ForEach(logic.mostUsedApps.prefix(5), id: \.appName) { appUsage in
         HStack {
           Circle()

@@ -101,28 +101,17 @@ class Day {
       .select(appName, timestamp)
       .order(timestamp.asc)
 
-    var appUsage: [String: TimeInterval] = [:]
-    var lastTimestamp: Date?
-    var lastApp: String?
-
+    var usages = [String: Double]()
     do {
       for row in try db.prepare(query) {
         let currentApp = row[appName]
-        let currentTimestamp = row[timestamp]
-
-        if let lastApp = lastApp, let lastTimestamp = lastTimestamp {
-          let duration = currentTimestamp.timeIntervalSince(lastTimestamp)
-          appUsage[lastApp, default: 0] += duration
-        }
-
-        lastApp = currentApp
-        lastTimestamp = currentTimestamp
+        usages[currentApp, default: 0] += Double(Watcher().INTERVAL)
       }
     } catch {
       print("Error querying database: \(error)")
     }
 
-    let sortedUsage = appUsage.map {
+    let sortedUsage = usages.map {
       AppUsage(appName: $0.key, duration: $0.value)
     }
     .sorted { $0.duration > $1.duration }

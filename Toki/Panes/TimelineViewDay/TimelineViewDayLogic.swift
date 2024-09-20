@@ -72,7 +72,9 @@ class TimelineViewDayLogic: ObservableObject {
     let newSegment = segmentForLocation(location, width: width)
     if newSegment != currentHoverSegment {
       currentHoverSegment = newSegment
-      triggerHapticFeedback()
+      if !appsForSegment(newSegment).isEmpty {
+        triggerHapticFeedback()
+      }
     }
   }
 
@@ -122,7 +124,6 @@ class TimelineViewDayLogic: ObservableObject {
         }
         return usage1.duration > usage2.duration  // Sort by duration (descending) otherwise
       }
-    print(v)
     return v
   }
 
