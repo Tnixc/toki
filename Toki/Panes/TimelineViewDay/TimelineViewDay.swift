@@ -2,6 +2,7 @@ import SwiftUI
 
 struct TimelineViewDay: View {
   @StateObject private var logic = TimelineViewDayLogic()
+  @Binding var selectedViewType: TimelineViewType
 
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
@@ -21,8 +22,11 @@ struct TimelineViewDay: View {
         }
       }
       .frame(height: 125)  // NOTE: Height
-      timelineConfigView().contentTransition(.interpolate).animation(
-        .snappy, value: logic.selectedDate)
+
+      timelineConfigView()
+        .contentTransition(.interpolate)
+        .animation(.snappy, value: logic.selectedDate)
+
       mostUsedAppsView()
 
       Spacer()
@@ -260,19 +264,26 @@ struct TimelineViewDay: View {
   }
 
   private func timelineConfigView() -> some View {
-    HStack {
-      Toggle(isOn: $logic.showAppColors) {
-        Text("App Colors")
+    VStack(alignment: .leading, spacing: 8) {
+      HStack {
+        dateNavigationView
+        Spacer()
+        TimelineViewSelector(selectedViewType: $selectedViewType)
       }
-      .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+      .frame(minHeight: 42)
+      .zIndex(-1)
+      HStack {
+        Toggle(isOn: $logic.showAppColors) {
+          Text("App Colors")
+        }
+        .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+      }
       .padding()
-      .frame(height: 42)
+      .frame(height: 40)
       .background(Color.secondary.opacity(0.1))
       .cornerRadius(10)
-      Spacer()
-      dateNavigationView
+      .zIndex(-1)
     }
-    .zIndex(-1)
   }
 
   private func mostUsedAppsView() -> some View {
