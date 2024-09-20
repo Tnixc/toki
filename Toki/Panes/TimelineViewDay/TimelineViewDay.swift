@@ -271,7 +271,6 @@ struct TimelineViewDay: View {
         TimelineViewSelector(selectedViewType: $selectedViewType)
       }
       .frame(minHeight: 42)
-      .zIndex(-1)
       HStack {
         Toggle(isOn: $logic.showAppColors) {
           Text("App Colors")
@@ -282,8 +281,8 @@ struct TimelineViewDay: View {
       .frame(height: 40)
       .background(Color.secondary.opacity(0.1))
       .cornerRadius(10)
-      .zIndex(-1)
-    }
+    }.zIndex(-1)
+
   }
 
   private func mostUsedAppsView() -> some View {
