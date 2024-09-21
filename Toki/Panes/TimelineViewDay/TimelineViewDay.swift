@@ -151,6 +151,13 @@ struct TimelineViewDay: View {
         .zIndex(99)
         .padding(8)
         .background(.thickMaterial)
+        .overlay(
+          RoundedRectangle(cornerRadius: 10)
+            .stroke(
+              Color.secondary.opacity(0.1),
+              lineWidth: 3
+            )
+        )
         .cornerRadius(10)
         .shadow(color: Color.black.opacity(0.1), radius: 8, y: 4)
         .frame(maxWidth: 200)
@@ -187,14 +194,8 @@ struct TimelineViewDay: View {
           .overlay(
             RoundedRectangle(cornerRadius: 5)
               .stroke(
-                LinearGradient(
-                  gradient: Gradient(colors: [
-                    Color.gray.opacity(0.5), Color.clear.opacity(0.1),
-                  ]),
-                  startPoint: .top,
-                  endPoint: .bottom
-                ),
-                lineWidth: 1
+                Color.secondary.opacity(0.1),
+                lineWidth: 3
               )
               .padding(.vertical, logic.hoverLineExtension / 2)
           )
