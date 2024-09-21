@@ -29,18 +29,23 @@ class Day {
       .documentDirectory, .userDomainMask, true
     ).first!
     db = try! Connection("\(path)/activities.sqlite3")
+
     activities = Table("activities")
   }
 
-  func getActivityForDay(date: Date) -> [ActivityEntry] {
+  func getActivityForDay(date: Date, chunk: Int, chunkSize: Int)
+    -> [ActivityEntry]
+  {
     let calendar = Calendar.current
     let startOfDay = calendar.startOfDay(for: date)
-    let endOfDay = calendar.date(byAdding: .hour, value: 24 + 6, to: startOfDay)!
+    let endOfDay = calendar.date(
+      byAdding: .hour, value: 24 + 6, to: startOfDay)!
 
     let query =
       activities
       .filter(timestamp >= startOfDay && timestamp < endOfDay)
       .order(timestamp.asc)
+      .limit(chunkSize, offset: chunk * chunkSize)
 
     var activityEntries: [ActivityEntry] = []
 
@@ -48,9 +53,7 @@ class Day {
       for activity in try db.prepare(query) {
         activityEntries.append(
           ActivityEntry(
-            timestamp: activity[timestamp],
-            appName: activity[appName]
-          ))
+            timestamp: activity[timestamp], appName: activity[appName]))
       }
     } catch {
       print("Error querying database: \(error)")

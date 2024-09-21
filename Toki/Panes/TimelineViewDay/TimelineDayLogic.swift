@@ -1,10 +1,4 @@
-//
-//  TimelineViewDayLogic.swift
-//  Toki
-//
-//  Created by tnixc on 19/9/2024.
-//
-
+import Combine
 import SwiftUI
 
 class TimelineDayLogic: ObservableObject {
@@ -29,39 +23,100 @@ class TimelineDayLogic: ObservableObject {
   private let queue = DispatchQueue(
     label: "com.toki.dataLoading", qos: .userInitiated)
 
+  @Published var isLoadingMore = false
+  @Published var loadingProgress: Double = 0
+  private var allLoadedActivities: [ActivityEntry] = []
+  private var cancellables = Set<AnyCancellable>()
+  // New properties for pagination
+  private let chunkSize = 100
+  private var currentChunk = 0
+  @Published var hasMoreData = true
+  let calendar = Calendar.current
+  let day = Day()
+
+  // Constants
+  let timelineHeight: CGFloat = 95
+  let segmentDuration: Int = 10
+  let segmentCount: Int = 144
+  let hoverLineExtension: CGFloat = 10
+  private var cachedActivities: [ActivityEntry] = []
+  private var activeSegments: Set<Int> = []
+  private var segmentDominantApps: [Int: String] = [:]
+  private var appUsageDurations: [String: TimeInterval] = [:]
+
+  init() {
+    let today = Date()
+    self.selectedDate = calendar.dateComponents(
+      [.year, .month, .day], from: today)
+  }
+
+  private let loadingDuration: TimeInterval = 2.0  // Total loading time in seconds
+  private let chunksPerSecond: Double = 5  // Number of chunks to load per second
+
   func loadData(for dateComponents: DateComponents) {
     isLoading = true
+    currentChunk = 0
+    hasMoreData = true
+    allLoadedActivities.removeAll()
+    cachedActivities.removeAll()
+    loadingProgress = 0
+
+    // Start the progressive loading
+    startProgressiveLoading()
+  }
+
+  private func startProgressiveLoading() {
+    let timer = Timer.publish(
+      every: 1.0 / chunksPerSecond, on: .main, in: .common
+    ).autoconnect()
+
+    timer.sink { [weak self] _ in
+      guard let self = self else { return }
+
+      if self.hasMoreData && self.loadingProgress < 1.0 {
+        self.loadNextChunk()
+        self.loadingProgress +=
+          1.0 / (self.chunksPerSecond * self.loadingDuration)
+      } else {
+        self.isLoading = false
+        self.loadingProgress = 1.0
+        timer.upstream.connect().cancel()
+      }
+    }.store(in: &cancellables)
+  }
+
+  func loadNextChunk() {
+    guard hasMoreData && !isLoadingMore else { return }
+
+    isLoadingMore = true
 
     queue.async { [weak self] in
       guard let self = self else { return }
 
-      if let cachedData = self.cache[dateComponents] {
-        self.updateWithData(cachedData)
-      } else {
-        if let date = self.calendar.date(from: dateComponents) {
-          let activities = self.day.getActivityForDay(date: date)
-          self.cache[dateComponents] = activities
-          self.updateWithData(activities)
-        }
-      }
+      let activities = self.day.getActivityForDay(
+        date: self.calendar.date(from: self.selectedDate)!,
+        chunk: self.currentChunk, chunkSize: self.chunkSize)
 
       DispatchQueue.main.async {
-        self.isLoading = false
+        self.allLoadedActivities.append(contentsOf: activities)
+        self.updateWithData(self.allLoadedActivities)
+        self.isLoadingMore = false
+        self.currentChunk += 1
+        self.hasMoreData = activities.count == self.chunkSize
       }
     }
   }
 
   private func updateWithData(_ activities: [ActivityEntry]) {
-    DispatchQueue.main.async {
-      self.cachedActivities = activities
-      self.precomputeSegmentData()
-      self.computeAppUsage()
-      self.mostUsedApps = self.appUsageDurations.map {
-        AppUsage(appName: $0.key, duration: $0.value)
-      }
-      .sorted { $0.duration > $1.duration }
-      self.calculateDayStats()
+    self.cachedActivities = activities
+    self.precomputeSegmentData()
+    self.computeAppUsage()
+    self.mostUsedApps = self.appUsageDurations.map {
+      AppUsage(appName: $0.key, duration: $0.value)
     }
+    .sorted { $0.duration > $1.duration }
+    self.calculateDayStats()
+    self.objectWillChange.send()
   }
 
   func endOfDayPosition(width: CGFloat) -> CGFloat {
@@ -98,25 +153,6 @@ class TimelineDayLogic: ObservableObject {
   }
 
   private var appColors: [String: Color] = [:]
-
-  let calendar = Calendar.current
-  let day = Day()
-
-  // Constants
-  let timelineHeight: CGFloat = 95
-  let segmentDuration: Int = 10
-  let segmentCount: Int = 144
-  let hoverLineExtension: CGFloat = 10
-  private var cachedActivities: [ActivityEntry] = []
-  private var activeSegments: Set<Int> = []
-  private var segmentDominantApps: [Int: String] = [:]
-  private var appUsageDurations: [String: TimeInterval] = [:]
-
-  init() {
-    let today = Date()
-    self.selectedDate = calendar.dateComponents(
-      [.year, .month, .day], from: today)
-  }
 
   var isTodaySelected: Bool {
     calendar.isDateInToday(calendar.date(from: selectedDate) ?? Date())
@@ -165,20 +201,27 @@ class TimelineDayLogic: ObservableObject {
   }
 
   private func precomputeSegmentData() {
-    activeSegments.removeAll()
-    segmentDominantApps.removeAll()
+    DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+      guard let self = self else { return }
 
-    for segment in 0..<segmentCount {
-      let (isActive, dominantApp) = computeSegmentInfo(segment)
-      if isActive {
-        activeSegments.insert(segment)
-        if let app = dominantApp {
-          segmentDominantApps[segment] = app
+      self.activeSegments.removeAll()
+      self.segmentDominantApps.removeAll()
+
+      for segment in 0..<self.segmentCount {
+        let (isActive, dominantApp) = self.computeSegmentInfo(segment)
+        if isActive {
+          self.activeSegments.insert(segment)
+          if let app = dominantApp {
+            self.segmentDominantApps[segment] = app
+          }
         }
+      }
+
+      DispatchQueue.main.async {
+        self.objectWillChange.send()
       }
     }
   }
-
   private func computeSegmentInfo(_ segment: Int) -> (Bool, String?) {
     let startTime = calendar.date(
       byAdding: .minute, value: segment * segmentDuration,
@@ -349,7 +392,7 @@ class TimelineDayLogic: ObservableObject {
       of: nextDayStart)!
 
     let filteredActivities =
-      cachedActivities
+      allLoadedActivities
       .filter { $0.timestamp <= endOfDay }
       .filter { $0.timestamp >= dayStart }
 
@@ -360,7 +403,6 @@ class TimelineDayLogic: ObservableObject {
     for entry in appUsageDurations {
       activeTime += entry.value
     }
-
   }
 
 }

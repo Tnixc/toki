@@ -8,40 +8,37 @@ struct TimelineDay: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
       headerView
-      timelineSection
-      timelineConfigView()
-      dayStatsView()
-      mostUsedAppsView()
-      Spacer()
+
+      if logic.isLoading {
+        loadingView
+      } else {
+        timelineSection
+        timelineConfigView()
+        dayStatsView()
+        mostUsedAppsView()
+      }
     }
     .padding()
     .frame(maxWidth: 600)
     .onAppear {
-      withAnimation(.easeInOut(duration: 0.3)) {
-        logic.isLoading = true
-      }
-
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-        logic.loadData(for: logic.selectedDate)
-
-        withAnimation(.easeInOut(duration: 0.3)) {
-          logic.isLoading = false
-        }
-      }
+      logic.loadData(for: logic.selectedDate)
     }
     .onChange(of: logic.selectedDate) {
-      withAnimation(.easeInOut(duration: 0.3)) {
-        logic.isLoading = true
-      }
-
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-        logic.loadData(for: logic.selectedDate)
-
-        withAnimation(.easeInOut(duration: 0.3)) {
-          logic.isLoading = false
-        }
-      }
+      logic.loadData(for: logic.selectedDate)
     }
+  }
+
+  private var loadingView: some View {
+    VStack {
+      ProgressView(value: logic.loadingProgress)
+        .progressViewStyle(LinearProgressViewStyle())
+        .frame(height: 10)
+      Text("Loading data...")
+        .font(.caption)
+        .foregroundColor(.secondary)
+    }
+    .padding()
+    .frame(maxWidth: .infinity)
   }
   // MARK: - Header Section
   private var headerView: some View {
@@ -49,8 +46,7 @@ struct TimelineDay: View {
       let dayName = formatDate(components: logic.selectedDate)
       Text("\(dayName)'s Timeline")
         .font(.largeTitle)
-        .animation(.snappy, value: logic.dateString)
-        .contentTransition(.numericText())
+        .contentTransition(.opacity)
       Spacer()
       settingsButton.offset(y: -8)
     }
