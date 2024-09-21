@@ -14,7 +14,7 @@ struct SettingsWindow: View {
         .tag(Tabs.general)
     }
     .padding(20)
-    .frame(width: 375, height: 150)
+    .frame(width: 500, height: 450)
   }
 
   /// Show settings programmatically

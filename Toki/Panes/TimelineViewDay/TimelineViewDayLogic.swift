@@ -17,6 +17,11 @@ class TimelineViewDayLogic: ObservableObject {
   @Published var currentHoverSegment: Int?
   @Published var mostUsedApps: [AppUsage] = []
   @Published var activities: [ActivityEntry] = []
+  @AppStorage("showAppColors") private var showAppColors: Bool = true {
+    didSet {
+      objectWillChange.send()
+    }
+  }
 
   var totalActiveDuration: TimeInterval {
     return appUsageDurations.values.reduce(0, +)

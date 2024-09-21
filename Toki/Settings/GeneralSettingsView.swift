@@ -6,13 +6,27 @@ struct GeneralSettingsTab: View {
 
   var body: some View {
     VStack(alignment: .leading, spacing: 20) {
-      Toggle("Show App Colors", isOn: $showAppColors)
-
-      Divider()
-
-      Text("Other settings can be added here")
+      VStack {
+        HStack {
+          VStack(alignment: .leading) {
+            Text("App Colors")
+            Text("Show hashed app colors in the day timeline view.").font(
+              .caption)
+          }
+          Spacer()
+          Toggle(isOn: $showAppColors) {}
+            .toggleStyle(SwitchToggleStyle(tint: .accentColor)).scaleEffect(
+              0.8)
+        }
+      }
+      .padding(10)
+      .overlay(
+        RoundedRectangle(cornerRadius: 10).stroke(
+          Color.secondary.opacity(0.2), lineWidth: 3)
+      )
+      .background(.ultraThickMaterial)
+      .clipShape(RoundedRectangle(cornerRadius: 10))
     }
     .padding(20)
-    .frame(width: 300)
   }
 }
