@@ -6,15 +6,20 @@ struct SettingsWindow: View {
   }
 
   var body: some View {
-    TabView {
-      GeneralSettingsTab()
-        .tabItem {
-          Label("General", systemImage: "gear")
-        }
-        .tag(Tabs.general)
+    ZStack {
+      VisualEffect().ignoresSafeArea()
+
+      TabView {
+        GeneralSettingsTab()
+          .tabItem {
+            Label("General", systemImage: "gear")
+          }
+          .tag(Tabs.general)
+      }
+      .padding(20)
     }
-    .padding(20)
     .frame(width: 500, height: 450)
+    .background(Color.clear)
   }
 }
 

@@ -29,7 +29,9 @@ struct MainScene: Scene {
 
     Settings {
       SettingsWindow()
+        .background(Color.clear)
     }
+    .windowStyle(.hiddenTitleBar)
   }
 }
 
