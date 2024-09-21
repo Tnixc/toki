@@ -8,10 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		39B14DB32C9CE173003A457D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B14DB12C9CE173003A457D /* Utils.swift */; };
-		39B14DBD2C9CE3DD003A457D /* CustomDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B14DBC2C9CE3DD003A457D /* CustomDatePicker.swift */; };
 		39B90B9B2C9B07CE0002823D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 39B90B9A2C9B07CE0002823D /* SQLite */; };
 		39B90BA12C9B24A40002823D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 39B90BA02C9B24A40002823D /* SQLite */; };
-		39D69B032C9E1B4E00923741 /* TimelineViewSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D69B022C9E1B4E00923741 /* TimelineViewSelector.swift */; };
 		39D69B062C9E71E100923741 /* SettingsAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 39D69B052C9E71E100923741 /* SettingsAccess */; };
 		4180AEAE2839753E0054FEA9 /* Toki.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEAD2839753E0054FEA9 /* Toki.swift */; };
 		4180AEB22839753F0054FEA9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4180AEB12839753F0054FEA9 /* Assets.xcassets */; };
@@ -29,8 +27,6 @@
 
 /* Begin PBXFileReference section */
 		39B14DB12C9CE173003A457D /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		39B14DBC2C9CE3DD003A457D /* CustomDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDatePicker.swift; sourceTree = "<group>"; };
-		39D69B022C9E1B4E00923741 /* TimelineViewSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineViewSelector.swift; sourceTree = "<group>"; };
 		4180AEAA2839753E0054FEA9 /* Toki.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Toki.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4180AEAD2839753E0054FEA9 /* Toki.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toki.swift; sourceTree = "<group>"; };
 		4180AEB12839753F0054FEA9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -51,6 +47,11 @@
 		398A914C2C9F17B500DF3012 /* TimelineViewWeek */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TimelineViewWeek;
+			sourceTree = "<group>";
+		};
+		398A91552C9F371B00DF3012 /* Components */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Components;
 			sourceTree = "<group>";
 		};
 		398DCB7A2C9A64DC00BB9310 /* Menu Bar */ = {
@@ -165,8 +166,7 @@
 		4180AEEC2839A0560054FEA9 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				39D69B022C9E1B4E00923741 /* TimelineViewSelector.swift */,
-				39B14DBC2C9CE3DD003A457D /* CustomDatePicker.swift */,
+				398A91552C9F371B00DF3012 /* Components */,
 				4180AEEF2839A0720054FEA9 /* Bundle Extensions */,
 				39B14DB12C9CE173003A457D /* Utils.swift */,
 			);
@@ -200,6 +200,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				398A914C2C9F17B500DF3012 /* TimelineViewWeek */,
+				398A91552C9F371B00DF3012 /* Components */,
 				398DCB7A2C9A64DC00BB9310 /* Menu Bar */,
 				39B14DBE2C9D00FB003A457D /* TimelineViewDay */,
 				39B90B9C2C9B1E1C0002823D /* Watcher */,
@@ -266,10 +267,8 @@
 			files = (
 				4180AEBD283975670054FEA9 /* MainScene.swift in Sources */,
 				4180AEF12839A0830054FEA9 /* Bundle+Version.swift in Sources */,
-				39B14DBD2C9CE3DD003A457D /* CustomDatePicker.swift in Sources */,
 				4180AEDC283984740054FEA9 /* ExportCommands.swift in Sources */,
 				4180AEEE2839A0660054FEA9 /* Bundle+Name.swift in Sources */,
-				39D69B032C9E1B4E00923741 /* TimelineViewSelector.swift in Sources */,
 				4180AEC4283979530054FEA9 /* MainView.swift in Sources */,
 				4180AEC2283976F80054FEA9 /* GeneralSettingsView.swift in Sources */,
 				4180AEDE283985190054FEA9 /* MyExportDocument.swift in Sources */,
