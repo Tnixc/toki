@@ -41,7 +41,10 @@ struct TimelineDay: View {
       let dayName = formatDate(components: logic.selectedDate)
       Text("\(dayName)'s Timeline")
         .font(.largeTitle)
-        .contentTransition(.opacity)
+        .contentTransition(.numericText()).animation(
+          .snappy(duration: 0.1), value: logic.selectedDate
+        )
+        .transition(.blurReplace)
       Spacer()
       settingsButton.offset(y: -8)
     }
@@ -72,13 +75,18 @@ struct TimelineDay: View {
   }
 
   private func loadingView(width: CGFloat, height: CGFloat) -> some View {
-    ZStack {
-      RoundedRectangle(cornerRadius: 10)
-        .fill(Color.secondary.opacity(0.1))
-      Text("Loading timeline...")
-        .foregroundColor(.secondary)
+    VStack(spacing: 0) {
+      hourLabelsView(width: width)
+      ZStack(alignment: .center) {
+        backgroundView(width: width + 8).offset(x: 8)
+          .blur(radius: 10)
+          .scaleEffect(0.8)
+
+        Text("Loading timeline...")
+          .foregroundColor(.secondary)
+      }.offset(y: -10)
+        .frame(width: width, height: height)
     }
-    .frame(width: width, height: height)
   }
 
   // MARK: - Hour Labels
@@ -322,18 +330,17 @@ struct TimelineDay: View {
         HStack(spacing: 0) {
           VStack {
             Image(systemName: "clock").font(.largeTitle)
-          }.aspectRatio(1, contentMode: .fill).padding(.leading, 4)
+          }.aspectRatio(1, contentMode: .fill).padding(.leading, 3)
           VStack(alignment: .leading) {
             Text("Active Time:")
               .font(.subheadline)
               .foregroundColor(.secondary)
-            VStack(alignment: .leading) {
-              Text(logic.formatDuration(logic.activeTime))
-                .redacted(reason: logic.isLoading ? .placeholder : [])
-            }
-          }.frame(width: 100)
-            .font(.title)
-            .foregroundColor(.primary)
+            Text(logic.formatDuration(logic.activeTime))
+              .redacted(reason: logic.isLoading ? .placeholder : [])
+          }
+          .frame(width: 100)
+          .font(.title)
+          .foregroundColor(.primary)
           Spacer()
         }
       }
@@ -413,11 +420,15 @@ struct TimelineDay: View {
   }
 
   private func loadingView(width: CGFloat?, height: CGFloat) -> some View {
-    ZStack {
-      RoundedRectangle(cornerRadius: 10)
-        .fill(Color.secondary.opacity(0.1))
-      Text("Loading...")
-        .foregroundColor(.secondary)
+    VStack {
+      Spacer()
+      HStack {
+        Spacer()
+        Text("Loading...")
+          .foregroundColor(.secondary)
+        Spacer()
+      }
+      Spacer()
     }
     .frame(width: width, height: height)
   }

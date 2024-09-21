@@ -30,9 +30,9 @@ class TimelineDayLogic: ObservableObject {
   // New properties for pagination
   private let chunkSize = 90000
   private var currentChunk = 0
-  
+
   @Published var hasMoreData = true
-  
+
   let calendar = Calendar.current
   let day = Day()
 
@@ -41,10 +41,10 @@ class TimelineDayLogic: ObservableObject {
   let segmentDuration: Int = 10
   let segmentCount: Int = 144
   let hoverLineExtension: CGFloat = 10
-  
+
   private var cachedActivities: [ActivityEntry] = []
   private var activeSegments: Set<Int> = []
-  
+
   private var segmentDominantApps: [Int: String] = [:]
   private var appUsageDurations: [String: TimeInterval] = [:]
 
