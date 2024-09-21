@@ -252,10 +252,14 @@ struct TimelineViewDay: View {
   private var dateNavigationView: some View {
     HStack {
       navigationButton(
-        action: { logic.changeDate(by: -1) }, iconName: "chevron.left")
+        action: { logic.changeDate(by: -1) }, iconName: "chevron.left"
+      ).keyboardShortcut(.leftArrow, modifiers: []).keyboardShortcut(
+        .init("h"), modifiers: [])
       datePickerButton
       navigationButton(
         action: { logic.changeDate(by: 1) }, iconName: "chevron.right"
+      ).keyboardShortcut(.rightArrow, modifiers: []).keyboardShortcut(
+        .init("l"), modifiers: []
       )
       .disabled(logic.isTodaySelected)
     }
@@ -269,6 +273,7 @@ struct TimelineViewDay: View {
         .contentShape(Rectangle())
         .frame(width: 40, height: 40)
     }
+
     .background(Color.primary.opacity(0.05))
     .frame(width: 40, height: 40)
     .clipShape(RoundedRectangle(cornerRadius: 10))

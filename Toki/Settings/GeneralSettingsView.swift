@@ -84,7 +84,7 @@ struct SettingItem<Content: View>: View {
         Image(systemName: icon).renderingMode(.original).font(.title3)
         VStack(alignment: .leading) {
           Text(title)
-          Text(description).font(.caption)
+          Text(description).font(.caption).foregroundStyle(.secondary)
         }
         Spacer()
         content()
