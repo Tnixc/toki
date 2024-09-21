@@ -6,15 +6,18 @@ struct MainScene: Scene {
     WindowGroup {
       MainView()
         .openSettingsAccess()
+      
         .frame(
           minWidth: 400, maxWidth: .infinity, minHeight: 500,
           maxHeight: .infinity
         )
         .padding(.top, 1)
+        .padding(.horizontal)
 
         .toolbar {
           Rectangle().hidden()
         }
+      
         .background(VisualEffect().ignoresSafeArea())
     }
     .defaultSize(width: 800, height: 600)

@@ -41,10 +41,6 @@ struct TimelineDay: View {
       let dayName = formatDate(components: logic.selectedDate)
       Text("\(dayName)'s Timeline")
         .font(.largeTitle)
-        .contentTransition(.numericText()).animation(
-          .snappy(duration: 0.1), value: logic.selectedDate
-        )
-        .transition(.blurReplace)
       Spacer()
       settingsButton.offset(y: -8)
     }
@@ -55,17 +51,19 @@ struct TimelineDay: View {
     GeometryReader { geometry in
       let timelineWidth = geometry.size.width
       VStack(alignment: .leading, spacing: 0) {
-        if logic.isLoading {
-          loadingView(width: timelineWidth, height: 125)
-        } else {
-          hourLabelsView(width: timelineWidth)
-          ZStack(alignment: .topLeading) {
+        hourLabelsView(width: timelineWidth)
+        ZStack(alignment: .topLeading) {
+          if logic.isLoading {
+            loadingView(width: timelineWidth, height: 125)
+              .transition(.blurReplace)
+          } else {
             timelineView(width: timelineWidth)
-            hoverInformationView(width: timelineWidth)
-              .zIndex(99)
+              .transition(.blurReplace)
           }
-          .zIndex(99)
+          hoverInformationView(width: timelineWidth)
+            .zIndex(99)
         }
+        .animation(.easeInOut(duration: 0.3), value: logic.isLoading)
       }
       .zIndex(99)
     }
@@ -76,11 +74,9 @@ struct TimelineDay: View {
 
   private func loadingView(width: CGFloat, height: CGFloat) -> some View {
     VStack(spacing: 0) {
-      hourLabelsView(width: width)
       ZStack(alignment: .center) {
         backgroundView(width: width + 8).offset(x: 8)
-          .blur(radius: 10)
-          .scaleEffect(0.8)
+          .blur(radius: 20)
 
         Text("Loading timeline...")
           .foregroundColor(.secondary)
@@ -336,7 +332,8 @@ struct TimelineDay: View {
               .font(.subheadline)
               .foregroundColor(.secondary)
             Text(logic.formatDuration(logic.activeTime))
-              .redacted(reason: logic.isLoading ? .placeholder : [])
+              .contentTransition(.numericText()).animation(
+                .snappy, value: logic.activeTime)
           }
           .frame(width: 100)
           .font(.title)
@@ -344,8 +341,6 @@ struct TimelineDay: View {
           Spacer()
         }
       }
-      .animation(.spring, value: logic.activeTime)
-      .transition(.blurReplace)
 
       InfoBox {
         VStack(alignment: .leading, spacing: 7) {
@@ -358,7 +353,7 @@ struct TimelineDay: View {
               logic.clockInTime?.formatted(date: .omitted, time: .shortened)
                 ?? "N/A"
             )
-            .redacted(reason: logic.isLoading ? .placeholder : [])
+            .contentTransition(.numericText()).animation( .snappy, value: logic.clockOutTime)
           }
           HStack {
             Image(systemName: "moon.zzz.fill").frame(width: 14)
@@ -368,11 +363,11 @@ struct TimelineDay: View {
               logic.clockOutTime?.formatted(date: .omitted, time: .shortened)
                 ?? "N/A"
             )
-            .redacted(reason: logic.isLoading ? .placeholder : [])
+            .contentTransition(.numericText()).animation(
+              .snappy, value: logic.clockOutTime)
           }
         }
       }
-      .animation(.spring, value: logic.clockOutTime)
       .transition(.blurReplace)
     }
   }
@@ -384,11 +379,23 @@ struct TimelineDay: View {
         .font(.headline).offset(y: -7)
 
       if logic.isLoading {
-        loadingView(width: nil, height: 100)
+        VStack {
+          HStack {
+            Text("Loading")
+              .foregroundColor(.secondary)
+              .padding()
+              .transition(.blurReplace)
+          }
+        }
       } else if logic.mostUsedApps.isEmpty {
-        Text("No data available")
-          .foregroundColor(.secondary)
-          .padding()
+        VStack {
+          HStack {
+            Text("No data available")
+              .foregroundColor(.secondary)
+              .padding()
+              .transition(.blurReplace)
+          }
+        }
       } else {
         ForEach(logic.mostUsedApps, id: \.appName) { appUsage in
           HStack {
@@ -413,23 +420,13 @@ struct TimelineDay: View {
         .secondary.opacity(0.2), lineWidth: 1)
     )
     .animation(
-      .spring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.3),
+      .spring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.0),
+      value: logic.isLoading
+    )
+    .animation(
+      .spring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.0),
       value: logic.mostUsedApps
     )
     .zIndex(-10)
-  }
-
-  private func loadingView(width: CGFloat?, height: CGFloat) -> some View {
-    VStack {
-      Spacer()
-      HStack {
-        Spacer()
-        Text("Loading...")
-          .foregroundColor(.secondary)
-        Spacer()
-      }
-      Spacer()
-    }
-    .frame(width: width, height: height)
   }
 }
