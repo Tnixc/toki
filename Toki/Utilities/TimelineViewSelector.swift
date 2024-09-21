@@ -13,11 +13,7 @@ struct TimelineViewSelector: View {
   var body: some View {
     ZStack(alignment: .top) {
       Button(action: {
-        withAnimation(
-          .spring(response: 0.3, dampingFraction: 0.7, blendDuration: 0)
-        ) {
-          self.isExpanded.toggle()
-        }
+        toggleExpanded()
       }) {
         HStack {
           Text(selectedViewType.rawValue)
@@ -41,11 +37,7 @@ struct TimelineViewSelector: View {
           ForEach(TimelineViewType.allCases, id: \.self) { viewType in
             Button(action: {
               self.selectedViewType = viewType
-              withAnimation(
-                .spring(response: 0.3, dampingFraction: 0.7, blendDuration: 0)
-              ) {
-                self.isExpanded.toggle()
-              }
+              toggleExpanded()
             }) {
               Text(viewType.rawValue)
                 .foregroundColor(.primary)
@@ -63,13 +55,44 @@ struct TimelineViewSelector: View {
         .frame(width: 120)
         .offset(y: 40)
         .transition(.blurReplace.combined(with: .opacity))
-        .zIndex(50)  // Ensures the dropdown is on top
+        .zIndex(50)
         .frame(maxHeight: 40).fixedSize(horizontal: true, vertical: true)
         .shadow(color: Color.black.opacity(0.1), radius: 9)
       }
     }
-    .zIndex(isExpanded ? 50 : -10)  // Higher zIndex when
+    .zIndex(isExpanded ? 50 : -10)
     .hoverEffect()
+    .onAppear {
+      setupMouseEventMonitor()
+    }
+  }
+
+  private func toggleExpanded() {
+    withAnimation(
+      .spring(response: 0.3, dampingFraction: 0.7, blendDuration: 0)
+    ) {
+      isExpanded.toggle()
+    }
+  }
+
+  private func setupMouseEventMonitor() {
+    NSEvent.addLocalMonitorForEvents(matching: [
+      .leftMouseUp, .rightMouseUp,
+    ]) { event in
+      if isExpanded {
+        let locationInWindow = event.locationInWindow
+        let frame =
+          NSApp.windows.first?.contentView?.convert(
+            NSRect(x: 0, y: 0, width: 120, height: 200), to: nil) ?? .zero
+
+        if !frame.contains(locationInWindow) {
+          DispatchQueue.main.async {
+            toggleExpanded()
+          }
+        }
+      }
+      return event
+    }
   }
 }
 
