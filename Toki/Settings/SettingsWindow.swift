@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct SettingsWindow: View {
-
   private enum Tabs: Hashable {
     case general
   }
@@ -20,7 +19,6 @@ struct SettingsWindow: View {
 
   /// Show settings programmatically
   static func show() {
-    NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
   }
 }
 

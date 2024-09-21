@@ -12,6 +12,7 @@
 		39B90B9B2C9B07CE0002823D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 39B90B9A2C9B07CE0002823D /* SQLite */; };
 		39B90BA12C9B24A40002823D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 39B90BA02C9B24A40002823D /* SQLite */; };
 		39D69B032C9E1B4E00923741 /* TimelineViewSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D69B022C9E1B4E00923741 /* TimelineViewSelector.swift */; };
+		39D69B062C9E71E100923741 /* SettingsAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 39D69B052C9E71E100923741 /* SettingsAccess */; };
 		4180AEAE2839753E0054FEA9 /* Toki.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEAD2839753E0054FEA9 /* Toki.swift */; };
 		4180AEB22839753F0054FEA9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4180AEB12839753F0054FEA9 /* Assets.xcassets */; };
 		4180AEB52839753F0054FEA9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4180AEB42839753F0054FEA9 /* Preview Assets.xcassets */; };
@@ -74,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39D69B062C9E71E100923741 /* SettingsAccess in Frameworks */,
 				39B90BA12C9B24A40002823D /* SQLite in Frameworks */,
 				39B90B9B2C9B07CE0002823D /* SQLite in Frameworks */,
 			);
@@ -226,6 +228,7 @@
 			mainGroup = 4180AEA12839753E0054FEA9;
 			packageReferences = (
 				39B90B992C9B07CE0002823D /* XCRemoteSwiftPackageReference "SQLite.swift" */,
+				39D69B042C9E71E100923741 /* XCRemoteSwiftPackageReference "SettingsAccess" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4180AEAB2839753E0054FEA9 /* Products */;
@@ -490,6 +493,14 @@
 				minimumVersion = 0.15.1;
 			};
 		};
+		39D69B042C9E71E100923741 /* XCRemoteSwiftPackageReference "SettingsAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/orchetect/SettingsAccess";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -502,6 +513,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 39B90B992C9B07CE0002823D /* XCRemoteSwiftPackageReference "SQLite.swift" */;
 			productName = SQLite;
+		};
+		39D69B052C9E71E100923741 /* SettingsAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 39D69B042C9E71E100923741 /* XCRemoteSwiftPackageReference "SettingsAccess" */;
+			productName = SettingsAccess;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

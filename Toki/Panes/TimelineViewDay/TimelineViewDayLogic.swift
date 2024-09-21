@@ -17,11 +17,7 @@ class TimelineViewDayLogic: ObservableObject {
   @Published var currentHoverSegment: Int?
   @Published var mostUsedApps: [AppUsage] = []
   @Published var activities: [ActivityEntry] = []
-  @Published var showAppColors: Bool {
-    didSet {
-      SettingsManager.shared.set(showAppColors, forKey: "showAppColors")
-    }
-  }
+
   var totalActiveDuration: TimeInterval {
     return appUsageDurations.values.reduce(0, +)
   }
@@ -45,7 +41,6 @@ class TimelineViewDayLogic: ObservableObject {
     let today = Date()
     self.selectedDate = calendar.dateComponents(
       [.year, .month, .day], from: today)
-    self.showAppColors = SettingsManager.shared.bool(forKey: "showAppColors")
   }
 
   var selectedDayStart: Date {
@@ -174,7 +169,9 @@ class TimelineViewDayLogic: ObservableObject {
   }
 
   func colorForSegment(_ segment: Int) -> Color {
-    if showAppColors, let dominantApp = segmentDominantApps[segment] {
+    if SettingsManager.shared.bool(forKey: "showAppColors"),
+      let dominantApp = segmentDominantApps[segment]
+    {
       return colorForApp(dominantApp)
     } else {
       return Color.accentColor.opacity(0.8)

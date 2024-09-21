@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 
 struct TimelineViewDay: View {
+
   @StateObject private var logic = TimelineViewDayLogic()
   @Binding var selectedViewType: TimelineViewType
 
@@ -29,6 +30,8 @@ struct TimelineViewDay: View {
         .font(.title)
         .animation(.snappy, value: logic.dateString)
         .contentTransition(.numericText())
+      Spacer()
+      settingsButton.offset(y: -8)
     }
   }
 
@@ -214,20 +217,17 @@ struct TimelineViewDay: View {
         TimelineViewSelector(selectedViewType: $selectedViewType)
       }
       .frame(minHeight: 42)
-      HStack {
-        HStack {
-          Text("App Colors")
-          Toggle(isOn: $logic.showAppColors) {}
-            .toggleStyle(SwitchToggleStyle(tint: .accentColor))
-            .scaleEffect(0.8, anchor: .leading)
-        }
-      }
-      .padding(.leading, 16)
-      .padding(.trailing, 6)
-      .frame(height: 40)
-      .background(Color.secondary.opacity(0.1))
-      .cornerRadius(10)
     }.zIndex(10)
+  }
+
+  @Environment(\.openSettingsLegacy) private var openSettingsLegacy
+  private var settingsButton: some View {
+    Button(action: { try? openSettingsLegacy() }) {
+      Image(systemName: "gearshape.fill")
+        .foregroundColor(.secondary)
+        .font(.system(size: 20))
+    }
+    .buttonStyle(PlainButtonStyle())
   }
 
   // MARK: - Date Navigation
