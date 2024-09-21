@@ -323,10 +323,10 @@ struct TimelineDay: View {
   private func dayStatsView() -> some View {
     HStack {
       InfoBox {
-        HStack {
+        HStack(spacing: 0) {
           VStack {
             Image(systemName: "clock").font(.largeTitle)
-          }.aspectRatio(1, contentMode: .fill)
+          }.aspectRatio(1, contentMode: .fill).padding(.leading, 4)
           VStack(alignment: .leading) {
             Text("Active Time:")
               .font(.subheadline)
