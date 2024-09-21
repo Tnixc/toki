@@ -22,6 +22,9 @@ class TimelineViewDayLogic: ObservableObject {
       SettingsManager.shared.set(showAppColors, forKey: "showAppColors")
     }
   }
+  var totalActiveDuration: TimeInterval {
+    return appUsageDurations.values.reduce(0, +)
+  }
 
   private var appColors: [String: Color] = [:]
 
