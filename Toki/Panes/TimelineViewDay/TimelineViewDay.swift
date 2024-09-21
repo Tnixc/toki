@@ -17,8 +17,7 @@ struct TimelineViewDay: View {
           ZStack(alignment: .topLeading) {
             timelineView(width: timelineWidth)
             hoverInformationView(width: timelineWidth)
-              .contentTransition(.interpolate)
-              .animation(.spring(), value: logic.selectedDate)
+              .transition(.blurReplace)
               .zIndex(99)
           }.zIndex(99)
         }.zIndex(99)
