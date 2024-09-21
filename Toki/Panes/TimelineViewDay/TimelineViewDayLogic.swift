@@ -20,14 +20,18 @@ class TimelineViewDayLogic: ObservableObject {
   @Published var clockInTime: Date?
   @Published var clockOutTime: Date?
   @Published var activeTime: TimeInterval = 0
-  private var endOfDayTime: Date {
-    UserDefaults.standard.object(forKey: "endOfDayTime") as? Date ?? Calendar
-      .current.date(from: DateComponents(hour: 4, minute: 0))!
-  }
-
   @AppStorage("showAppColors") private var showAppColors: Bool = true {
     didSet {
       objectWillChange.send()
+    }
+  }
+  private var endOfDayTime: Date {
+    let defaults = UserDefaults.standard
+    if let savedTime = defaults.object(forKey: "endOfDayTime") as? Date {
+      return savedTime
+    } else {
+      return Calendar.current.date(from: DateComponents(hour: 4, minute: 0))
+        ?? Date()
     }
   }
 
@@ -51,6 +55,7 @@ class TimelineViewDayLogic: ObservableObject {
   private var appUsageDurations: [String: TimeInterval] = [:]
 
   init() {
+
     let today = Date()
     self.selectedDate = calendar.dateComponents(
       [.year, .month, .day], from: today)
@@ -297,30 +302,31 @@ class TimelineViewDayLogic: ObservableObject {
 
   func calculateDayStats() {
     let dayStart = calendar.startOfDay(for: selectedDayStart)
-    let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart)!
+    let nextDayStart = calendar.date(byAdding: .day, value: 1, to: dayStart)!
 
+    let endOfDayComponents = calendar.dateComponents(
+      [.hour, .minute], from: endOfDayTime)
     let endOfDay = calendar.date(
-      bySettingHour: calendar.component(.hour, from: endOfDayTime),
-      minute: calendar.component(.minute, from: endOfDayTime),
+      bySettingHour: endOfDayComponents.hour ?? 4,
+      minute: endOfDayComponents.minute ?? 0,
       second: 0,
-      of: dayEnd)!
+      of: nextDayStart)!
 
-    let filteredActivities = cachedActivities.filter { !$0.isIdle }
+    let filteredActivities =
+      cachedActivities
+      .filter { !$0.isIdle }
+      .filter { $0.timestamp <= endOfDay }
 
     clockInTime = filteredActivities.first?.timestamp
+
     clockOutTime = filteredActivities.last?.timestamp
 
-    activeTime = filteredActivities.reduce(0) { sum, activity in
-      return sum + Double(segmentDuration)
+    // Calculate active time
+    activeTime = 0
+    for entry in appUsageDurations {
+      activeTime += entry.value
     }
 
-    // Adjust clock times based on the end of day setting
-    if let clockIn = clockInTime, clockIn > endOfDay {
-      clockInTime = nil
-    }
-    if let clockOut = clockOutTime, clockOut > endOfDay {
-      clockOutTime = calendar.date(byAdding: .day, value: -1, to: clockOut)
-    }
   }
 
 }

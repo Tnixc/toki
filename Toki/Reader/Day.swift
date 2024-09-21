@@ -38,7 +38,7 @@ class Day {
   func getActivityForDay(date: Date) -> [ActivityEntry] {
     let calendar = Calendar.current
     let startOfDay = calendar.startOfDay(for: date)
-    let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+    let endOfDay = calendar.date(byAdding: .hour, value: 24 + 6, to: startOfDay)!
 
     let query =
       activities

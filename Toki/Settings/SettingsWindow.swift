@@ -16,10 +16,6 @@ struct SettingsWindow: View {
     .padding(20)
     .frame(width: 500, height: 450)
   }
-
-  /// Show settings programmatically
-  static func show() {
-  }
 }
 
 struct SettingsWindow_Previews: PreviewProvider {

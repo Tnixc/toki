@@ -17,22 +17,21 @@ struct GeneralSettingsTab: View {
       initialValue: defaults.object(forKey: "endOfDayTime") as? Date
         ?? defaultEndOfDay)
 
-    self.timeOptions = (0...6).flatMap { hour in
-      [0].map { minute in
-        Calendar.current.date(from: DateComponents(hour: hour, minute: minute))
-          ?? Date()
-      }
+    self.timeOptions = (0...6).map { hour in
+      Calendar.current.date(from: DateComponents(hour: hour, minute: 0))
+        ?? Date()
     }
 
     self.timeFormatter = DateFormatter()
-    self.timeFormatter.dateFormat = "h:mm a"
+    self.timeFormatter.dateFormat = "HH:mm"
   }
 
   var body: some View {
     VStack(alignment: .leading, spacing: 20) {
       SettingItem(
         title: "App Colors",
-        description: "Show hashed app colors in the day timeline view."
+        description: "Show hashed app colors in the day timeline view.",
+        icon: "swatchpalette"
       ) {
         Toggle(
           "",
@@ -50,7 +49,8 @@ struct GeneralSettingsTab: View {
 
       SettingItem(
         title: "End of Day",
-        description: "Set the time that separates work days."
+        description: "Set the time that starts a new day. Requires restart.",
+        icon: "square.and.line.vertical.and.square.filled"
       ) {
         Picker(
           "",
@@ -66,7 +66,7 @@ struct GeneralSettingsTab: View {
             Text(timeFormatter.string(from: date))
           }
         }
-        .pickerStyle(MenuPickerStyle())
+        .pickerStyle(.menu).frame(maxWidth: 100)
       }
     }
     .padding(20)
@@ -76,11 +76,12 @@ struct GeneralSettingsTab: View {
 struct SettingItem<Content: View>: View {
   let title: String
   let description: String
+  let icon: String
   let content: () -> Content
-
   var body: some View {
     VStack {
       HStack {
+        Image(systemName: icon).renderingMode(.original).font(.title3)
         VStack(alignment: .leading) {
           Text(title)
           Text(description).font(.caption)
