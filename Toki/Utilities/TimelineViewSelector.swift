@@ -59,7 +59,7 @@ struct TimelineViewSelector: View {
     .background(.ultraThinMaterial)
     .overlay(
       RoundedRectangle(cornerRadius: 12)
-        .stroke(Color.primary.opacity(0.1), lineWidth: 2)
+        .stroke(Color.primary.opacity(0.3), lineWidth: 2)
     )
     .clipShape(RoundedRectangle(cornerRadius: 12))
     .frame(width: 120)

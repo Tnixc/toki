@@ -173,15 +173,12 @@ class TimelineViewDayLogic: ObservableObject {
 
   private func computeAppUsage() {
     appUsageDurations.removeAll()
-    var lastTimestamp: Date?
     var lastApp: String?
 
     for activity in cachedActivities {
-      if let lastTimestamp = lastTimestamp, let lastApp = lastApp {
-        let duration = activity.timestamp.timeIntervalSince(lastTimestamp)
-        appUsageDurations[lastApp, default: 0] += duration
+      if let lastApp = lastApp {
+        appUsageDurations[lastApp, default: 0] += Double(Watcher().INTERVAL)
       }
-      lastTimestamp = activity.timestamp
       lastApp = activity.appName
     }
   }
@@ -322,7 +319,6 @@ class TimelineViewDayLogic: ObservableObject {
     clockInTime = filteredActivities.first?.timestamp
     clockOutTime = filteredActivities.last?.timestamp
 
-    // Calculate active time
     activeTime = 0
     for entry in appUsageDurations {
       activeTime += entry.value
