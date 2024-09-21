@@ -56,14 +56,14 @@ struct TimelineViewSelector: View {
       }
     }
     .padding(2)
-    .background(.thickMaterial)
+    .background(.ultraThinMaterial)
     .overlay(
       RoundedRectangle(cornerRadius: 12)
         .stroke(Color.primary.opacity(0.1), lineWidth: 2)
     )
     .clipShape(RoundedRectangle(cornerRadius: 12))
     .frame(width: 120)
-    .offset(y: 40)
+    .offset(y: 30)
     .transition(.blurReplace.combined(with: .opacity))
     .zIndex(50)
     .frame(maxHeight: 40).fixedSize(horizontal: true, vertical: true)
@@ -75,7 +75,7 @@ struct TimelineViewSelector: View {
     Button(action: { selectViewType(viewType) }) {
       HStack {
         Image(systemName: "checkmark")
-          .scaleEffect(0.9, anchor: .center)
+          .scaleEffect(1, anchor: .center)
           .foregroundColor(selectedViewType == viewType ? .primary : .clear)
           .fontWeight(.medium)
           .frame(width: 15)
@@ -83,7 +83,7 @@ struct TimelineViewSelector: View {
         Text(viewType.rawValue)
           .foregroundColor(.primary)
           .padding(.vertical)
-          .frame(height: 40)
+          .frame(height: 30)
           .frame(maxWidth: .infinity, alignment: .leading)
           .clipShape(RoundedRectangle(cornerRadius: 10))
       }
@@ -91,7 +91,7 @@ struct TimelineViewSelector: View {
     }
     .hoverEffect()
     .buttonStyle(.borderless)
-    .frame(height: 40)
+    .frame(height: 30)
   }
 
   // MARK: - Helper Functions
