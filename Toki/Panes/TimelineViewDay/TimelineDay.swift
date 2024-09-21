@@ -1,8 +1,8 @@
 import Foundation
 import SwiftUI
 
-struct TimelineViewDay: View {
-  @StateObject private var logic = TimelineViewDayLogic()
+struct TimelineDay: View {
+  @StateObject private var logic = TimelineDayLogic()
   @Binding var selectedViewType: TimelineViewType
 
   var body: some View {

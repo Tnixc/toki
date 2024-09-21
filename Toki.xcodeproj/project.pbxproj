@@ -48,6 +48,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		398A914C2C9F17B500DF3012 /* TimelineViewWeek */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TimelineViewWeek;
+			sourceTree = "<group>";
+		};
 		398DCB7A2C9A64DC00BB9310 /* Menu Bar */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "Menu Bar";
@@ -142,6 +147,7 @@
 		4180AECA28397C3A0054FEA9 /* Panes */ = {
 			isa = PBXGroup;
 			children = (
+				398A914C2C9F17B500DF3012 /* TimelineViewWeek */,
 				39B14DBE2C9D00FB003A457D /* TimelineViewDay */,
 			);
 			path = Panes;
@@ -193,6 +199,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				398A914C2C9F17B500DF3012 /* TimelineViewWeek */,
 				398DCB7A2C9A64DC00BB9310 /* Menu Bar */,
 				39B14DBE2C9D00FB003A457D /* TimelineViewDay */,
 				39B90B9C2C9B1E1C0002823D /* Watcher */,

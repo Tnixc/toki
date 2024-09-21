@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class TimelineViewDayLogic: ObservableObject {
+class TimelineDayLogic: ObservableObject {
   @AppStorage("showAppColors") private var showAppColors: Bool = true {
     didSet {
       objectWillChange.send()
