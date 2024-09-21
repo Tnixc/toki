@@ -30,28 +30,45 @@ struct TimelineViewSelector: View {
         .background(Color.secondary.opacity(0.1))
         .clipShape(RoundedRectangle(cornerRadius: 10))
       }
+      .hoverEffect()
       .buttonStyle(.plain)
 
       if isExpanded {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .leading, spacing: 2) {  // Adjust gap between buttons
           ForEach(TimelineViewType.allCases, id: \.self) { viewType in
             Button(action: {
               self.selectedViewType = viewType
               toggleExpanded()
             }) {
-              Text(viewType.rawValue)
-                .foregroundColor(.primary)
-                .padding()
-                .frame(maxWidth: .infinity, alignment: .leading)
+              HStack {
+                Image(systemName: "checkmark")
+                  .foregroundColor(
+                    selectedViewType == viewType ? .primary : .clear
+                  )
+                  .fontWeight(.medium)
+                  .frame(width: 15)
+                  .padding(.leading, 10)
+                Text(viewType.rawValue)
+                  .foregroundColor(.primary)
+                  .padding(.vertical)
+                  .frame(height: 40)
+                  .frame(maxWidth: .infinity, alignment: .leading)
+                  .clipShape(RoundedRectangle(cornerRadius: 10))
+              }
+              .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .hoverEffect()
             .buttonStyle(.borderless)
             .frame(height: 40)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .background(viewType == selectedViewType ? Color.blue : Color.clear)
           }
         }
-        .background(.ultraThickMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .padding(2)
+        .background(.thinMaterial)
+        .overlay(
+          RoundedRectangle(cornerRadius: 12)
+            .stroke(Color.primary.opacity(0.1), lineWidth: 2)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 12))
         .frame(width: 120)
         .offset(y: 40)
         .transition(.blurReplace.combined(with: .opacity))
@@ -61,7 +78,6 @@ struct TimelineViewSelector: View {
       }
     }
     .zIndex(isExpanded ? 50 : -10)
-    .hoverEffect()
     .onAppear {
       setupMouseEventMonitor()
     }
