@@ -353,7 +353,7 @@ struct TimelineDay: View {
               logic.clockInTime?.formatted(date: .omitted, time: .shortened)
                 ?? "N/A"
             )
-            .contentTransition(.numericText()).animation( .snappy, value: logic.clockOutTime)
+            .contentTransition(.numericText()).animation(.snappy, value: logic.clockOutTime)
           }
           HStack {
             Image(systemName: "moon.zzz.fill").frame(width: 14)
