@@ -10,7 +10,6 @@ class Watcher {
   private let activities: Table
   private let timestamp = Expression<Date>("timestamp")
   private let appName = Expression<String>("app_name")
-  private let isIdle = Expression<Bool>("is_idle")
 
   init() {
     // Initialize SQLite database
@@ -25,7 +24,6 @@ class Watcher {
       activities.create(ifNotExists: true) { t in
         t.column(timestamp)
         t.column(appName)
-        t.column(isIdle)
       })
   }
 
@@ -53,11 +51,10 @@ class Watcher {
           .combinedSessionState, eventType: .keyDown)) > IDLE_TIME
 
     // Log to database
-    if appName != "loginwindow" {
+    if appName != "loginwindow" && !idle {
       let insert = activities.insert(
         timestamp <- Date(),
-        self.appName <- appName,
-        isIdle <- idle
+        self.appName <- appName
       )
       do {
         try db.run(insert)

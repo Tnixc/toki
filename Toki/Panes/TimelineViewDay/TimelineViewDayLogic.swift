@@ -25,6 +25,7 @@ class TimelineViewDayLogic: ObservableObject {
       objectWillChange.send()
     }
   }
+
   private var endOfDayTime: Date {
     let defaults = UserDefaults.standard
     if let savedTime = defaults.object(forKey: "endOfDayTime") as? Date {
@@ -33,6 +34,16 @@ class TimelineViewDayLogic: ObservableObject {
       return Calendar.current.date(from: DateComponents(hour: 4, minute: 0))
         ?? Date()
     }
+  }
+
+  var selectedDayStart: Date {
+    let calendar = Calendar.current
+    let zero = calendar.startOfDay(
+      for: calendar.date(from: selectedDate) ?? Date())
+
+    let endOfDayHour = calendar.component(.hour, from: endOfDayTime)
+
+    return calendar.date(byAdding: .hour, value: endOfDayHour, to: zero) ?? zero
   }
 
   var totalActiveDuration: TimeInterval {
@@ -55,14 +66,9 @@ class TimelineViewDayLogic: ObservableObject {
   private var appUsageDurations: [String: TimeInterval] = [:]
 
   init() {
-
     let today = Date()
     self.selectedDate = calendar.dateComponents(
       [.year, .month, .day], from: today)
-  }
-
-  var selectedDayStart: Date {
-    calendar.startOfDay(for: calendar.date(from: selectedDate) ?? Date())
   }
 
   var isTodaySelected: Bool {
@@ -141,7 +147,8 @@ class TimelineViewDayLogic: ObservableObject {
 
   private func computeSegmentInfo(_ segment: Int) -> (Bool, String?) {
     let startTime = calendar.date(
-      byAdding: .minute, value: segment * segmentDuration, to: selectedDayStart)!
+      byAdding: .minute, value: segment * segmentDuration,
+      to: calendar.startOfDay(for: selectedDayStart))!
     let endTime = startTime.addingTimeInterval(
       TimeInterval(segmentDuration * 60))
 
@@ -150,13 +157,11 @@ class TimelineViewDayLogic: ObservableObject {
 
     for activity in cachedActivities {
       if activity.timestamp >= startTime && activity.timestamp < endTime {
-        if !activity.isIdle {
-          isActive = true
-          let duration = min(
-            endTime.timeIntervalSince(activity.timestamp),
-            TimeInterval(segmentDuration * 60))
-          appUsage[activity.appName, default: 0] += duration
-        }
+        isActive = true
+        let duration = min(
+          endTime.timeIntervalSince(activity.timestamp),
+          TimeInterval(segmentDuration * 60))
+        appUsage[activity.appName, default: 0] += duration
       } else if activity.timestamp >= endTime {
         break
       }
@@ -172,9 +177,7 @@ class TimelineViewDayLogic: ObservableObject {
     var lastApp: String?
 
     for activity in cachedActivities {
-      if let lastTimestamp = lastTimestamp, let lastApp = lastApp,
-        !activity.isIdle
-      {
+      if let lastTimestamp = lastTimestamp, let lastApp = lastApp {
         let duration = activity.timestamp.timeIntervalSince(lastTimestamp)
         appUsageDurations[lastApp, default: 0] += duration
       }
@@ -199,7 +202,8 @@ class TimelineViewDayLogic: ObservableObject {
 
   func appsForSegment(_ segment: Int) -> [AppUsage] {
     let startTime = calendar.date(
-      byAdding: .minute, value: segment * segmentDuration, to: selectedDayStart)!
+      byAdding: .minute, value: segment * segmentDuration,
+      to: calendar.startOfDay(for: selectedDayStart))!
     let endTime = startTime.addingTimeInterval(
       TimeInterval(segmentDuration * 60))
 
@@ -207,9 +211,7 @@ class TimelineViewDayLogic: ObservableObject {
 
     for activity in cachedActivities {
       if activity.timestamp >= startTime && activity.timestamp < endTime {
-        if !activity.isIdle {
-          appUsage[activity.appName, default: 0] += Double(Watcher().INTERVAL)
-        }
+        appUsage[activity.appName, default: 0] += Double(Watcher().INTERVAL)
       } else if activity.timestamp >= endTime {
         break
       }
@@ -301,7 +303,7 @@ class TimelineViewDayLogic: ObservableObject {
   }
 
   func calculateDayStats() {
-    let dayStart = calendar.startOfDay(for: selectedDayStart)
+    let dayStart = selectedDayStart
     let nextDayStart = calendar.date(byAdding: .day, value: 1, to: dayStart)!
 
     let endOfDayComponents = calendar.dateComponents(
@@ -314,11 +316,10 @@ class TimelineViewDayLogic: ObservableObject {
 
     let filteredActivities =
       cachedActivities
-      .filter { !$0.isIdle }
       .filter { $0.timestamp <= endOfDay }
+      .filter { $0.timestamp >= dayStart }
 
     clockInTime = filteredActivities.first?.timestamp
-
     clockOutTime = filteredActivities.last?.timestamp
 
     // Calculate active time

@@ -4,11 +4,9 @@ import SQLite
 struct ActivityEntry: Equatable {
   let timestamp: Date
   let appName: String
-  let isIdle: Bool
 
   static func == (lhs: ActivityEntry, rhs: ActivityEntry) -> Bool {
     return lhs.timestamp == rhs.timestamp && lhs.appName == rhs.appName
-      && lhs.isIdle == rhs.isIdle
   }
 }
 
@@ -25,7 +23,6 @@ class Day {
   private let activities: Table
   private let timestamp = Expression<Date>("timestamp")
   private let appName = Expression<String>("app_name")
-  private let isIdle = Expression<Bool>("is_idle")
 
   init() {
     let path = NSSearchPathForDirectoriesInDomains(
@@ -52,8 +49,7 @@ class Day {
         activityEntries.append(
           ActivityEntry(
             timestamp: activity[timestamp],
-            appName: activity[appName],
-            isIdle: activity[isIdle]
+            appName: activity[appName]
           ))
       }
     } catch {
@@ -70,7 +66,7 @@ class Day {
 
     let query =
       activities
-      .filter(timestamp >= startOfDay && timestamp < endOfDay && !isIdle)
+      .filter(timestamp >= startOfDay && timestamp < endOfDay)
       .select(appName, timestamp)
       .order(timestamp.asc)
 
