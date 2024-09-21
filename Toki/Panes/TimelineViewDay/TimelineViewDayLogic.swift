@@ -26,6 +26,15 @@ class TimelineViewDayLogic: ObservableObject {
     }
   }
 
+  func endOfDayPosition(width: CGFloat) -> CGFloat {
+    let calendar = Calendar.current
+    let endOfDayComponents = calendar.dateComponents(
+      [.hour, .minute], from: endOfDayTime)
+    let totalMinutes =
+      (endOfDayComponents.hour ?? 0) * 60 + (endOfDayComponents.minute ?? 0)
+    return (CGFloat(totalMinutes) / CGFloat(24 * 60)) * width
+  }
+
   private var endOfDayTime: Date {
     let defaults = UserDefaults.standard
     if let savedTime = defaults.object(forKey: "endOfDayTime") as? Date {

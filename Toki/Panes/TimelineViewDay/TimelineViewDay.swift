@@ -41,8 +41,7 @@ struct TimelineViewDay: View {
     GeometryReader { geometry in
       let timelineWidth = geometry.size.width
       VStack(alignment: .leading, spacing: 0) {
-        hourLabelsView(width: timelineWidth - 20)
-          .padding(.horizontal, 10)
+        hourLabelsView(width: timelineWidth)
         ZStack(alignment: .topLeading) {
           timelineView(width: timelineWidth)
           hoverInformationView(width: timelineWidth)
@@ -74,8 +73,19 @@ struct TimelineViewDay: View {
       backgroundView(width: width)
       activityBarsView(width: width)
       hoverLineView(width: width)
+      endOfDayLineView(width: width)
       hoverOverlayView(width: width)
     }.zIndex(99)
+  }
+
+  private func endOfDayLineView(width: CGFloat) -> some View {
+    let position = logic.endOfDayPosition(width: width)
+    return Rectangle()
+      .fill(Color.primary.opacity(position != 0 ? 0.1 : 0))
+      .frame(
+        width: 2, height: logic.timelineHeight - logic.hoverLineExtension * 2
+      )
+      .position(x: position, y: logic.timelineHeight / 2)
   }
 
   // MARK: - Hover Information
@@ -123,7 +133,13 @@ struct TimelineViewDay: View {
   private func backgroundView(width: CGFloat) -> some View {
     RoundedRectangle(cornerRadius: 10)
       .fill(Color.accentColor.opacity(0.1))
-      .frame(width: width, height: logic.timelineHeight)
+      .frame(width: width + 20, height: logic.timelineHeight)
+      .offset(x: -10)
+      .overlay(
+        RoundedRectangle(cornerRadius: 10).stroke(
+          Color.accentColor.opacity(0.3), lineWidth: 1
+        ).offset(x: -10)
+      )
   }
 
   // MARK: - Activity Bars
@@ -204,9 +220,6 @@ struct TimelineViewDay: View {
       }
       .frame(width: width, height: logic.timelineHeight)
       .clipShape(RoundedRectangle(cornerRadius: 10))
-      .overlay(
-        RoundedRectangle(cornerRadius: 10).stroke(
-          Color.accentColor.opacity(0.3), lineWidth: 1))
   }
 
   // MARK: - Timeline Configuration
@@ -291,8 +304,8 @@ struct TimelineViewDay: View {
     HStack {
       HStack {
         VStack {
-          Image(systemName: "clock").font(.title)
-        }.frame(width: 33)
+          Image(systemName: "clock").font(.largeTitle)
+        }.frame(width: 40)
         VStack(alignment: .leading) {
           Text("Active Time:")
             .font(.subheadline)
@@ -316,7 +329,7 @@ struct TimelineViewDay: View {
               ?? "N/A")
         }
         HStack {
-          Image(systemName: "lightbulb.slash").frame(width: 14)
+          Image(systemName: "moon.zzz.fill").frame(width: 14)
           Text("Clocked out:")
           Spacer()
           Text(
