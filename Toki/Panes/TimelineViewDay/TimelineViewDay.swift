@@ -11,6 +11,7 @@ struct TimelineViewDay: View {
       headerView
       timelineSection
       timelineConfigView()
+      dayStatsView()
       mostUsedAppsView()
       Spacer()
     }
@@ -282,6 +283,51 @@ struct TimelineViewDay: View {
         )
       )
       .padding()
+    }
+  }
+
+  // MARK: - day stats
+  private func dayStatsView() -> some View {
+    HStack {
+      HStack {
+        VStack {
+          Image(systemName: "clock").font(.title)
+        }.frame(width: 33)
+        VStack(alignment: .leading) {
+          Text("Active Time:")
+            .font(.subheadline)
+            .foregroundColor(.secondary)
+          Text(logic.formatDuration(logic.activeTime))
+        }
+        .font(.title)
+        .foregroundColor(.primary)
+      }
+      .padding()
+      .background(Color.secondary.opacity(0.1))
+      .cornerRadius(10)
+      VStack(alignment: .leading, spacing: 5) {
+        HStack {
+          Image(systemName: "rectangle.righthalf.inset.filled.arrow.right")
+            .frame(width: 14)
+          Text("Clocked in:")
+          Spacer()
+          Text(
+            logic.clockInTime?.formatted(date: .omitted, time: .shortened)
+              ?? "N/A")
+        }
+        HStack {
+          Image(systemName: "lightbulb.slash").frame(width: 14)
+          Text("Clocked out:")
+          Spacer()
+          Text(
+            logic.clockOutTime?.formatted(date: .omitted, time: .shortened)
+              ?? "N/A")
+        }
+      }
+      .frame(maxWidth: 200)
+      .padding()
+      .background(Color.secondary.opacity(0.1))
+      .cornerRadius(10)
     }
   }
 

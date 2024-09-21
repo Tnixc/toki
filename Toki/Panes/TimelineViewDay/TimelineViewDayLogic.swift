@@ -17,6 +17,14 @@ class TimelineViewDayLogic: ObservableObject {
   @Published var currentHoverSegment: Int?
   @Published var mostUsedApps: [AppUsage] = []
   @Published var activities: [ActivityEntry] = []
+  @Published var clockInTime: Date?
+  @Published var clockOutTime: Date?
+  @Published var activeTime: TimeInterval = 0
+  private var endOfDayTime: Date {
+    UserDefaults.standard.object(forKey: "endOfDayTime") as? Date ?? Calendar
+      .current.date(from: DateComponents(hour: 4, minute: 0))!
+  }
+
   @AppStorage("showAppColors") private var showAppColors: Bool = true {
     didSet {
       objectWillChange.send()
@@ -108,6 +116,7 @@ class TimelineViewDayLogic: ObservableObject {
       }
       .sorted { $0.duration > $1.duration }
     }
+    calculateDayStats()
   }
 
   private func precomputeSegmentData() {
@@ -284,6 +293,34 @@ class TimelineViewDayLogic: ObservableObject {
   func dominantAppForSegment(_ segment: Int) -> String? {
     let apps = appsForSegment(segment)
     return apps.max(by: { $0.duration < $1.duration })?.appName
+  }
+
+  func calculateDayStats() {
+    let dayStart = calendar.startOfDay(for: selectedDayStart)
+    let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart)!
+
+    let endOfDay = calendar.date(
+      bySettingHour: calendar.component(.hour, from: endOfDayTime),
+      minute: calendar.component(.minute, from: endOfDayTime),
+      second: 0,
+      of: dayEnd)!
+
+    let filteredActivities = cachedActivities.filter { !$0.isIdle }
+
+    clockInTime = filteredActivities.first?.timestamp
+    clockOutTime = filteredActivities.last?.timestamp
+
+    activeTime = filteredActivities.reduce(0) { sum, activity in
+      return sum + Double(segmentDuration)
+    }
+
+    // Adjust clock times based on the end of day setting
+    if let clockIn = clockInTime, clockIn > endOfDay {
+      clockInTime = nil
+    }
+    if let clockOut = clockOutTime, clockOut > endOfDay {
+      clockOutTime = calendar.date(byAdding: .day, value: -1, to: clockOut)
+    }
   }
 
 }
