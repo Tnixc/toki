@@ -19,14 +19,16 @@ struct TimelineViewDay: View {
             hoverInformationView(width: timelineWidth)
               .contentTransition(.interpolate)
               .animation(.spring(), value: logic.selectedDate)
-          }
-        }
-      }
-      .frame(height: 125)  // NOTE: Height
+              .zIndex(99)
+          }.zIndex(99)
+        }.zIndex(99)
+      }.zIndex(99)
+        .frame(height: 125)  // NOTE: Height
 
       timelineConfigView()
         .contentTransition(.interpolate)
         .animation(.snappy, value: logic.selectedDate)
+        .zIndex(50)
 
       mostUsedAppsView()
 
@@ -68,6 +70,7 @@ struct TimelineViewDay: View {
 
       Button(action: { logic.showDatePicker.toggle() }) {
         Text(logic.dateString).fontWeight(.bold)
+          .foregroundStyle(.primary)
           .padding(.horizontal, 10)
           .frame(width: 120, height: 40)
           .contentShape(Rectangle())
@@ -122,7 +125,8 @@ struct TimelineViewDay: View {
       activityBarsView(width: width)
       hoverLineView(width: width)
       hoverOverlayView(width: width)
-    }
+    }.zIndex(99)
+
   }
 
   private func hoverInformationView(width: CGFloat) -> some View {
@@ -166,7 +170,7 @@ struct TimelineViewDay: View {
           y: logic.timelineHeight + logic.hoverLineExtension
         )
       }
-    }
+    }.zIndex(99)
   }
 
   private func backgroundView(width: CGFloat) -> some View {
@@ -277,7 +281,7 @@ struct TimelineViewDay: View {
       .frame(height: 40)
       .background(Color.secondary.opacity(0.1))
       .cornerRadius(10)
-    }.zIndex(-1)
+    }.zIndex(10)
 
   }
 
@@ -313,6 +317,6 @@ struct TimelineViewDay: View {
     .background(Color.secondary.opacity(0.1))
     .cornerRadius(10)
     .transition(.scale.combined(with: .opacity))
-    .zIndex(-1)
+    .zIndex(-10)
   }
 }

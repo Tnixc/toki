@@ -21,10 +21,11 @@ struct TimelineViewSelector: View {
       }) {
         HStack {
           Text(selectedViewType.rawValue)
-            .foregroundColor(.primary)
+            .foregroundColor(.secondary)
+            .fontWeight(.bold)
           Spacer()
           Image(systemName: "chevron.down")
-            .foregroundColor(.primary)
+            .foregroundColor(.secondary)
             .fontWeight(.bold)
             .rotationEffect(.degrees(isExpanded ? 180 : 0))
         }
@@ -36,7 +37,7 @@ struct TimelineViewSelector: View {
       .buttonStyle(.plain)
 
       if isExpanded {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 2) {
           ForEach(TimelineViewType.allCases, id: \.self) { viewType in
             Button(action: {
               self.selectedViewType = viewType
@@ -48,22 +49,27 @@ struct TimelineViewSelector: View {
             }) {
               Text(viewType.rawValue)
                 .foregroundColor(.primary)
-                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
-                .background(
-                  viewType == selectedViewType ? Color.blue : Color.clear)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.borderless)
+            .frame(height: 40)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .background(viewType == selectedViewType ? Color.blue : Color.clear)
           }
         }
-        .background(Color.black)
+        .background(.ultraThickMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .frame(width: 120)
-        .offset(y: 45)
-        .transition(.opacity)
+        .offset(y: 40)
+        .transition(.blurReplace.combined(with: .opacity))
+        .zIndex(50)  // Ensures the dropdown is on top
+        .frame(maxHeight: 40).fixedSize(horizontal: true, vertical: true)
+        .shadow(color: Color.black.opacity(0.1), radius: 9)
       }
     }
-    .zIndex(100)
+    .zIndex(isExpanded ? 50 : -10)  // Higher zIndex when
+    .hoverEffect()
   }
 }
 
@@ -72,10 +78,11 @@ struct ContentView: View {
 
   var body: some View {
     ZStack {
-      Color.black.edgesIgnoringSafeArea(.all)
       VStack {
         Spacer()
-        TimelineViewSelector(selectedViewType: $selectedViewType)
+        TimelineViewSelector(selectedViewType: $selectedViewType).frame(
+          maxHeight: 40
+        ).fixedSize(horizontal: true, vertical: true)
         Spacer()
       }
     }
