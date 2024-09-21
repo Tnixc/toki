@@ -8,15 +8,10 @@ struct TimelineDay: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
       headerView
-
-      if logic.isLoading {
-        loadingView
-      } else {
-        timelineSection
-        timelineConfigView()
-        dayStatsView()
-        mostUsedAppsView()
-      }
+      timelineSection
+      timelineConfigView()
+      dayStatsView()
+      mostUsedAppsView()
     }
     .padding()
     .frame(maxWidth: 600)
@@ -57,15 +52,17 @@ struct TimelineDay: View {
     GeometryReader { geometry in
       let timelineWidth = geometry.size.width
       VStack(alignment: .leading, spacing: 0) {
-        hourLabelsView(width: timelineWidth)
-        ZStack(alignment: .topLeading) {
-          timelineView(width: timelineWidth)
-            .opacity(logic.isLoading ? 0 : 1)
-          hoverInformationView(width: timelineWidth)
-            .opacity(logic.isLoading ? 0 : 1)
-            .zIndex(99)
+        if logic.isLoading {
+          loadingView(width: timelineWidth, height: 125)
+        } else {
+          hourLabelsView(width: timelineWidth)
+          ZStack(alignment: .topLeading) {
+            timelineView(width: timelineWidth)
+            hoverInformationView(width: timelineWidth)
+              .zIndex(99)
+          }
+          .zIndex(99)
         }
-        .zIndex(99)
       }
       .zIndex(99)
     }
@@ -74,11 +71,14 @@ struct TimelineDay: View {
     .frame(height: 125)
   }
 
-  private func timelineLoadingView(width: CGFloat) -> some View {
+  private func loadingView(width: CGFloat, height: CGFloat) -> some View {
     ZStack {
-      backgroundView(width: width)
-      Text("Loading...").opacity(0.4)
+      RoundedRectangle(cornerRadius: 10)
+        .fill(Color.secondary.opacity(0.1))
+      Text("Loading timeline...")
+        .foregroundColor(.secondary)
     }
+    .frame(width: width, height: height)
   }
 
   // MARK: - Hour Labels
@@ -327,14 +327,9 @@ struct TimelineDay: View {
             Text("Active Time:")
               .font(.subheadline)
               .foregroundColor(.secondary)
-            if logic.isLoading {
-              VStack(alignment: .leading) {
-                Text("0h 0m").foregroundColor(.clear)
-              }
-            } else {
-              VStack(alignment: .leading) {
-                Text(logic.formatDuration(logic.activeTime))
-              }
+            VStack(alignment: .leading) {
+              Text(logic.formatDuration(logic.activeTime))
+                .redacted(reason: logic.isLoading ? .placeholder : [])
             }
           }.frame(width: 100)
             .font(.title)
@@ -352,25 +347,21 @@ struct TimelineDay: View {
               .frame(width: 14)
             Text("Clocked in:")
             Spacer()
-            if logic.isLoading {
-              Text("0h 0m").foregroundColor(.clear)
-            } else {
-              Text(
-                logic.clockInTime?.formatted(date: .omitted, time: .shortened)
-                  ?? "N/A")
-            }
+            Text(
+              logic.clockInTime?.formatted(date: .omitted, time: .shortened)
+                ?? "N/A"
+            )
+            .redacted(reason: logic.isLoading ? .placeholder : [])
           }
           HStack {
             Image(systemName: "moon.zzz.fill").frame(width: 14)
             Text("Clocked out:")
             Spacer()
-            if logic.isLoading {
-              Text("0h 0m").foregroundColor(.clear)
-            } else {
-              Text(
-                logic.clockOutTime?.formatted(date: .omitted, time: .shortened)
-                  ?? "N/A")
-            }
+            Text(
+              logic.clockOutTime?.formatted(date: .omitted, time: .shortened)
+                ?? "N/A"
+            )
+            .redacted(reason: logic.isLoading ? .placeholder : [])
           }
         }
       }
@@ -379,34 +370,30 @@ struct TimelineDay: View {
     }
   }
 
-  // MARK: - Most Used Apps
   private func mostUsedAppsView() -> some View {
     VStack(alignment: .leading, spacing: 10) {
       HStack { Spacer().frame(height: 1) }
+      Text("Most Used Apps")
+        .font(.headline).offset(y: -7)
+
       if logic.isLoading {
-        Text("Most Used Apps").offset(y: -7)
-          .font(.headline)
-          .transition(.blurReplace)
-
+        loadingView(width: nil, height: 100)
+      } else if logic.mostUsedApps.isEmpty {
+        Text("No data available")
+          .foregroundColor(.secondary)
+          .padding()
       } else {
-        Text(logic.mostUsedApps.isEmpty ? "No data" : "Most Used Apps")
-          .font(.headline).offset(y: -7)
-
-        if !logic.mostUsedApps.isEmpty {
-          ForEach(logic.mostUsedApps, id: \.appName) { appUsage in
-            HStack {
-              Circle()
-                .fill(logic.colorForApp(appUsage.appName))
-                .frame(width: 10, height: 10)
-              Text(appUsage.appName)
-                .font(.subheadline)
-              Spacer()
-              Text(logic.formatDuration(appUsage.duration))
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-            }
-            .transition(.blurReplace)
-
+        ForEach(logic.mostUsedApps, id: \.appName) { appUsage in
+          HStack {
+            Circle()
+              .fill(logic.colorForApp(appUsage.appName))
+              .frame(width: 10, height: 10)
+            Text(appUsage.appName)
+              .font(.subheadline)
+            Spacer()
+            Text(logic.formatDuration(appUsage.duration))
+              .font(.subheadline)
+              .foregroundColor(.secondary)
           }
         }
       }
@@ -423,5 +410,15 @@ struct TimelineDay: View {
       value: logic.mostUsedApps
     )
     .zIndex(-10)
+  }
+
+  private func loadingView(width: CGFloat?, height: CGFloat) -> some View {
+    ZStack {
+      RoundedRectangle(cornerRadius: 10)
+        .fill(Color.secondary.opacity(0.1))
+      Text("Loading...")
+        .foregroundColor(.secondary)
+    }
+    .frame(width: width, height: height)
   }
 }
