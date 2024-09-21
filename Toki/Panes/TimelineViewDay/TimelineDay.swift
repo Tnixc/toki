@@ -16,12 +16,33 @@ struct TimelineDay: View {
     }
     .padding()
     .frame(maxWidth: 600)
-    .onAppear { logic.loadData(for: logic.selectedDate) }
+    .onAppear {
+      withAnimation(.easeInOut(duration: 0.3)) {
+        logic.isLoading = true
+      }
+
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        logic.loadData(for: logic.selectedDate)
+
+        withAnimation(.easeInOut(duration: 0.3)) {
+          logic.isLoading = false
+        }
+      }
+    }
     .onChange(of: logic.selectedDate) {
-      logic.loadData(for: logic.selectedDate)
+      withAnimation(.easeInOut(duration: 0.3)) {
+        logic.isLoading = true
+      }
+
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        logic.loadData(for: logic.selectedDate)
+
+        withAnimation(.easeInOut(duration: 0.3)) {
+          logic.isLoading = false
+        }
+      }
     }
   }
-
   // MARK: - Header Section
   private var headerView: some View {
     HStack {
@@ -35,23 +56,22 @@ struct TimelineDay: View {
     }
   }
 
-  // MARK: - Timeline Section
+  // MARK: - timeline section
   private var timelineSection: some View {
     GeometryReader { geometry in
       let timelineWidth = geometry.size.width
       VStack(alignment: .leading, spacing: 0) {
         hourLabelsView(width: timelineWidth)
         ZStack(alignment: .topLeading) {
-          if logic.isLoading {
-            timelineLoadingView(width: timelineWidth).transition(.blurReplace)
-          } else {
-            timelineView(width: timelineWidth).transition(.blurReplace)
-            hoverInformationView(width: timelineWidth)
-              .transition(.blurReplace)
-              .zIndex(99)
-          }
-        }.zIndex(99)
-      }.zIndex(99)
+          timelineView(width: timelineWidth)
+            .opacity(logic.isLoading ? 0 : 1)
+          hoverInformationView(width: timelineWidth)
+            .opacity(logic.isLoading ? 0 : 1)
+            .zIndex(99)
+        }
+        .zIndex(99)
+      }
+      .zIndex(99)
     }
     .padding(.horizontal, 10)
     .zIndex(99)
@@ -366,17 +386,15 @@ struct TimelineDay: View {
   // MARK: - Most Used Apps
   private func mostUsedAppsView() -> some View {
     VStack(alignment: .leading, spacing: 10) {
+      HStack { Spacer().frame(height: 1) }
       if logic.isLoading {
-        Text("Most Used Apps")
+        Text("Most Used Apps").offset(y: -7)
           .font(.headline)
-        HStack {
-          Spacer()
-        }
-        .transition(.blurReplace)
+          .transition(.blurReplace)
 
       } else {
         Text(logic.mostUsedApps.isEmpty ? "No data" : "Most Used Apps")
-          .font(.headline)
+          .font(.headline).offset(y: -7)
 
         if !logic.mostUsedApps.isEmpty {
           ForEach(logic.mostUsedApps, id: \.appName) { appUsage in

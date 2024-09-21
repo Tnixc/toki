@@ -164,19 +164,6 @@ class TimelineDayLogic: ObservableObject {
       "\(formatter.string(from: startTime)) - \(formatter.string(from: endTime))"
   }
 
-  //  func loadData(for dateComponents: DateComponents) {
-  //    if let date = calendar.date(from: dateComponents) {
-  //      cachedActivities = day.getActivityForDay(date: date)
-  //      precomputeSegmentData()
-  //      computeAppUsage()
-  //      mostUsedApps = appUsageDurations.map {
-  //        AppUsage(appName: $0.key, duration: $0.value)
-  //      }
-  //      .sorted { $0.duration > $1.duration }
-  //    }
-  //    calculateDayStats()
-  //  }
-
   private func precomputeSegmentData() {
     activeSegments.removeAll()
     segmentDominantApps.removeAll()
@@ -272,6 +259,9 @@ class TimelineDayLogic: ObservableObject {
   }
 
   func formatDuration(_ duration: TimeInterval) -> String {
+    if duration == 0 {
+      return "N/A"
+    }
     if duration < 60 {
       return "<1m"
     }
