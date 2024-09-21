@@ -9,7 +9,7 @@ struct MainView: View {
       case .day:
         TimelineDay(selectedViewType: $selectedViewType)
       case .week:
-        TimelineWeek(selectedViewType: $selectedViewType)
+        //        TimelineWeek(selectedViewType: $selectedViewType)
         Text("week")
       case .month:
         //                TimelineViewMonth(selectedViewType: $selectedViewType)

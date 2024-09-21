@@ -268,39 +268,14 @@ struct TimelineDay: View {
   private func navigationButton(action: @escaping () -> Void, iconName: String)
     -> some View
   {
-    Button(action: action) {
-      Image(systemName: iconName).fontWeight(.bold)
-        .contentShape(Rectangle())
-        .frame(width: 40, height: 40)
-    }
-
-    .background(Color.primary.opacity(0.05))
-    .frame(width: 40, height: 40)
-    .clipShape(RoundedRectangle(cornerRadius: 10))
-    .buttonStyle(.borderless)
-    .overlay(
-      RoundedRectangle(cornerRadius: 10).stroke(
-        Color.secondary.opacity(0.2), lineWidth: 1)
-    )
-    .hoverEffect()
+    CustomButton(
+      action: action, label: "", icon: iconName, width: 40, height: 40)
   }
 
   private var datePickerButton: some View {
-    Button(action: { logic.showDatePicker.toggle() }) {
-      Text(logic.dateString).fontWeight(.bold)
-        .foregroundStyle(.primary)
-        .padding(.horizontal, 10)
-        .frame(width: 120, height: 40)
-        .contentShape(Rectangle())
-    }
-    .background(Color.primary.opacity(0.05))
-    .frame(height: 40)
-    .clipShape(RoundedRectangle(cornerRadius: 10))
-    .buttonStyle(.borderless)
-    .hoverEffect()
-    .overlay(
-      RoundedRectangle(cornerRadius: 10).stroke(
-        Color.secondary.opacity(0.2), lineWidth: 1)
+    CustomButton(
+      action: { logic.showDatePicker.toggle() }, label: logic.dateString,
+      width: 120, height: 40
     )
     .popover(isPresented: $logic.showDatePicker) {
       CustomDatePicker(
@@ -319,64 +294,62 @@ struct TimelineDay: View {
   // MARK: - day stats
   private func dayStatsView() -> some View {
     HStack {
-      HStack {
-        VStack {
-          Image(systemName: "clock").font(.largeTitle)
-        }.frame(width: 40)
-        VStack(alignment: .leading) {
-          Text("Active Time:")
-            .font(.subheadline)
-            .foregroundColor(.secondary)
-          if logic.isLoading {
-            VStack(alignment: .leading) {
-              Text("0h 0m").foregroundColor(.clear)
-            }.frame(width: 80).offset(x: -4)
-          } else {
-            VStack(alignment: .leading) {
-              Text(logic.formatDuration(logic.activeTime))
+      InfoBox {
+        HStack {
+          VStack {
+            Image(systemName: "clock").font(.largeTitle)
+          }.frame(width: 40)
+          VStack(alignment: .leading) {
+            Text("Active Time:")
+              .font(.subheadline)
+              .foregroundColor(.secondary)
+            if logic.isLoading {
+              VStack(alignment: .leading) {
+                Text("0h 0m").foregroundColor(.clear)
+              }.frame(width: 80).offset(x: -4)
+            } else {
+              VStack(alignment: .leading) {
+                Text(logic.formatDuration(logic.activeTime))
+              }
+              .frame(width: 80).offset(x: -4)
             }
-            .frame(width: 80).offset(x: -4)
           }
+          .font(.title)
+          .foregroundColor(.primary)
         }
-        .font(.title)
-        .foregroundColor(.primary)
       }
-      .padding()
-      .background(Color.secondary.opacity(0.1))
-      .cornerRadius(10)
       .animation(.snappy, value: logic.activeTime)
       .transition(.blurReplace)
 
-      VStack(alignment: .leading, spacing: 7) {
-        HStack {
-          Image(systemName: "rectangle.righthalf.inset.filled.arrow.right")
-            .frame(width: 14)
-          Text("Clocked in:")
-          Spacer()
-          if logic.isLoading {
-            Text("0h 0m").foregroundColor(.clear)
-          } else {
-            Text(
-              logic.clockInTime?.formatted(date: .omitted, time: .shortened)
-                ?? "N/A")
+      InfoBox {
+        VStack(alignment: .leading, spacing: 7) {
+          HStack {
+            Image(systemName: "rectangle.righthalf.inset.filled.arrow.right")
+              .frame(width: 14)
+            Text("Clocked in:")
+            Spacer()
+            if logic.isLoading {
+              Text("0h 0m").foregroundColor(.clear)
+            } else {
+              Text(
+                logic.clockInTime?.formatted(date: .omitted, time: .shortened)
+                  ?? "N/A")
+            }
           }
-        }
-        HStack {
-          Image(systemName: "moon.zzz.fill").frame(width: 14)
-          Text("Clocked out:")
-          Spacer()
-          if logic.isLoading {
-            Text("0h 0m").foregroundColor(.clear)
-          } else {
-            Text(
-              logic.clockOutTime?.formatted(date: .omitted, time: .shortened)
-                ?? "N/A")
+          HStack {
+            Image(systemName: "moon.zzz.fill").frame(width: 14)
+            Text("Clocked out:")
+            Spacer()
+            if logic.isLoading {
+              Text("0h 0m").foregroundColor(.clear)
+            } else {
+              Text(
+                logic.clockOutTime?.formatted(date: .omitted, time: .shortened)
+                  ?? "N/A")
+            }
           }
         }
       }
-      .padding()
-      .background(Color.secondary.opacity(0.1))
-      .cornerRadius(10)
       .animation(.snappy, value: logic.clockOutTime)
       .transition(.blurReplace)
     }
