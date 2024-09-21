@@ -255,7 +255,6 @@ class TimelineDayLogic: ObservableObject {
   private func computeAppUsage() {
     appUsageDurations.removeAll()
     var lastApp: String?
-
     for activity in cachedActivities {
       if let lastApp = lastApp {
         appUsageDurations[lastApp, default: 0] += Double(Watcher().INTERVAL)
@@ -303,23 +302,6 @@ class TimelineDayLogic: ObservableObject {
           return app1.duration > app2.duration
         }
       }
-  }
-
-  func formatDuration(_ duration: TimeInterval) -> String {
-    if duration == 0 {
-      return "N/A"
-    }
-    if duration < 60 {
-      return "<1m"
-    }
-    let minutes = Int(duration) / 60
-    if minutes > 59 {
-      let hours = minutes / 60
-      let remainingMinutes = minutes % 60
-
-      return "\(hours)h \(remainingMinutes)m"
-    }
-    return "\(minutes)m"
   }
 
   func mergeAdjacentSegments() -> [(Int, Int)] {
@@ -391,22 +373,20 @@ class TimelineDayLogic: ObservableObject {
       [.hour, .minute], from: endOfDayTime)
     let endOfDay = calendar.date(
       bySettingHour: endOfDayComponents.hour ?? 4,
-      minute: endOfDayComponents.minute ?? 0,
-      second: 0,
-      of: nextDayStart)!
-
+      minute: 0, second: 0, of: nextDayStart)!
     let filteredActivities =
       allLoadedActivities
       .filter { $0.timestamp <= endOfDay }
       .filter { $0.timestamp >= dayStart }
+    let (clockIn, clockOut, active) = TimelineUtils.calculateDayStats(
+      activities: filteredActivities)
+    clockInTime = clockIn
+    clockOutTime = clockOut
+    activeTime = active
+  }
 
-    clockInTime = filteredActivities.first?.timestamp
-    clockOutTime = filteredActivities.last?.timestamp
-
-    activeTime = 0
-    for entry in appUsageDurations {
-      activeTime += entry.value
-    }
+  func formatDuration(_ duration: TimeInterval) -> String {
+    return TimelineUtils.formatDuration(duration)
   }
 
 }

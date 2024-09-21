@@ -12,8 +12,9 @@ struct Toki: App {
   var body: some Scene {
     MainScene()
 
-    MenuBarExtra("Toki", systemImage: "hammer") {
+    MenuBarExtra(menuBarModel.activeDuration, systemImage: "clock") {
       MenuBarView()
+        .environmentObject(menuBarModel)
     }
     .menuBarExtraStyle(.window)
   }
