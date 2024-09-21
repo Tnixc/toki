@@ -27,7 +27,7 @@ struct TimelineDay: View {
     HStack {
       let dayName = formatDate(components: logic.selectedDate)
       Text("\(dayName)'s Timeline")
-        .font(.title)
+        .font(.largeTitle)
         .animation(.snappy, value: logic.dateString)
         .contentTransition(.numericText())
       Spacer()
@@ -241,7 +241,7 @@ struct TimelineDay: View {
   @Environment(\.openSettingsLegacy) private var openSettingsLegacy
   private var settingsButton: some View {
     Button(action: { try? openSettingsLegacy() }) {
-      Image(systemName: "gearshape.fill")
+      Image(systemName: "slider.horizontal.3")
         .foregroundColor(.secondary)
         .font(.system(size: 20))
     }
@@ -275,7 +275,8 @@ struct TimelineDay: View {
   private var datePickerButton: some View {
     CustomButton(
       action: { logic.showDatePicker.toggle() }, label: logic.dateString,
-      width: 120, height: 40
+      icon: "calendar",
+      width: 150, height: 40
     )
     .popover(isPresented: $logic.showDatePicker) {
       CustomDatePicker(
@@ -318,7 +319,7 @@ struct TimelineDay: View {
           .foregroundColor(.primary)
         }
       }
-      .animation(.snappy, value: logic.activeTime)
+      .animation(.spring, value: logic.activeTime)
       .transition(.blurReplace)
 
       InfoBox {
@@ -350,7 +351,7 @@ struct TimelineDay: View {
           }
         }
       }
-      .animation(.snappy, value: logic.clockOutTime)
+      .animation(.spring, value: logic.clockOutTime)
       .transition(.blurReplace)
     }
   }
@@ -392,7 +393,10 @@ struct TimelineDay: View {
     .padding()
     .background(Color.secondary.opacity(0.1))
     .cornerRadius(10)
-    //    .transition(.blurReplace)
+    .overlay(
+      RoundedRectangle(cornerRadius: 10).stroke(
+        .secondary.opacity(0.2), lineWidth: 1)
+    )
     .animation(
       .spring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.3),
       value: logic.mostUsedApps

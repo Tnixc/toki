@@ -19,5 +19,9 @@ struct InfoBox<Content: View>: View {
       .padding()
       .background(Color.secondary.opacity(0.1))
       .cornerRadius(10)
+      .overlay(
+        RoundedRectangle(cornerRadius: 10).stroke(
+          .secondary.opacity(0.2), lineWidth: 1)
+      )
   }
 }

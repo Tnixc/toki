@@ -25,8 +25,10 @@ struct CustomButton: View {
           Image(systemName: icon)
             .fontWeight(.bold)
         }
-        Text(label)
-          .fontWeight(.bold)
+        if !label.isEmpty {
+          Text(label)
+            .fontWeight(.medium)
+        }
       }
       .padding()
       .frame(width: width, height: height)

@@ -32,8 +32,7 @@ struct TimelineViewSelector: View {
     Button(action: toggleExpanded) {
       HStack {
         Text(selectedViewType.rawValue)
-          .foregroundColor(.secondary)
-          .fontWeight(.bold)
+          .fontWeight(.medium)
         Spacer()
         Image(systemName: "chevron.down")
           .foregroundColor(.secondary)
@@ -62,7 +61,7 @@ struct TimelineViewSelector: View {
     .background(.ultraThinMaterial)
     .overlay(
       RoundedRectangle(cornerRadius: 12)
-        .stroke(Color.primary.opacity(0.3), lineWidth: 2)
+        .stroke(Color.primary.opacity(0.2), lineWidth: 2)
     )
     .clipShape(RoundedRectangle(cornerRadius: 12))
     .frame(width: 120)
