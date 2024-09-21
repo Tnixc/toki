@@ -2,24 +2,27 @@ import Foundation
 import SwiftUI
 
 struct TimelineViewDay: View {
-
   @StateObject private var logic = TimelineViewDayLogic()
   @Binding var selectedViewType: TimelineViewType
 
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
       headerView
-      timelineSection
-      timelineConfigView()
-      dayStatsView()
-      mostUsedAppsView()
+      if logic.isLoading {
+        ProgressView()
+      } else {
+        timelineSection
+        timelineConfigView()
+        dayStatsView()
+        mostUsedAppsView()
+      }
       Spacer()
     }
     .padding()
     .frame(maxWidth: 600)
     .onAppear { logic.loadData(for: logic.selectedDate) }
-    .onChange(of: logic.selectedDate) {
-      logic.loadData(for: logic.selectedDate)
+    .onChange(of: logic.selectedDate) { newValue in
+      logic.loadData(for: newValue)
     }
   }
 

@@ -8,7 +8,11 @@
 import SwiftUI
 
 class TimelineViewDayLogic: ObservableObject {
-
+  @AppStorage("showAppColors") private var showAppColors: Bool = true {
+    didSet {
+      objectWillChange.send()
+    }
+  }
   @Published var hoveredSegment: Int? = nil
   @Published var isHovering: Bool = false
   @Published var hoverPosition: CGFloat = 0
@@ -20,9 +24,43 @@ class TimelineViewDayLogic: ObservableObject {
   @Published var clockInTime: Date?
   @Published var clockOutTime: Date?
   @Published var activeTime: TimeInterval = 0
-  @AppStorage("showAppColors") private var showAppColors: Bool = true {
-    didSet {
-      objectWillChange.send()
+  @Published var isLoading = false
+  private var cache: [DateComponents: [ActivityEntry]] = [:]
+  private let queue = DispatchQueue(
+    label: "com.toki.dataLoading", qos: .userInitiated)
+
+  func loadData(for dateComponents: DateComponents) {
+    isLoading = true
+
+    queue.async { [weak self] in
+      guard let self = self else { return }
+
+      if let cachedData = self.cache[dateComponents] {
+        self.updateWithData(cachedData)
+      } else {
+        if let date = self.calendar.date(from: dateComponents) {
+          let activities = self.day.getActivityForDay(date: date)
+          self.cache[dateComponents] = activities
+          self.updateWithData(activities)
+        }
+      }
+
+      DispatchQueue.main.async {
+        self.isLoading = false
+      }
+    }
+  }
+
+  private func updateWithData(_ activities: [ActivityEntry]) {
+    DispatchQueue.main.async {
+      self.cachedActivities = activities
+      self.precomputeSegmentData()
+      self.computeAppUsage()
+      self.mostUsedApps = self.appUsageDurations.map {
+        AppUsage(appName: $0.key, duration: $0.value)
+      }
+      .sorted { $0.duration > $1.duration }
+      self.calculateDayStats()
     }
   }
 
@@ -126,18 +164,18 @@ class TimelineViewDayLogic: ObservableObject {
       "\(formatter.string(from: startTime)) - \(formatter.string(from: endTime))"
   }
 
-  func loadData(for dateComponents: DateComponents) {
-    if let date = calendar.date(from: dateComponents) {
-      cachedActivities = day.getActivityForDay(date: date)
-      precomputeSegmentData()
-      computeAppUsage()
-      mostUsedApps = appUsageDurations.map {
-        AppUsage(appName: $0.key, duration: $0.value)
-      }
-      .sorted { $0.duration > $1.duration }
-    }
-    calculateDayStats()
-  }
+  //  func loadData(for dateComponents: DateComponents) {
+  //    if let date = calendar.date(from: dateComponents) {
+  //      cachedActivities = day.getActivityForDay(date: date)
+  //      precomputeSegmentData()
+  //      computeAppUsage()
+  //      mostUsedApps = appUsageDurations.map {
+  //        AppUsage(appName: $0.key, duration: $0.value)
+  //      }
+  //      .sorted { $0.duration > $1.duration }
+  //    }
+  //    calculateDayStats()
+  //  }
 
   private func precomputeSegmentData() {
     activeSegments.removeAll()
