@@ -8,21 +8,17 @@ struct TimelineViewDay: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
       headerView
-      if logic.isLoading {
-        ProgressView()
-      } else {
-        timelineSection
-        timelineConfigView()
-        dayStatsView()
-        mostUsedAppsView()
-      }
+      timelineSection
+      timelineConfigView()
+      dayStatsView()
+      mostUsedAppsView()
       Spacer()
     }
     .padding()
     .frame(maxWidth: 600)
     .onAppear { logic.loadData(for: logic.selectedDate) }
-    .onChange(of: logic.selectedDate) { newValue in
-      logic.loadData(for: newValue)
+    .onChange(of: logic.selectedDate) {
+      logic.loadData(for: logic.selectedDate)
     }
   }
 
@@ -46,10 +42,15 @@ struct TimelineViewDay: View {
       VStack(alignment: .leading, spacing: 0) {
         hourLabelsView(width: timelineWidth)
         ZStack(alignment: .topLeading) {
-          timelineView(width: timelineWidth)
-          hoverInformationView(width: timelineWidth)
-            .transition(.blurReplace)
-            .zIndex(99)
+          if logic.isLoading {
+            ProgressView()
+              .frame(width: timelineWidth, height: logic.timelineHeight)
+          } else {
+            timelineView(width: timelineWidth)
+            hoverInformationView(width: timelineWidth)
+              .transition(.blurReplace)
+              .zIndex(99)
+          }
         }.zIndex(99)
       }.zIndex(99)
     }
@@ -313,7 +314,16 @@ struct TimelineViewDay: View {
           Text("Active Time:")
             .font(.subheadline)
             .foregroundColor(.secondary)
-          Text(logic.formatDuration(logic.activeTime))
+          if logic.isLoading {
+            VStack(alignment: .leading) {
+              Text("0h 0m").foregroundColor(.clear)
+            }.frame(width: 80).offset(x: -4)
+          } else {
+            VStack(alignment: .leading) {
+              Text(logic.formatDuration(logic.activeTime))
+            }
+            .frame(width: 80).offset(x: -4)
+          }
         }
         .font(.title)
         .foregroundColor(.primary)
@@ -321,65 +331,86 @@ struct TimelineViewDay: View {
       .padding()
       .background(Color.secondary.opacity(0.1))
       .cornerRadius(10)
-      VStack(alignment: .leading, spacing: 5) {
+      .animation(.snappy, value: logic.activeTime)
+      .transition(.blurReplace)
+
+      VStack(alignment: .leading, spacing: 7) {
         HStack {
           Image(systemName: "rectangle.righthalf.inset.filled.arrow.right")
             .frame(width: 14)
           Text("Clocked in:")
           Spacer()
-          Text(
-            logic.clockInTime?.formatted(date: .omitted, time: .shortened)
-              ?? "N/A")
+          if logic.isLoading {
+            Text("0h 0m").foregroundColor(.clear)
+          } else {
+            Text(
+              logic.clockInTime?.formatted(date: .omitted, time: .shortened)
+                ?? "N/A")
+          }
         }
         HStack {
           Image(systemName: "moon.zzz.fill").frame(width: 14)
           Text("Clocked out:")
           Spacer()
-          Text(
-            logic.clockOutTime?.formatted(date: .omitted, time: .shortened)
-              ?? "N/A")
+          if logic.isLoading {
+            Text("0h 0m").foregroundColor(.clear)
+          } else {
+            Text(
+              logic.clockOutTime?.formatted(date: .omitted, time: .shortened)
+                ?? "N/A")
+          }
         }
       }
-      .frame(maxWidth: 200)
       .padding()
       .background(Color.secondary.opacity(0.1))
       .cornerRadius(10)
+      .animation(.snappy, value: logic.clockOutTime)
+      .transition(.blurReplace)
     }
   }
 
   // MARK: - Most Used Apps
   private func mostUsedAppsView() -> some View {
     VStack(alignment: .leading, spacing: 10) {
-      Text(logic.mostUsedApps.isEmpty ? "No data" : "Most Used Apps")
-        .font(.headline)
-        .transition(.opacity)
-        .id("header-\(logic.mostUsedApps.isEmpty)")
+      if logic.isLoading {
+        Text("Most Used Apps")
+          .font(.headline)
+        HStack {
+          Spacer()
+        }
+        .transition(.blurReplace)
 
-      if !logic.mostUsedApps.isEmpty {
-        ForEach(logic.mostUsedApps, id: \.appName) { appUsage in
-          HStack {
-            Circle()
-              .fill(logic.colorForApp(appUsage.appName))
-              .frame(width: 10, height: 10)
-            Text(appUsage.appName)
-              .font(.subheadline)
-            Spacer()
-            Text(logic.formatDuration(appUsage.duration))
-              .font(.subheadline)
-              .foregroundColor(.secondary)
+      } else {
+        Text(logic.mostUsedApps.isEmpty ? "No data" : "Most Used Apps")
+          .font(.headline)
+
+        if !logic.mostUsedApps.isEmpty {
+          ForEach(logic.mostUsedApps, id: \.appName) { appUsage in
+            HStack {
+              Circle()
+                .fill(logic.colorForApp(appUsage.appName))
+                .frame(width: 10, height: 10)
+              Text(appUsage.appName)
+                .font(.subheadline)
+              Spacer()
+              Text(logic.formatDuration(appUsage.duration))
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+            }
+            .transition(.blurReplace)
+
           }
-          .transition(.scale(scale: 0.9).combined(with: .opacity))
         }
       }
     }
+    .padding()
+    .background(Color.secondary.opacity(0.1))
+    .cornerRadius(10)
+    //    .transition(.blurReplace)
     .animation(
       .spring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.3),
       value: logic.mostUsedApps
     )
-    .padding()
-    .background(Color.secondary.opacity(0.1))
-    .cornerRadius(10)
-    .transition(.scale.combined(with: .opacity))
     .zIndex(-10)
   }
 }
