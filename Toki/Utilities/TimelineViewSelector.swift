@@ -46,6 +46,9 @@ struct TimelineViewSelector: View {
       .clipShape(RoundedRectangle(cornerRadius: 10))
     }
     .buttonStyle(.plain)
+    .overlay(
+      RoundedRectangle(cornerRadius: 10).stroke(
+        Color.secondary.opacity(0.2), lineWidth: 1))
   }
 
   // Dropdown menu showing view type options

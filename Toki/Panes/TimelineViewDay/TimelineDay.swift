@@ -278,6 +278,10 @@ struct TimelineDay: View {
     .frame(width: 40, height: 40)
     .clipShape(RoundedRectangle(cornerRadius: 10))
     .buttonStyle(.borderless)
+    .overlay(
+      RoundedRectangle(cornerRadius: 10).stroke(
+        Color.secondary.opacity(0.2), lineWidth: 1)
+    )
     .hoverEffect()
   }
 
@@ -294,6 +298,10 @@ struct TimelineDay: View {
     .clipShape(RoundedRectangle(cornerRadius: 10))
     .buttonStyle(.borderless)
     .hoverEffect()
+    .overlay(
+      RoundedRectangle(cornerRadius: 10).stroke(
+        Color.secondary.opacity(0.2), lineWidth: 1)
+    )
     .popover(isPresented: $logic.showDatePicker) {
       CustomDatePicker(
         selectedDate: Binding(
