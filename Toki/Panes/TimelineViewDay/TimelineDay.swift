@@ -43,10 +43,9 @@ struct TimelineDay: View {
         hourLabelsView(width: timelineWidth)
         ZStack(alignment: .topLeading) {
           if logic.isLoading {
-            ProgressView()
-              .frame(width: timelineWidth, height: logic.timelineHeight)
+            timelineLoadingView(width: timelineWidth).transition(.blurReplace)
           } else {
-            timelineView(width: timelineWidth)
+            timelineView(width: timelineWidth).transition(.blurReplace)
             hoverInformationView(width: timelineWidth)
               .transition(.blurReplace)
               .zIndex(99)
@@ -54,8 +53,16 @@ struct TimelineDay: View {
         }.zIndex(99)
       }.zIndex(99)
     }
+    .padding(.horizontal, 10)
     .zIndex(99)
     .frame(height: 125)
+  }
+
+  private func timelineLoadingView(width: CGFloat) -> some View {
+    ZStack {
+      backgroundView(width: width)
+      Text("Loading...").opacity(0.4)
+    }
   }
 
   // MARK: - Hour Labels
@@ -137,13 +144,13 @@ struct TimelineDay: View {
   private func backgroundView(width: CGFloat) -> some View {
     RoundedRectangle(cornerRadius: 10)
       .fill(Color.accentColor.opacity(0.1))
-      .frame(width: width + 20, height: logic.timelineHeight)
-      .offset(x: -10)
+      .frame(width: width + 16, height: logic.timelineHeight)
       .overlay(
         RoundedRectangle(cornerRadius: 10).stroke(
           Color.accentColor.opacity(0.3), lineWidth: 1
-        ).offset(x: -10)
-      )
+        )
+
+      ).offset(x: -8)
   }
 
   // MARK: - Activity Bars
@@ -187,7 +194,7 @@ struct TimelineDay: View {
 
   // MARK: - Hover Line
   private func hoverLineView(width: CGFloat) -> some View {
-    Rectangle()
+    RoundedRectangle(cornerRadius: 10)
       .fill(Color.white.opacity(0.7))
       .frame(
         width: 2, height: logic.timelineHeight + 2 * logic.hoverLineExtension
@@ -229,7 +236,7 @@ struct TimelineDay: View {
   // MARK: - Timeline Configuration
   private func timelineConfigView() -> some View {
     VStack(alignment: .leading, spacing: 8) {
-      HStack {
+      HStack(spacing: 8) {
         dateNavigationView
         Spacer()
         TimelineViewSelector(selectedViewType: $selectedViewType)
@@ -299,7 +306,7 @@ struct TimelineDay: View {
         HStack {
           VStack {
             Image(systemName: "clock").font(.largeTitle)
-          }.frame(width: 40)
+          }.aspectRatio(1, contentMode: .fill)
           VStack(alignment: .leading) {
             Text("Active Time:")
               .font(.subheadline)
@@ -307,16 +314,16 @@ struct TimelineDay: View {
             if logic.isLoading {
               VStack(alignment: .leading) {
                 Text("0h 0m").foregroundColor(.clear)
-              }.frame(width: 80).offset(x: -4)
+              }
             } else {
               VStack(alignment: .leading) {
                 Text(logic.formatDuration(logic.activeTime))
               }
-              .frame(width: 80).offset(x: -4)
             }
-          }
-          .font(.title)
-          .foregroundColor(.primary)
+          }.frame(width: 100)
+            .font(.title)
+            .foregroundColor(.primary)
+          Spacer()
         }
       }
       .animation(.spring, value: logic.activeTime)

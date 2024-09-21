@@ -103,7 +103,7 @@ class TimelineDayLogic: ObservableObject {
   let day = Day()
 
   // Constants
-  let timelineHeight: CGFloat = 100
+  let timelineHeight: CGFloat = 95
   let segmentDuration: Int = 10
   let segmentCount: Int = 144
   let hoverLineExtension: CGFloat = 10
