@@ -96,7 +96,11 @@ struct MultiDateCell: View {
               for: date, isInRange: isInRange, isStartDate: isStartDate,
               isEndDate: isEndDate)
           )
-          .foregroundColor(foregroundColor(for: date, isInRange: isInRange))
+          .foregroundColor(
+            foregroundColor(
+              for: date, isInRange: isInRange, isStartDate: isStartDate,
+              isEndDate: isEndDate)
+          )
           .clipShape(RoundedRectangle(cornerRadius: 10))
       }
       .buttonStyle(.borderless)
@@ -148,7 +152,6 @@ struct MultiDateCell: View {
       endDate = nil
     }
   }
-
   private func isDateInRange(_ date: Date) -> Bool {
     guard let start = startDate, let end = endDate else { return false }
     return date >= start && date <= end
@@ -159,18 +162,20 @@ struct MultiDateCell: View {
   ) -> Color {
     if isStartDate || isEndDate {
       return .accentColor
-    } else if isInRange {
-      return .accentColor.opacity(0.3)
     } else {
       return .clear
     }
   }
 
-  private func foregroundColor(for date: Date, isInRange: Bool) -> Color {
+  private func foregroundColor(
+    for date: Date, isInRange: Bool, isStartDate: Bool, isEndDate: Bool
+  ) -> Color {
     if date > today {
       return .secondary.opacity(0.5)
-    } else if isInRange || calendar.isDateInToday(date) {
+    } else if isStartDate || isEndDate {
       return .white
+    } else if isInRange {
+      return .accentColor
     } else if calendar.component(.month, from: date)
       == calendar.component(.month, from: currentMonth)
     {

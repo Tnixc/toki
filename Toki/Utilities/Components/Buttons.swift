@@ -59,7 +59,7 @@ struct CustomButtonPlain: View {
   let width: CGFloat?
   let height: CGFloat?
   let align: Alignment?
-  
+
   init(
     action: @escaping () -> Void, label: String, icon: String? = nil,
     width: CGFloat? = nil, height: CGFloat? = nil, align: Alignment? = nil
@@ -71,7 +71,7 @@ struct CustomButtonPlain: View {
     self.height = height
     self.align = align
   }
-  
+
   var body: some View {
     Button(action: action) {
       HStack {

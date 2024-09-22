@@ -19,7 +19,7 @@ struct SettingsWindow: View {
     }
     .frame(width: 600, height: 400)
     .background(VisualEffect().ignoresSafeArea())
-    .padding()
+    .padding(10)
   }
 
   var sidebar: some View {
@@ -83,7 +83,7 @@ struct SettingsTabButton: View {
   let action: () -> Void
 
   var body: some View {
-    if isSelected{
+    if isSelected {
       CustomButton(
         action: action, label: title, icon: icon, width: 200, height: 36,
         align: .leading)
