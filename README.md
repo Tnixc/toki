@@ -2,24 +2,23 @@
 
 ## Core
 
+- [ ] *Menu bar (time needs fixing)*
 - [x] Frontmost app tracking
-- [ ] Purge function (old and reguarly)
 - [x] Idle detection
 - [x] Day view
 - [x] Show app colors
-- [ ] Show app icons
-- [ ] Clock in and clock out
+- [x] Purge db and size display
+- [x] Clock in and clock out (automatic)
 - [ ] hotkey to summon window
-- [ ] Menu bar only mode
 - [ ] Week view
 - [ ] Month view
-- [ ] Clock in reminders via notifications
 - [ ] Clock out reminders via overlay
 - [ ] Data export to CSV
 - [ ] Updater
 
 ## Extras
 
+- [ ] Show app icons(?)
 - [ ] Reminder to take a break
 - [ ] Stopwatch
 - [ ] Pomodoro
