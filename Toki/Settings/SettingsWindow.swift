@@ -4,6 +4,7 @@ struct SettingsWindow: View {
   private enum Tabs: Hashable {
     case general
     case storage
+    case export
   }
 
   @State private var selectedTab: Tabs = .general
@@ -39,6 +40,14 @@ struct SettingsWindow: View {
           selectedTab = .storage
         }
 
+        SettingsTabButton(
+          title: "Export",
+          icon: "square.and.arrow.up",
+          isSelected: selectedTab == .export
+        ) {
+          selectedTab = .export
+        }
+
         Spacer()
       }
       Divider()
@@ -52,6 +61,8 @@ struct SettingsWindow: View {
       GeneralSettingsTab()
     case .storage:
       StorageSettingsTab()
+    case .export:
+      ExportSettingsTab()
     }
   }
 }
