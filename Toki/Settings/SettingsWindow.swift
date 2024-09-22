@@ -51,7 +51,7 @@ struct SettingsWindow: View {
     case .general:
       GeneralSettingsTab()
     case .storage:
-      Text("Storage Settings")  // Placeholder for Storage settings
+      StorageSettingsTab()
     }
   }
 }

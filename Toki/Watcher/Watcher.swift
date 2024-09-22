@@ -2,6 +2,7 @@ import AppKit
 import SQLite
 
 typealias Expression = SQLite.Expression
+
 class Watcher {
   public let INTERVAL = 6
   private let IDLE_TIME = 60

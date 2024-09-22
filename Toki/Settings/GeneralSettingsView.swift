@@ -27,7 +27,8 @@ struct GeneralSettingsTab: View {
   }
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 20) {
+    VStack(alignment: .leading, spacing: 10) {
+      Text("General").font(.title).padding()
       SettingItem(
         title: "App Colors",
         description: "Show hashed app colors in the day timeline view.",
@@ -68,34 +69,18 @@ struct GeneralSettingsTab: View {
         }
         .pickerStyle(.menu).frame(maxWidth: 100)
       }
-    }
-    .padding(20)
-  }
-}
-
-struct SettingItem<Content: View>: View {
-  let title: String
-  let description: String
-  let icon: String
-  let content: () -> Content
-  var body: some View {
-    VStack {
-      HStack {
-        Image(systemName: icon).renderingMode(.original).font(.title3)
-        VStack(alignment: .leading) {
-          Text(title)
-          Text(description).font(.caption).foregroundStyle(.secondary)
+      Spacer()
+      InfoBox {
+        HStack {
+          Image(systemName: "hand.raised.slash")
+          Text(
+            "Toki is 100% private. No data ever leaves your device."
+          )
+          .foregroundStyle(.secondary)
+          Spacer()
         }
-        Spacer()
-        content()
       }
+
     }
-    .padding(10)
-    .overlay(
-      RoundedRectangle(cornerRadius: 10)
-        .stroke(Color.secondary.opacity(0.2), lineWidth: 3)
-    )
-    .background(Color.secondary.opacity(0.1))
-    .clipShape(RoundedRectangle(cornerRadius: 10))
   }
 }
