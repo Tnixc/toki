@@ -49,8 +49,8 @@ struct SettingsWindow: View {
           selectedTab = .export
         }
         SettingsTabButton(
-          title: "Clock Out",
-          icon: "clock.arrow.circlepath",
+          title: "Clock Out Reminders",
+          icon: "clock.badge.exclamationmark",
           isSelected: selectedTab == .clockOut
         ) {
           selectedTab = .clockOut
@@ -83,9 +83,15 @@ struct SettingsTabButton: View {
   let action: () -> Void
 
   var body: some View {
-    CustomButton(
-      action: action, label: title, icon: icon, width: 160, height: 36,
-      align: .leading)
+    if isSelected{
+      CustomButton(
+        action: action, label: title, icon: icon, width: 200, height: 36,
+        align: .leading)
+    } else {
+      CustomButtonPlain(
+        action: action, label: title, icon: icon, width: 200, height: 36,
+        align: .leading)
+    }
   }
 }
 

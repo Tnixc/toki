@@ -66,7 +66,7 @@ struct TimelineViewSelector: View {
     .clipShape(RoundedRectangle(cornerRadius: 12))
     .frame(width: 120)
     .offset(y: 30)
-    .transition(.blurReplace.combined(with: .opacity))
+    .transition(.blurReplace)
     .zIndex(50)
     .frame(maxHeight: 40).fixedSize(horizontal: true, vertical: true)
     .shadow(color: Color.black.opacity(0.1), radius: 9)
@@ -101,7 +101,7 @@ struct TimelineViewSelector: View {
   // Toggle dropdown expansion state
   private func toggleExpanded() {
     withAnimation(
-      .spring(response: 0.3, dampingFraction: 0.7, blendDuration: 0)
+      .easeOut(duration: 0.1)
     ) {
       isExpanded.toggle()
     }

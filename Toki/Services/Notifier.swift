@@ -11,6 +11,7 @@ class Notifier {
 
   private init() {
     updateSettings()
+    requestNotificationPermission()
   }
 
   func updateSettings() {
@@ -53,14 +54,10 @@ class Notifier {
   }
 
   private func clockOutMain() {
-    print("It's time to clock out!")
-    // Implement your clock out notification logic here
     sendNotification(title: "Clock Out", body: "It's time to clock out!")
   }
 
   private func clockOutReminder() {
-    print("Reminder: You should clock out!")
-    // Implement your reminder notification logic here
     sendNotification(
       title: "Clock Out Reminder", body: "Don't forget to clock out!")
   }
@@ -73,6 +70,25 @@ class Notifier {
 
     let request = UNNotificationRequest(
       identifier: UUID().uuidString, content: content, trigger: nil)
-    UNUserNotificationCenter.current().add(request)
+
+    UNUserNotificationCenter.current().add(request) { error in
+      if let error = error {
+        print("Error sending notification: \(error.localizedDescription)")
+      }
+    }
+  }
+
+  private func requestNotificationPermission() {
+    UNUserNotificationCenter.current().requestAuthorization(options: [
+      .alert, .sound, .badge,
+    ]) { granted, error in
+      if granted {
+        print("Notification permission granted")
+      } else if let error = error {
+        print(
+          "Error requesting notification permission: \(error.localizedDescription)"
+        )
+      }
+    }
   }
 }
