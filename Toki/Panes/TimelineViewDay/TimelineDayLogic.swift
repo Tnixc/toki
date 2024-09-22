@@ -28,7 +28,7 @@ class TimelineDayLogic: ObservableObject {
   private var allLoadedActivities: [ActivityEntry] = []
   private var cancellables = Set<AnyCancellable>()
   // New properties for pagination
-  private let chunkSize = 18000
+  private let chunkSize = 40000
   private var currentChunk = 0
 
   @Published var hasMoreData = true

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3958B61D2C9F5E17005FC95A /* TimelineUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3958B61C2C9F5E17005FC95A /* TimelineUtils.swift */; };
+		3958B6202C9F973E005FC95A /* SettingsKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3958B61F2C9F973E005FC95A /* SettingsKit */; };
 		39B14DB32C9CE173003A457D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B14DB12C9CE173003A457D /* Utils.swift */; };
 		39B90B9B2C9B07CE0002823D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 39B90B9A2C9B07CE0002823D /* SQLite */; };
 		39B90BA12C9B24A40002823D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 39B90BA02C9B24A40002823D /* SQLite */; };
@@ -78,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3958B6202C9F973E005FC95A /* SettingsKit in Frameworks */,
 				39D69B062C9E71E100923741 /* SettingsAccess in Frameworks */,
 				39B90BA12C9B24A40002823D /* SQLite in Frameworks */,
 				39B90B9B2C9B07CE0002823D /* SQLite in Frameworks */,
@@ -233,6 +235,7 @@
 			packageReferences = (
 				39B90B992C9B07CE0002823D /* XCRemoteSwiftPackageReference "SQLite.swift" */,
 				39D69B042C9E71E100923741 /* XCRemoteSwiftPackageReference "SettingsAccess" */,
+				3958B61E2C9F973E005FC95A /* XCRemoteSwiftPackageReference "SettingsKit-macOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4180AEAB2839753E0054FEA9 /* Products */;
@@ -488,6 +491,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		3958B61E2C9F973E005FC95A /* XCRemoteSwiftPackageReference "SettingsKit-macOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/david-swift/SettingsKit-macOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.4;
+			};
+		};
 		39B90B992C9B07CE0002823D /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
@@ -507,6 +518,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		3958B61F2C9F973E005FC95A /* SettingsKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3958B61E2C9F973E005FC95A /* XCRemoteSwiftPackageReference "SettingsKit-macOS" */;
+			productName = SettingsKit;
+		};
 		39B90B9A2C9B07CE0002823D /* SQLite */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 39B90B992C9B07CE0002823D /* XCRemoteSwiftPackageReference "SQLite.swift" */;

@@ -5,15 +5,19 @@ struct MenuBarView: View {
   @Environment(\.openWindow) private var openWindow
 
   var body: some View {
-    VStack(spacing: 20) {
-      InfoBox {
-        VStack(alignment: .leading, spacing: 10) {
-          HStack {
-            Image(systemName: "clock")
-            Text("Active Time:")
-            Spacer()
-            Text(menuBarModel.activeDuration)
+    VStack(alignment: .leading, spacing: 10) {
+      VStack(alignment: .leading, spacing: 10) {
+        HStack {
+          Image(systemName: "clock").font(.title)
+            .padding(.trailing, 4)
+          VStack(alignment: .leading) {
+            Text("Active Time:").foregroundStyle(.secondary).font(.caption)
+            Text(menuBarModel.activeDuration).font(.title2)
           }
+          Spacer()
+        }
+        Divider()
+        VStack(spacing: 6) {
           HStack {
             Image(systemName: "arrow.right.to.line")
             Text("Clocked in:")
@@ -32,15 +36,25 @@ struct MenuBarView: View {
           }
         }
       }
-
-      Button("Open Toki") {
-        NSApp.activate(ignoringOtherApps: true)
-        openWindow(id: "main")
+      Divider()
+      HStack(spacing: 10) {
+        CustomButton(
+          action: {
+            NSApp.activate(ignoringOtherApps: true)
+            openWindow(id: "main")
+          }, label: "Open Toki", height: 30
+        )
+        CustomButton(
+          action: {
+            NSApplication.shared.terminate(nil)
+          },
+          label: "Quit",
+          icon: "xmark",
+          height: 30
+        )
       }
-      .buttonStyle(.borderedProminent)
     }
     .padding()
-    .frame(width: 250)
     .background(VisualEffect().ignoresSafeArea())
   }
 }

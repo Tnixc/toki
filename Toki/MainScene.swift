@@ -3,7 +3,7 @@ import SwiftUI
 
 struct MainScene: Scene {
   var body: some Scene {
-    WindowGroup {
+    Window("Toki", id: "main") {
       MainView()
         .openSettingsAccess()
 
@@ -15,7 +15,7 @@ struct MainScene: Scene {
         .padding(.horizontal)
 
         .toolbar {
-          Rectangle().hidden()
+          Text("Toki").fontWeight(.bold)
         }
 
         .background(VisualEffect().ignoresSafeArea())
@@ -32,9 +32,11 @@ struct MainScene: Scene {
 
     Settings {
       SettingsWindow()
-        .background(Color.clear)
+        .background(VisualEffect().ignoresSafeArea())
+
     }
     .windowStyle(.hiddenTitleBar)
+    .windowToolbarStyle(.automatic)
   }
 }
 
