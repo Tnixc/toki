@@ -25,7 +25,7 @@ struct ExportSettingsTab: View {
         )
       }
 
-      SettingItemTall(
+      SettingItem(
         title: "Export Date Range",
         description: "Export activity data for a specific date range.",
         icon: "calendar"
@@ -48,7 +48,6 @@ struct ExportSettingsTab: View {
               },
               label: "Export Selected Range",
               icon: "arrow.down.doc.fill",
-              width: 200,
               height: 36
             )
             .padding()
@@ -58,7 +57,7 @@ struct ExportSettingsTab: View {
         }
       }
 
-      SettingItemTall(
+      SettingItem(
         title: "Show Database File",
         description: "Open the database file location in Finder.",
         icon: "folder"
@@ -67,7 +66,6 @@ struct ExportSettingsTab: View {
           action: showDatabaseInFinder,
           label: "Show in Finder",
           icon: "folder",
-          width: 180,
           height: 36
         )
       }

@@ -5,7 +5,7 @@ typealias Expression = SQLite.Expression
 
 class Watcher {
   public let INTERVAL = 6
-  private let IDLE_TIME = 60
+  public let IDLE_TIME = 60
   private var timer: Timer?
   private let db: Connection
   private let activities: Table
@@ -41,6 +41,11 @@ class Watcher {
     timer = nil
   }
   private func checkActivity() {
+    //clock out
+
+    Notifier.shared.checkClockOutTime()
+
+    // watcher
     let frontmostApp = NSWorkspace.shared.frontmostApplication
     let appName = frontmostApp?.localizedName ?? "Unknown"
     let idle =

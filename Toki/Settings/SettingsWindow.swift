@@ -5,6 +5,7 @@ struct SettingsWindow: View {
     case general
     case storage
     case export
+    case clockOut
   }
 
   @State private var selectedTab: Tabs = .general
@@ -47,7 +48,13 @@ struct SettingsWindow: View {
         ) {
           selectedTab = .export
         }
-
+        SettingsTabButton(
+          title: "Clock Out",
+          icon: "clock.arrow.circlepath",
+          isSelected: selectedTab == .clockOut
+        ) {
+          selectedTab = .clockOut
+        }
         Spacer()
       }
       Divider()
@@ -63,6 +70,8 @@ struct SettingsWindow: View {
       StorageSettingsTab()
     case .export:
       ExportSettingsTab()
+    case .clockOut:
+      ClockOutSettingsTab()
     }
   }
 }
@@ -80,7 +89,6 @@ struct SettingsTabButton: View {
   }
 }
 
-//  .background(isSelected ? Color.accentColor : Color.clear)
 struct SettingsWindow_Previews: PreviewProvider {
   static var previews: some View {
     SettingsWindow()

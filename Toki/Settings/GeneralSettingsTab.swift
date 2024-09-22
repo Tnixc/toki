@@ -45,7 +45,7 @@ struct GeneralSettingsTab: View {
           )
         )
         .toggleStyle(SwitchToggleStyle(tint: .accentColor))
-        .scaleEffect(0.8)
+        .scaleEffect(0.8, anchor: .trailing)
       }
 
       SettingItem(

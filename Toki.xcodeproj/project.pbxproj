@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		394E3A7E2CA0704500DFC1AD /* ExportSettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394E3A7D2CA0704500DFC1AD /* ExportSettingsTab.swift */; };
 		394E3A802CA0706A00DFC1AD /* ExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394E3A7F2CA0706A00DFC1AD /* ExportManager.swift */; };
+		394E3A842CA08D5F00DFC1AD /* ClockOutSettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394E3A832CA08D5F00DFC1AD /* ClockOutSettingsTab.swift */; };
 		3958B61D2C9F5E17005FC95A /* TimelineUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3958B61C2C9F5E17005FC95A /* TimelineUtils.swift */; };
 		3958B6202C9F973E005FC95A /* SettingsKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3958B61F2C9F973E005FC95A /* SettingsKit */; };
 		3958B6242C9F99FA005FC95A /* StorageSettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3958B6232C9F99FA005FC95A /* StorageSettingsTab.swift */; };
@@ -33,6 +34,7 @@
 /* Begin PBXFileReference section */
 		394E3A7D2CA0704500DFC1AD /* ExportSettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportSettingsTab.swift; sourceTree = "<group>"; };
 		394E3A7F2CA0706A00DFC1AD /* ExportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportManager.swift; sourceTree = "<group>"; };
+		394E3A832CA08D5F00DFC1AD /* ClockOutSettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockOutSettingsTab.swift; sourceTree = "<group>"; };
 		3958B61C2C9F5E17005FC95A /* TimelineUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineUtils.swift; sourceTree = "<group>"; };
 		3958B6232C9F99FA005FC95A /* StorageSettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageSettingsTab.swift; sourceTree = "<group>"; };
 		39B14DB12C9CE173003A457D /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
@@ -68,9 +70,9 @@
 			path = TimelineViewDay;
 			sourceTree = "<group>";
 		};
-		39B90B9C2C9B1E1C0002823D /* Watcher */ = {
+		39B90B9C2C9B1E1C0002823D /* Services */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Watcher;
+			path = Services;
 			sourceTree = "<group>";
 		};
 		39B90BA22C9B2B0A0002823D /* Reader */ = {
@@ -117,7 +119,7 @@
 			isa = PBXGroup;
 			children = (
 				39B90BA22C9B2B0A0002823D /* Reader */,
-				39B90B9C2C9B1E1C0002823D /* Watcher */,
+				39B90B9C2C9B1E1C0002823D /* Services */,
 				398DCB7A2C9A64DC00BB9310 /* Menu Bar */,
 				4180AEEC2839A0560054FEA9 /* Utilities */,
 				4180AEBE283976620054FEA9 /* Settings */,
@@ -144,6 +146,7 @@
 		4180AEBE283976620054FEA9 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				394E3A832CA08D5F00DFC1AD /* ClockOutSettingsTab.swift */,
 				394E3A7D2CA0704500DFC1AD /* ExportSettingsTab.swift */,
 				3958B6232C9F99FA005FC95A /* StorageSettingsTab.swift */,
 				4180AEBF283976740054FEA9 /* SettingsWindow.swift */,
@@ -210,7 +213,7 @@
 				398A91552C9F371B00DF3012 /* Components */,
 				398DCB7A2C9A64DC00BB9310 /* Menu Bar */,
 				39B14DBE2C9D00FB003A457D /* TimelineViewDay */,
-				39B90B9C2C9B1E1C0002823D /* Watcher */,
+				39B90B9C2C9B1E1C0002823D /* Services */,
 				39B90BA22C9B2B0A0002823D /* Reader */,
 			);
 			name = Toki;
@@ -281,6 +284,7 @@
 				4180AEDC283984740054FEA9 /* ExportCommands.swift in Sources */,
 				4180AEEE2839A0660054FEA9 /* Bundle+Name.swift in Sources */,
 				4180AEC4283979530054FEA9 /* MainView.swift in Sources */,
+				394E3A842CA08D5F00DFC1AD /* ClockOutSettingsTab.swift in Sources */,
 				4180AEC2283976F80054FEA9 /* GeneralSettingsTab.swift in Sources */,
 				4180AEDE283985190054FEA9 /* MyExportDocument.swift in Sources */,
 				4180AEF32839A0950054FEA9 /* Bundle+Copyright.swift in Sources */,
