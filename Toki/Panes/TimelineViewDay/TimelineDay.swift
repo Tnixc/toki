@@ -38,9 +38,13 @@ struct TimelineDay: View {
   // MARK: - Header Section
   private var headerView: some View {
     HStack {
-      let dayName = formatDate(components: logic.selectedDate)
-      Text("\(dayName)'s Timeline")
-        .font(.largeTitle)
+      VStackLayout(alignment: .leading) {
+        let dayName = formatDate(components: logic.selectedDate)
+        Text("\(dayName)'s Timeline")
+          .font(.largeTitle)
+        let longDayName = formatDateLong(components: logic.selectedDate)
+        Text("\(longDayName)").font(.title3).foregroundStyle(.secondary).padding(.leading, 1)
+      }
       Spacer()
       settingsButton.offset(y: -8)
     }

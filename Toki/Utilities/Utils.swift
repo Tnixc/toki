@@ -24,6 +24,20 @@ func formatDate(components: DateComponents) -> String {
     return dateFormatter.string(from: date)
   }
 }
+
+func formatDateLong(components: DateComponents) -> String {
+  let calendar = Calendar.current
+  guard let date = calendar.date(from: components) else {
+    return "Invalid Date"
+  }
+
+  let dateFormatter = DateFormatter()
+  dateFormatter.dateFormat = DateFormatter.dateFormat(
+    fromTemplate: "EEEE MMM d, yyyy", options: 0, locale: Locale.current)
+
+  return dateFormatter.string(from: date)
+}
+
 class SettingsManager {
   static let shared = SettingsManager()
 

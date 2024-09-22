@@ -142,16 +142,26 @@ struct MultiDateCell: View {
   }
 
   private func selectDate(_ date: Date) {
-    if startDate == nil || (endDate != nil && date < startDate!) {
+    if startDate == nil {
+      // First click: set start date
       startDate = date
       endDate = nil
-    } else if endDate == nil && date > startDate! {
-      endDate = date
+    } else if endDate == nil {
+      // Second click: set end date
+      if date < startDate! {
+        // If end date is before start date, swap them
+        endDate = startDate
+        startDate = date
+      } else {
+        endDate = date
+      }
     } else {
+      // Subsequent clicks: reset and set new start date
       startDate = date
       endDate = nil
     }
   }
+
   private func isDateInRange(_ date: Date) -> Bool {
     guard let start = startDate, let end = endDate else { return false }
     return date >= start && date <= end

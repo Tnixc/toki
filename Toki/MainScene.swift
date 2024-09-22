@@ -6,14 +6,12 @@ struct MainScene: Scene {
     Window("Toki", id: "main") {
       MainView()
         .openSettingsAccess()
-
         .frame(
           minWidth: 400, maxWidth: .infinity, minHeight: 500,
           maxHeight: .infinity
         )
         .padding(.top, 1)
         .padding(.horizontal)
-
         .toolbar {
           Text("Toki").fontWeight(.bold)
         }
