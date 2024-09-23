@@ -42,11 +42,13 @@ struct TimelineDay: View {
         let dayName = formatDate(components: logic.selectedDate)
         Text("\(dayName)'s Timeline")
           .font(.largeTitle)
-          .contentTransition(.numericText()).animation(.snappy, value: logic.selectedDate)
+          .contentTransition(.numericText()).animation(
+            .snappy, value: logic.selectedDate)
         let longDayName = formatDateLong(components: logic.selectedDate)
         Text("\(longDayName)").font(.title3).foregroundStyle(.secondary)
           .padding(.leading, 1)
-          .contentTransition(.numericText()).animation(.snappy, value: logic.selectedDate)
+          .contentTransition(.numericText()).animation(
+            .snappy, value: logic.selectedDate)
       }
       Spacer()
       settingsButton.offset(y: -8)
@@ -342,7 +344,9 @@ struct TimelineDay: View {
                 Spacer()
               }
               Text(logic.formatDuration(logic.activeTime))
-                .contentTransition(.numericText()).animation(.snappy, value: logic.activeTime)
+                .contentTransition(.numericText()).animation(
+                  .snappy, value: logic.activeTime
+                )
                 .frame(height: 20)
             }
             .frame(width: 100)
@@ -385,41 +389,43 @@ struct TimelineDay: View {
 
   private func mostUsedAppsView() -> some View {
     VStack(alignment: .leading, spacing: 10) {
-      HStack { Spacer().frame(height: 1) }
-      Text("Most Used Apps")
-        .font(.headline).offset(y: -7)
+      HStack {
+        Text("Most Used Apps")
+          .font(.headline)
+        Spacer().frame(height: 1)
+      }
+      Divider()
+      ZStack {
+        VStack {
+          if logic.mostUsedApps.isEmpty {
+            HStack {
+              Text("No data available")
+                .foregroundColor(.secondary)
+                .padding()
+            }
+          } else {
+            ForEach(logic.mostUsedApps, id: \.appName) { appUsage in
+              HStack {
+                Circle()
+                  .fill(logic.colorForApp(appUsage.appName))
+                  .frame(width: 10, height: 10)
+                Text(appUsage.appName)
+                  .font(.subheadline)
+                Spacer()
+                Text(logic.formatDuration(appUsage.duration))
+                  .font(.subheadline)
+                  .foregroundColor(.secondary)
+              }
+            }
+          }
+        }
+        .opacity(logic.isLoading ? 0 : 1)
 
-      if logic.isLoading {
-        VStack {
-          HStack {
-            Text("Loading")
-              .foregroundColor(.secondary)
-              .padding()
-              .transition(.blurReplace)
-          }
-        }
-      } else if logic.mostUsedApps.isEmpty {
-        VStack {
-          HStack {
-            Text("No data available")
-              .foregroundColor(.secondary)
-              .padding()
-              .transition(.blurReplace)
-          }
-        }
-      } else {
-        ForEach(logic.mostUsedApps, id: \.appName) { appUsage in
-          HStack {
-            Circle()
-              .fill(logic.colorForApp(appUsage.appName))
-              .frame(width: 10, height: 10)
-            Text(appUsage.appName)
-              .font(.subheadline)
-            Spacer()
-            Text(logic.formatDuration(appUsage.duration))
-              .font(.subheadline)
-              .foregroundColor(.secondary)
-          }
+        if logic.isLoading {
+          Text("Loading")
+            .foregroundColor(.secondary)
+            .padding()
+            .transition(.blurReplace)
         }
       }
     }
