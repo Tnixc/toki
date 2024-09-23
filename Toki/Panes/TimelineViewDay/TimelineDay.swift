@@ -25,9 +25,6 @@ struct TimelineDay: View {
 
   private var loadingView: some View {
     VStack {
-      ProgressView(value: logic.loadingProgress)
-        .progressViewStyle(LinearProgressViewStyle())
-        .frame(height: 10)
       Text("Loading data...")
         .font(.caption)
         .foregroundColor(.secondary)

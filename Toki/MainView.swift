@@ -8,16 +8,13 @@ struct MainView: View {
   }
 
   var body: some View {
-
     ScrollView {
       switch selectedViewType {
       case .day:
         TimelineDay(selectedViewType: $selectedViewType)
       case .week:
-        //        TimelineWeek(selectedViewType: $selectedViewType)
-        Text("week")
+        TimelineWeek(selectedViewType: $selectedViewType)
       case .month:
-        //        TimelineViewMonth(selectedViewType: $selectedViewType)
         Text("month")
       }
     }

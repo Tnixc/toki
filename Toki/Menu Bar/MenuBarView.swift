@@ -6,7 +6,9 @@ struct MenuBarView: View {
 
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
+
       VStack(alignment: .leading, spacing: 10) {
+
         HStack {
           Image(systemName: "clock").font(.title)
             .padding(.trailing, 4)
@@ -16,7 +18,9 @@ struct MenuBarView: View {
           }
           Spacer()
         }
+
         Divider()
+
         VStack(spacing: 6) {
           HStack {
             Image(systemName: "arrow.right.to.line")
@@ -26,6 +30,7 @@ struct MenuBarView: View {
               menuBarModel.clockInTime?.formatted(
                 date: .omitted, time: .shortened) ?? "N/A")
           }
+
           HStack {
             Image(systemName: "arrow.left.to.line")
             Text("Clocked out:")
@@ -36,7 +41,9 @@ struct MenuBarView: View {
           }
         }
       }
+
       Divider()
+
       HStack(spacing: 10) {
         CustomButton(
           action: {

@@ -9,9 +9,9 @@ class Notifier {
   private var clockOutTime: Date?
   private var lastReminderTime: Date?
   private let defaults = UserDefaults.standard
-  var overlayWindow: NSWindow?
   private var activeDays: Set<Int> = []
   private var clockOutUseOverlay: Bool?
+  var overlayWindow: NSWindow?
 
   func showOverlay(title: String, message: String, dismissAfter: TimeInterval) {
     overlayWindow = generateOverlay(
@@ -33,9 +33,9 @@ class Notifier {
 
   func updateSettings() {
     clockOutTime = defaults.object(forKey: "clockOutTime") as? Date
-    clockOutUseOverlay = defaults.object(forKey: "clockOutUseOverlay") as? Bool
     activeDays = Set(
       defaults.array(forKey: "clockOutSelectedDays") as? [Int] ?? [])
+    clockOutUseOverlay = defaults.object(forKey: "clockOutUseOverlay") as? Bool
   }
 
   func checkClockOutTime() {

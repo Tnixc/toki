@@ -23,8 +23,7 @@ class MenuBarModel: ObservableObject {
 
   func updateStats() {
     let today = Date()
-    let activities = day.getActivityForDay(
-      date: today, chunk: 0, chunkSize: Int.max)
+    let activities = day.getActivityForDay(date: today)
     let (clockIn, clockOut, activeTime) = TimelineUtils.calculateDayStats(
       activities: activities)
 

@@ -33,9 +33,7 @@ class Day {
     activities = Table("activities")
   }
 
-  func getActivityForDay(date: Date, chunk: Int, chunkSize: Int)
-    -> [ActivityEntry]
-  {
+  func getActivityForDay(date: Date) -> [ActivityEntry] {
     let calendar = Calendar.current
     let startOfDay = calendar.startOfDay(for: date)
     let endOfDay = calendar.date(
@@ -45,7 +43,6 @@ class Day {
       activities
       .filter(timestamp >= startOfDay && timestamp < endOfDay)
       .order(timestamp.asc)
-      .limit(chunkSize, offset: chunk * chunkSize)
 
     var activityEntries: [ActivityEntry] = []
 
@@ -53,7 +50,10 @@ class Day {
       for activity in try db.prepare(query) {
         activityEntries.append(
           ActivityEntry(
-            timestamp: activity[timestamp], appName: activity[appName]))
+            timestamp: activity[timestamp],
+            appName: activity[appName]
+          )
+        )
       }
     } catch {
       print("Error querying database: \(error)")
@@ -86,8 +86,8 @@ class Day {
     let sortedUsage = usages.map {
       AppUsage(appName: $0.key, duration: $0.value)
     }
-
     .sorted { $0.duration > $1.duration }
+
     return sortedUsage
   }
 }

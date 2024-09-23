@@ -7,6 +7,7 @@ class TimelineDayLogic: ObservableObject {
       objectWillChange.send()
     }
   }
+
   @Published var hoveredSegment: Int? = nil
   @Published var isHovering: Bool = false
   @Published var hoverPosition: CGFloat = 0
@@ -22,16 +23,6 @@ class TimelineDayLogic: ObservableObject {
   private var cache: [DateComponents: [ActivityEntry]] = [:]
   private let queue = DispatchQueue(
     label: "com.toki.dataLoading", qos: .userInitiated)
-
-  @Published var isLoadingMore = false
-  @Published var loadingProgress: Double = 0
-  private var allLoadedActivities: [ActivityEntry] = []
-  private var cancellables = Set<AnyCancellable>()
-  // New properties for pagination
-  private let chunkSize = Int.max
-  private var currentChunk = 0
-
-  @Published var hasMoreData = true
 
   let calendar = Calendar.current
   let day = Day()
@@ -54,59 +45,19 @@ class TimelineDayLogic: ObservableObject {
       [.year, .month, .day], from: today)
   }
 
-  private let loadingDuration: TimeInterval = 2.0  // Total loading time in seconds
-  private let chunksPerSecond: Double = 5  // Number of chunks to load per second
-
   func loadData(for dateComponents: DateComponents) {
     isLoading = true
-    currentChunk = 0
-    hasMoreData = true
-    allLoadedActivities.removeAll()
     cachedActivities.removeAll()
-    loadingProgress = 0
-
-    // Start the progressive loading
-    startProgressiveLoading()
-  }
-
-  private func startProgressiveLoading() {
-    let timer = Timer.publish(
-      every: 1.0 / chunksPerSecond, on: .main, in: .common
-    ).autoconnect()
-
-    timer.sink { [weak self] _ in
-      guard let self = self else { return }
-
-      if self.hasMoreData && self.loadingProgress < 1.0 {
-        self.loadNextChunk()
-        self.loadingProgress +=
-          1.0 / (self.chunksPerSecond * self.loadingDuration)
-      } else {
-        self.isLoading = false
-        self.loadingProgress = 1.0
-        timer.upstream.connect().cancel()
-      }
-    }.store(in: &cancellables)
-  }
-
-  func loadNextChunk() {
-    guard hasMoreData && !isLoadingMore else { return }
-
-    isLoadingMore = true
 
     queue.async { [weak self] in
       guard let self = self else { return }
 
       let activities = self.day.getActivityForDay(
-        date: self.calendar.date(from: self.selectedDate)!,
-        chunk: self.currentChunk, chunkSize: self.chunkSize)
+        date: self.calendar.date(from: self.selectedDate)!)
 
       DispatchQueue.main.async {
-        self.allLoadedActivities.append(contentsOf: activities)
-        self.updateWithData(self.allLoadedActivities)
-        self.isLoadingMore = false
-        self.currentChunk += 1
-        self.hasMoreData = activities.count == self.chunkSize
+        self.updateWithData(activities)
+        self.isLoading = false
       }
     }
   }
@@ -372,12 +323,11 @@ class TimelineDayLogic: ObservableObject {
     let endOfDayComponents = calendar.dateComponents(
       [.hour, .minute], from: endOfDayTime)
     let endOfDay = calendar.date(
-      bySettingHour: endOfDayComponents.hour ?? 4,
-      minute: 0, second: 0, of: nextDayStart)!
-    let filteredActivities =
-      allLoadedActivities
-      .filter { $0.timestamp <= endOfDay }
-      .filter { $0.timestamp >= dayStart }
+      bySettingHour: endOfDayComponents.hour ?? 4, minute: 0, second: 0,
+      of: nextDayStart)!
+    let filteredActivities = cachedActivities.filter {
+      $0.timestamp <= endOfDay && $0.timestamp >= dayStart
+    }
     let (clockIn, clockOut, active) = TimelineUtils.calculateDayStats(
       activities: filteredActivities)
     clockInTime = clockIn
