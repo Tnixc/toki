@@ -10,14 +10,16 @@ class Notifier {
   private var lastReminderTime: Date?
   private let defaults = UserDefaults.standard
   var overlayWindow: NSWindow?
+  private var activeDays: Set<Int> = []
+  private var clockOutUseOverlay: Bool?
 
-  func showOverlay(dismissAfter: TimeInterval? = nil) {
+  func showOverlay(title: String, message: String, dismissAfter: TimeInterval) {
     overlayWindow = generateOverlay(
-      title: "Hi", message: "message", seconds: dismissAfter ?? 1.0
+      title: title, message: message, seconds: dismissAfter
     )
 
     overlayWindow?.makeKeyAndOrderFront(nil)
-    DispatchQueue.main.asyncAfter(deadline: .now() + (dismissAfter ?? 1.0)) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + dismissAfter) {
       [weak self] in
       self?.overlayWindow?.close()
       self?.overlayWindow = nil
@@ -31,6 +33,9 @@ class Notifier {
 
   func updateSettings() {
     clockOutTime = defaults.object(forKey: "clockOutTime") as? Date
+    clockOutUseOverlay = defaults.object(forKey: "clockOutUseOverlay") as? Bool
+    activeDays = Set(
+      defaults.array(forKey: "clockOutSelectedDays") as? [Int] ?? [])
   }
 
   func checkClockOutTime() {
@@ -42,6 +47,12 @@ class Notifier {
 
     let now = Date()
     let calendar = Calendar.current
+
+    // Check if today is an active day
+    let today = calendar.component(.weekday, from: now)
+    guard activeDays.contains(today) else {
+      return
+    }
 
     let clockOutComponents = calendar.dateComponents(
       [.hour, .minute], from: clockOutTime)
@@ -69,8 +80,13 @@ class Notifier {
   }
 
   private func clockOutMain() {
-    sendNotification(title: "Clock Out", body: "It's time to clock out!")
-    showOverlay()
+    if clockOutUseOverlay ?? false {
+      let date = Date()
+      let midTime = DateFormatter.localizedString(from: date, dateStyle: .none, timeStyle: .short)
+      showOverlay(title: "Time to clock out", message: "The time is \(midTime)", dismissAfter: 5.0)
+    } else {
+      sendNotification(title: "Clock Out", body: "It's time to clock out!")
+    }
   }
 
   private func clockOutReminder() {

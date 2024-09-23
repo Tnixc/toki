@@ -1,6 +1,8 @@
 import Foundation
 import SwiftUI
 
+public let daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+
 func triggerHapticFeedback() {
   NSHapticFeedbackManager.defaultPerformer.perform(
     .levelChange, performanceTime: .default)

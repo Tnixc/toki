@@ -34,7 +34,7 @@ struct CustomDatePicker: View {
       .padding(.horizontal)
 
       HStack {
-        ForEach(["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"], id: \.self) { day in
+        ForEach(daysOfWeek, id: \.self) { day in
           Text(day)
             .font(.caption)
             .foregroundColor(.secondary)

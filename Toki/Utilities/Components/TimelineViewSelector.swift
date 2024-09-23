@@ -105,7 +105,7 @@ struct TimelineViewSelector: View {
     }
 
     isButtonEnabled = false
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
       isButtonEnabled = true
     }
   }
@@ -117,7 +117,7 @@ struct TimelineViewSelector: View {
 
   private func setupMouseEventMonitor() {
     NSEvent.addLocalMonitorForEvents(matching: [
-      .leftMouseDown, .rightMouseDown,
+      .leftMouseUp, .rightMouseUp,
     ]) { event in
       if isExpanded {
         DispatchQueue.main.async {

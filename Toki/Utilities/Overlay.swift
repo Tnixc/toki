@@ -18,7 +18,6 @@ func generateOverlay(
   window.hasShadow = false
   window.ignoresMouseEvents = false
   window.backgroundColor = .clear
-
   window.isReleasedWhenClosed = false
 
   let contentView = NSHostingView(
@@ -35,9 +34,13 @@ func generateOverlay(
 struct OverlayView: View {
   let title: String
   let message: String
-  let duration: TimeInterval
+  @State private var remainingTime: TimeInterval
 
-  @State private var progress: CGFloat = 0
+  init(title: String, message: String, duration: TimeInterval) {
+    self.title = title
+    self.message = message
+    self._remainingTime = State(initialValue: duration)
+  }
 
   var body: some View {
     ZStack {
@@ -50,30 +53,33 @@ struct OverlayView: View {
 
         Text(message)
           .font(.title2)
-
-        GeometryReader { geometry in
-          ZStack(alignment: .leading) {
-            Rectangle()
-              .fill(Color.secondary.opacity(0.3))
-              .shadow(radius: 10)
-
-            Rectangle()
-              .fill(Color.blue)
-              .frame(width: geometry.size.width * progress)
-          }
-          .frame(height: 10)
-          .cornerRadius(5)
+        HStack(spacing: 0) {
+          Text("Dismisses in ")
+            .font(.title2)
+            .foregroundStyle(.secondary)
+          Text(String(format: "%.0f", remainingTime))
+            .font(.title2)
+            .foregroundStyle(.secondary)
+            .contentTransition(.numericText(countsDown: true))
+            .animation(.snappy, value: remainingTime)
+            .frame(width: 12)
         }
-        .frame(height: 10)
-        .padding(.horizontal)
       }
       .padding()
       .frame(width: 400)
       .cornerRadius(20)
     }
     .onAppear {
-      withAnimation(.linear(duration: duration)) {
-        progress = 1.0
+      startTimer(interval: 1)
+    }
+  }
+
+  private func startTimer(interval: Double) {
+    Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { timer in
+      if remainingTime > 0 {
+        remainingTime -= interval
+      } else {
+        timer.invalidate()
       }
     }
   }
