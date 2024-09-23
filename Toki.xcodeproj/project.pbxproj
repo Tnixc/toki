@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		394CEBC22CA0F51A00973A39 /* Overlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394CEBC12CA0F51900973A39 /* Overlay.swift */; };
 		394E3A7E2CA0704500DFC1AD /* ExportSettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394E3A7D2CA0704500DFC1AD /* ExportSettingsTab.swift */; };
 		394E3A802CA0706A00DFC1AD /* ExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394E3A7F2CA0706A00DFC1AD /* ExportManager.swift */; };
 		394E3A842CA08D5F00DFC1AD /* ClockOutSettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394E3A832CA08D5F00DFC1AD /* ClockOutSettingsTab.swift */; };
@@ -32,6 +33,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		394CEBC12CA0F51900973A39 /* Overlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Overlay.swift; sourceTree = "<group>"; };
 		394E3A7D2CA0704500DFC1AD /* ExportSettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportSettingsTab.swift; sourceTree = "<group>"; };
 		394E3A7F2CA0706A00DFC1AD /* ExportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportManager.swift; sourceTree = "<group>"; };
 		394E3A832CA08D5F00DFC1AD /* ClockOutSettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockOutSettingsTab.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 		4180AEEC2839A0560054FEA9 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				394CEBC12CA0F51900973A39 /* Overlay.swift */,
 				394E3A7F2CA0706A00DFC1AD /* ExportManager.swift */,
 				3958B61C2C9F5E17005FC95A /* TimelineUtils.swift */,
 				398A91552C9F371B00DF3012 /* Components */,
@@ -286,6 +289,7 @@
 				4180AEC4283979530054FEA9 /* MainView.swift in Sources */,
 				394E3A842CA08D5F00DFC1AD /* ClockOutSettingsTab.swift in Sources */,
 				4180AEC2283976F80054FEA9 /* GeneralSettingsTab.swift in Sources */,
+				394CEBC22CA0F51A00973A39 /* Overlay.swift in Sources */,
 				4180AEDE283985190054FEA9 /* MyExportDocument.swift in Sources */,
 				4180AEF32839A0950054FEA9 /* Bundle+Copyright.swift in Sources */,
 				3958B61D2C9F5E17005FC95A /* TimelineUtils.swift in Sources */,

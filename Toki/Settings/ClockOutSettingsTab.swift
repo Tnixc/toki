@@ -63,6 +63,13 @@ struct ClockOutSettingsTab: View {
                 Notifier.shared.updateSettings()
               }
             }
+            HStack {
+              Spacer()
+              CustomButton(
+                action: {
+                  Notifier.shared.showOverlay()
+                }, label: "Show overlay", icon: "circle.dotted", height: 36)
+            }
           }
         }
         SettingItemGroup {

@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 import UserNotifications
 
 class Notifier {
@@ -8,6 +9,20 @@ class Notifier {
   private var clockOutTime: Date?
   private var lastReminderTime: Date?
   private let defaults = UserDefaults.standard
+  var overlayWindow: NSWindow?
+
+  func showOverlay(dismissAfter: TimeInterval? = nil) {
+    overlayWindow = generateOverlay(
+      title: "Hi", message: "message", seconds: dismissAfter ?? 1.0
+    )
+
+    overlayWindow?.makeKeyAndOrderFront(nil)
+    DispatchQueue.main.asyncAfter(deadline: .now() + (dismissAfter ?? 1.0)) {
+      [weak self] in
+      self?.overlayWindow?.orderOut(nil)
+      self?.overlayWindow = nil
+    }
+  }
 
   private init() {
     updateSettings()
@@ -55,6 +70,7 @@ class Notifier {
 
   private func clockOutMain() {
     sendNotification(title: "Clock Out", body: "It's time to clock out!")
+    showOverlay()
   }
 
   private func clockOutReminder() {
