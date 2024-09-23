@@ -17,7 +17,7 @@ struct SettingsWindow: View {
       tabContent
       Spacer()
     }
-    .frame(width: 600, height: 400)
+    .frame(width: 700, height: 600)
     .background(VisualEffect().ignoresSafeArea())
     .padding(10)
   }
