@@ -1,6 +1,5 @@
 import SwiftUI
 
-// Enum representing different timeline view types
 enum TimelineViewType: String, CaseIterable {
   case day = "Day"
   case week = "Week"
@@ -10,10 +9,12 @@ enum TimelineViewType: String, CaseIterable {
 struct TimelineViewSelector: View {
   @Binding var selectedViewType: TimelineViewType
   @State private var isExpanded = false
+  @State private var isButtonEnabled = true
 
   var body: some View {
     ZStack(alignment: .top) {
       if isExpanded {
+        selectionButton.hoverEffect()
         dropdownMenu
       } else {
         selectionButton.hoverEffect()
@@ -27,7 +28,6 @@ struct TimelineViewSelector: View {
 
   // MARK: - UI Components
 
-  // Button to toggle dropdown expansion
   private var selectionButton: some View {
     Button(action: toggleExpanded) {
       HStack {
@@ -37,7 +37,6 @@ struct TimelineViewSelector: View {
         Image(systemName: "chevron.down")
           .foregroundColor(.secondary)
           .fontWeight(.bold)
-          .rotationEffect(.degrees(isExpanded ? 180 : 0))
       }
       .padding()
       .frame(width: 120, height: 40)
@@ -47,10 +46,10 @@ struct TimelineViewSelector: View {
     .buttonStyle(.plain)
     .overlay(
       RoundedRectangle(cornerRadius: 10).stroke(
-        Color.secondary.opacity(0.2), lineWidth: 1))
+        Color.secondary.opacity(0.2), lineWidth: 1)
+    )
   }
 
-  // Dropdown menu showing view type options
   private var dropdownMenu: some View {
     VStack(alignment: .leading, spacing: 2) {
       ForEach(TimelineViewType.allCases, id: \.self) { viewType in
@@ -58,21 +57,21 @@ struct TimelineViewSelector: View {
       }
     }
     .padding(2)
-    .background(.ultraThinMaterial)
+    .background(.thickMaterial)
+    .background(Color.secondary.opacity(0.1))
     .overlay(
       RoundedRectangle(cornerRadius: 12)
         .stroke(Color.primary.opacity(0.2), lineWidth: 2)
     )
     .clipShape(RoundedRectangle(cornerRadius: 12))
     .frame(width: 120)
-    .offset(y: 30)
+    .offset(y: 75)
     .transition(.blurReplace)
     .zIndex(50)
     .frame(maxHeight: 40).fixedSize(horizontal: true, vertical: true)
     .shadow(color: Color.black.opacity(0.1), radius: 9)
   }
 
-  // Individual dropdown menu item
   private func dropdownMenuItem(for viewType: TimelineViewType) -> some View {
     Button(action: { selectViewType(viewType) }) {
       HStack {
@@ -98,54 +97,34 @@ struct TimelineViewSelector: View {
 
   // MARK: - Helper Functions
 
-  // Toggle dropdown expansion state
   private func toggleExpanded() {
-    withAnimation(
-      .easeOut(duration: 0.1)
-    ) {
+    guard isButtonEnabled else { return }
+
+    withAnimation(.smooth(duration: 0.15)) {
       isExpanded.toggle()
+    }
+
+    isButtonEnabled = false
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+      isButtonEnabled = true
     }
   }
 
-  // Select a view type and close dropdown
   private func selectViewType(_ viewType: TimelineViewType) {
     self.selectedViewType = viewType
     toggleExpanded()
   }
 
-  // Setup mouse event monitoring to close dropdown when clicking outside
   private func setupMouseEventMonitor() {
-    NSEvent.addLocalMonitorForEvents(matching: [.leftMouseUp, .rightMouseUp]) {
-      event in
+    NSEvent.addLocalMonitorForEvents(matching: [
+      .leftMouseDown, .rightMouseDown,
+    ]) { event in
       if isExpanded {
-        let locationInWindow = event.locationInWindow
-        let frame =
-          NSApp.windows.first?.contentView?.convert(
-            NSRect(x: 0, y: 0, width: 120, height: 200), to: nil) ?? .zero
-
-        if !frame.contains(locationInWindow) {
-          DispatchQueue.main.async {
-            toggleExpanded()
-          }
+        DispatchQueue.main.async {
+          toggleExpanded()
         }
       }
       return event
-    }
-  }
-}
-
-struct ContentView: View {
-  @State private var selectedViewType: TimelineViewType = .day
-
-  var body: some View {
-    ZStack {
-      VStack {
-        Spacer()
-        TimelineViewSelector(selectedViewType: $selectedViewType)
-          .frame(maxHeight: 40)
-          .fixedSize(horizontal: true, vertical: true)
-        Spacer()
-      }
     }
   }
 }
