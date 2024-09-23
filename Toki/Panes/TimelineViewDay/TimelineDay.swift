@@ -42,9 +42,11 @@ struct TimelineDay: View {
         let dayName = formatDate(components: logic.selectedDate)
         Text("\(dayName)'s Timeline")
           .font(.largeTitle)
+          .contentTransition(.numericText()).animation(.snappy, value: logic.selectedDate)
         let longDayName = formatDateLong(components: logic.selectedDate)
         Text("\(longDayName)").font(.title3).foregroundStyle(.secondary)
           .padding(.leading, 1)
+          .contentTransition(.numericText()).animation(.snappy, value: logic.selectedDate)
       }
       Spacer()
       settingsButton.offset(y: -8)
@@ -60,7 +62,6 @@ struct TimelineDay: View {
         ZStack(alignment: .topLeading) {
           if logic.isLoading {
             loadingView(width: timelineWidth, height: 125)
-              .transition(.blurReplace)
           } else {
             timelineView(width: timelineWidth)
               .transition(.blurReplace)
@@ -81,7 +82,7 @@ struct TimelineDay: View {
     VStack(spacing: 0) {
       ZStack(alignment: .center) {
         backgroundView(width: width + 8).offset(x: 8)
-          .blur(radius: 20)
+          .blur(radius: 20).scaleEffect(0.8)
 
         Text("Loading timeline...")
           .foregroundColor(.secondary)
@@ -329,17 +330,20 @@ struct TimelineDay: View {
     HStack {
       InfoBox {
         HStack {
-          HStack(spacing: 0) {
+          HStack(spacing: 10) {
             VStack {
               Image(systemName: "clock").font(.largeTitle)
             }.aspectRatio(1, contentMode: .fill).padding(.leading, 3)
             VStack(alignment: .leading) {
-              Text("Active Time:")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+              HStack {
+                Text("Active Time:")
+                  .font(.subheadline)
+                  .foregroundColor(.secondary)
+                Spacer()
+              }
               Text(logic.formatDuration(logic.activeTime))
-                .contentTransition(.numericText()).animation(
-                  .snappy, value: logic.activeTime)
+                .contentTransition(.numericText()).animation(.snappy, value: logic.activeTime)
+                .frame(height: 20)
             }
             .frame(width: 100)
             .font(.title)
@@ -427,13 +431,14 @@ struct TimelineDay: View {
         .secondary.opacity(0.2), lineWidth: 1)
     )
     .animation(
-      .snappy(duration: 0.1),
+      .spring(duration: 0.3, bounce: 0.2),
       value: logic.isLoading
     )
     .animation(
-      .snappy(duration: 0.1),
+      .spring,
       value: logic.mostUsedApps
     )
+    .transition(.blurReplace)
     .zIndex(-10)
   }
 }

@@ -3,6 +3,7 @@
 ## Core
 
 - [ ] **add opts for notifier overlay**
+- [ ] **add opts for show apps <1 min in most used apps**
 - [ ] hotkey to summon window
 - [ ] Week view
 - [ ] Month view
