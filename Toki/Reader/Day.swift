@@ -77,7 +77,7 @@ class Day {
     do {
       for row in try db.prepare(query) {
         let currentApp = row[appName]
-        usages[currentApp, default: 0] += Double(Watcher().INTERVAL)
+        usages[currentApp, default: 0] += Double(Watcher.INTERVAL)
       }
     } catch {
       print("Error querying database: \(error)")

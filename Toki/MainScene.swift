@@ -7,14 +7,14 @@ struct MainScene: Scene {
       MainView()
         .openSettingsAccess()
         .frame(
-          minWidth: 400, maxWidth: .infinity, minHeight: 500,
+          minWidth: 400,
+          maxWidth: .infinity,
+          minHeight: 500,
           maxHeight: .infinity
         )
         .padding(.top, 1)
         .padding(.horizontal)
-        .toolbar {
-          Text("Toki").fontWeight(.bold)
-        }
+        .toolbar { Text("Toki").fontWeight(.bold) }
 
         .background(VisualEffect().ignoresSafeArea())
     }

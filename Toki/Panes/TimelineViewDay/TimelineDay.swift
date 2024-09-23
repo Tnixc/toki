@@ -43,7 +43,8 @@ struct TimelineDay: View {
         Text("\(dayName)'s Timeline")
           .font(.largeTitle)
         let longDayName = formatDateLong(components: logic.selectedDate)
-        Text("\(longDayName)").font(.title3).foregroundStyle(.secondary).padding(.leading, 1)
+        Text("\(longDayName)").font(.title3).foregroundStyle(.secondary)
+          .padding(.leading, 1)
       }
       Spacer()
       settingsButton.offset(y: -8)
@@ -67,7 +68,7 @@ struct TimelineDay: View {
           hoverInformationView(width: timelineWidth)
             .zIndex(99)
         }
-        .animation(.easeInOut(duration: 0.3), value: logic.isLoading)
+        .animation(.easeInOut(duration: 0.1), value: logic.isLoading)
       }
       .zIndex(99)
     }
@@ -327,48 +328,50 @@ struct TimelineDay: View {
   private func dayStatsView() -> some View {
     HStack {
       InfoBox {
-        HStack(spacing: 0) {
-          VStack {
-            Image(systemName: "clock").font(.largeTitle)
-          }.aspectRatio(1, contentMode: .fill).padding(.leading, 3)
-          VStack(alignment: .leading) {
-            Text("Active Time:")
-              .font(.subheadline)
-              .foregroundColor(.secondary)
-            Text(logic.formatDuration(logic.activeTime))
-              .contentTransition(.numericText()).animation(
-                .snappy, value: logic.activeTime)
+        HStack {
+          HStack(spacing: 0) {
+            VStack {
+              Image(systemName: "clock").font(.largeTitle)
+            }.aspectRatio(1, contentMode: .fill).padding(.leading, 3)
+            VStack(alignment: .leading) {
+              Text("Active Time:")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+              Text(logic.formatDuration(logic.activeTime))
+                .contentTransition(.numericText()).animation(
+                  .snappy, value: logic.activeTime)
+            }
+            .frame(width: 100)
+            .font(.title)
+            .foregroundColor(.primary)
           }
-          .frame(width: 100)
-          .font(.title)
-          .foregroundColor(.primary)
           Spacer()
-        }
-      }
-
-      InfoBox {
-        VStack(alignment: .leading, spacing: 7) {
-          HStack {
-            Image(systemName: "rectangle.righthalf.inset.filled.arrow.right")
-              .frame(width: 14)
-            Text("Clocked in:")
-            Spacer()
-            Text(
-              logic.clockInTime?.formatted(date: .omitted, time: .shortened)
-                ?? "N/A"
-            )
-            .contentTransition(.numericText()).animation(.snappy, value: logic.clockOutTime)
-          }
-          HStack {
-            Image(systemName: "moon.zzz.fill").frame(width: 14)
-            Text("Clocked out:")
-            Spacer()
-            Text(
-              logic.clockOutTime?.formatted(date: .omitted, time: .shortened)
-                ?? "N/A"
-            )
-            .contentTransition(.numericText()).animation(
-              .snappy, value: logic.clockOutTime)
+          Divider()
+          Spacer()
+          VStack(alignment: .leading, spacing: 7) {
+            HStack {
+              Image(systemName: "rectangle.righthalf.inset.filled.arrow.right")
+                .frame(width: 14)
+              Text("Clocked in:")
+              Spacer()
+              Text(
+                logic.clockInTime?.formatted(date: .omitted, time: .shortened)
+                  ?? ""
+              )
+              .contentTransition(.numericText()).animation(
+                .snappy, value: logic.clockOutTime)
+            }
+            HStack {
+              Image(systemName: "moon.zzz.fill").frame(width: 14)
+              Text("Clocked out:")
+              Spacer()
+              Text(
+                logic.clockOutTime?.formatted(date: .omitted, time: .shortened)
+                  ?? ""
+              )
+              .contentTransition(.numericText()).animation(
+                .snappy, value: logic.clockOutTime)
+            }
           }
         }
       }
@@ -424,11 +427,11 @@ struct TimelineDay: View {
         .secondary.opacity(0.2), lineWidth: 1)
     )
     .animation(
-      .spring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.0),
+      .snappy(duration: 0.1),
       value: logic.isLoading
     )
     .animation(
-      .spring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.0),
+      .snappy(duration: 0.1),
       value: logic.mostUsedApps
     )
     .zIndex(-10)

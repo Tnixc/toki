@@ -4,8 +4,8 @@ import SQLite
 typealias Expression = SQLite.Expression
 
 class Watcher {
-  public let INTERVAL = 6
-  public let IDLE_TIME = 60
+  static let INTERVAL = 6
+  static let IDLE_TIME = 60
   private var timer: Timer?
   private let db: Connection
   private let activities: Table
@@ -30,7 +30,7 @@ class Watcher {
 
   func start() {
     timer = Timer.scheduledTimer(
-      withTimeInterval: TimeInterval(INTERVAL), repeats: true
+      withTimeInterval: TimeInterval(Watcher.INTERVAL), repeats: true
     ) { [weak self] _ in
       self?.checkActivity()
     }
@@ -51,10 +51,10 @@ class Watcher {
     let idle =
       Int(
         CGEventSource.secondsSinceLastEventType(
-          .combinedSessionState, eventType: .mouseMoved)) > IDLE_TIME
+          .combinedSessionState, eventType: .mouseMoved)) > Watcher.IDLE_TIME
       && Int(
         CGEventSource.secondsSinceLastEventType(
-          .combinedSessionState, eventType: .keyDown)) > IDLE_TIME
+          .combinedSessionState, eventType: .keyDown)) > Watcher.IDLE_TIME
 
     // Log to database
     if appName != "loginwindow" && !idle {

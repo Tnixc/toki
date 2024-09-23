@@ -8,9 +8,9 @@
 import Foundation
 
 struct TimelineUtils {
-  static func formatDuration(_ duration: TimeInterval) -> String {
+  static func formatDuration(_ duration: TimeInterval) -> String? {
     if duration == 0 {
-      return "N/A"
+      return nil
     }
     if duration < 60 {
       return "<1m"
@@ -33,7 +33,7 @@ struct TimelineUtils {
     var activeTime: TimeInterval = 0
     if activities.count > 1 {
       for _ in activities {
-        activeTime += Double(Watcher().INTERVAL)
+        activeTime += Double(Watcher.INTERVAL)
       }
     }
 

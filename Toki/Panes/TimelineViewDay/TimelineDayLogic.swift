@@ -28,7 +28,7 @@ class TimelineDayLogic: ObservableObject {
   private var allLoadedActivities: [ActivityEntry] = []
   private var cancellables = Set<AnyCancellable>()
   // New properties for pagination
-  private let chunkSize = 40000
+  private let chunkSize = Int.max
   private var currentChunk = 0
 
   @Published var hasMoreData = true
@@ -257,7 +257,7 @@ class TimelineDayLogic: ObservableObject {
     var lastApp: String?
     for activity in cachedActivities {
       if let lastApp = lastApp {
-        appUsageDurations[lastApp, default: 0] += Double(Watcher().INTERVAL)
+        appUsageDurations[lastApp, default: 0] += Double(Watcher.INTERVAL)
       }
       lastApp = activity.appName
     }
@@ -288,7 +288,7 @@ class TimelineDayLogic: ObservableObject {
 
     for activity in cachedActivities {
       if activity.timestamp >= startTime && activity.timestamp < endTime {
-        appUsage[activity.appName, default: 0] += Double(Watcher().INTERVAL)
+        appUsage[activity.appName, default: 0] += Double(Watcher.INTERVAL)
       } else if activity.timestamp >= endTime {
         break
       }
@@ -386,7 +386,7 @@ class TimelineDayLogic: ObservableObject {
   }
 
   func formatDuration(_ duration: TimeInterval) -> String {
-    return TimelineUtils.formatDuration(duration)
+    return TimelineUtils.formatDuration(duration) ?? ""
   }
 
 }

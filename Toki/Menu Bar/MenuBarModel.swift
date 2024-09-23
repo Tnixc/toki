@@ -29,7 +29,7 @@ class MenuBarModel: ObservableObject {
       activities: activities)
 
     DispatchQueue.main.async {
-      self.activeDuration = TimelineUtils.formatDuration(activeTime)
+      self.activeDuration = TimelineUtils.formatDuration(activeTime) ?? "N/A"
       self.clockInTime = clockIn
       self.clockOutTime = clockOut
     }
