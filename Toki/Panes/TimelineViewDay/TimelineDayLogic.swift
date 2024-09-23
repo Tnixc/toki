@@ -20,6 +20,7 @@ class TimelineDayLogic: ObservableObject {
   @Published var clockOutTime: Date?
   @Published var activeTime: TimeInterval = 0
   @Published var isLoading = false
+
   private var cache: [DateComponents: [ActivityEntry]] = [:]
   private let queue = DispatchQueue(
     label: "com.toki.dataLoading", qos: .userInitiated)

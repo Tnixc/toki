@@ -121,19 +121,13 @@ class TimelineWeekLogic: ObservableObject {
       activity.timestamp >= segmentStart && activity.timestamp < segmentEnd
     }
 
-    if let dominantApp = segmentActivities.max(by: { $0.appName < $1.appName })?
-      .appName
+    if segmentActivities.max(by: { $0.appName < $1.appName })?
+      .appName != nil
     {
-      return colorForApp(dominantApp)
+      return Color.accentColor
     }
 
     return .clear
-  }
-
-  func colorForApp(_ appName: String) -> Color {
-    let hash = appName.unicodeScalars.reduce(0) { $0 + $1.value }
-    let index = Int(hash) % colorSet.count
-    return colorSet[index]
   }
 
   func formatDuration(_ duration: TimeInterval) -> String {
