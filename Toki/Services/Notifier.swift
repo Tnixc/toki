@@ -19,7 +19,7 @@ class Notifier {
     overlayWindow?.makeKeyAndOrderFront(nil)
     DispatchQueue.main.asyncAfter(deadline: .now() + (dismissAfter ?? 1.0)) {
       [weak self] in
-      self?.overlayWindow?.orderOut(nil)
+      self?.overlayWindow?.close()
       self?.overlayWindow = nil
     }
   }

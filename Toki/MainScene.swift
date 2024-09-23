@@ -31,7 +31,6 @@ struct MainScene: Scene {
     Settings {
       SettingsWindow()
         .background(VisualEffect().ignoresSafeArea())
-
     }
     .windowStyle(.hiddenTitleBar)
     .windowToolbarStyle(.automatic)

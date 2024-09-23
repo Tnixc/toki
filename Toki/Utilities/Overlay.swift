@@ -17,7 +17,9 @@ func generateOverlay(
   window.isOpaque = false
   window.hasShadow = false
   window.ignoresMouseEvents = false
-  window.backgroundColor = NSColor.clear
+  window.backgroundColor = .clear
+
+  window.isReleasedWhenClosed = false
 
   let contentView = NSHostingView(
     rootView: OverlayView(title: title, message: message, duration: seconds)
