@@ -82,8 +82,11 @@ class Notifier {
   private func clockOutMain() {
     if clockOutUseOverlay ?? false {
       let date = Date()
-      let midTime = DateFormatter.localizedString(from: date, dateStyle: .none, timeStyle: .short)
-      showOverlay(title: "Time to clock out", message: "The time is \(midTime)", dismissAfter: 5.0)
+      let midTime = DateFormatter.localizedString(
+        from: date, dateStyle: .none, timeStyle: .short)
+      showOverlay(
+        title: "Time to clock out", message: "The time is \(midTime)",
+        dismissAfter: 5.0)
     } else {
       sendNotification(title: "Clock Out", body: "It's time to clock out!")
     }
