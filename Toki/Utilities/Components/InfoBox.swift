@@ -1,10 +1,3 @@
-//
-//  InfoBox.swift
-//  Toki
-//
-//  Created by tnixc on 21/9/2024.
-//
-
 import SwiftUI
 
 struct InfoBox<Content: View>: View {

@@ -1,12 +1,5 @@
 import SwiftUI
 
-//
-//  SettingItem.swift
-//  Toki
-//
-//  Created by tnixc on 21/9/2024.
-//
-
 struct SettingItem<Content: View>: View {
   let title: String
   let description: String

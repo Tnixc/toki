@@ -103,7 +103,8 @@ struct ClockOutSettingsTab: View {
                   action: {
                     Notifier.shared.showOverlay(
                       title: "This is a demo overlay",
-                      message: "It's more effective than a notification", dismissAfter: 5)
+                      message: "It's more effective than a notification",
+                      dismissAfter: 5)
                   }, label: "Show overlay", icon: "circle.dotted", height: 36)
               }
 
@@ -117,8 +118,10 @@ struct ClockOutSettingsTab: View {
               HStack {
                 Spacer()
                 ForEach(0..<7) { index in
+                  let day = Calendar.current.weekdaySymbols[index]
+                  let dayName = day.prefix(3).capitalized
                   DayToggleButton(
-                    day: Calendar.current.weekdaySymbols[index],
+                    day: dayName,
                     isSelected: selectedDays.contains(index + 1)
                   ) {
                     toggleDay(index + 1)

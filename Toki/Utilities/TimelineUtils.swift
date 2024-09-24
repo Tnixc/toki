@@ -1,10 +1,3 @@
-//
-//  TimelineUtils.swift
-//  Toki
-//
-//  Created by tnixc on 21/9/2024.
-//
-
 import Foundation
 
 struct TimelineUtils {

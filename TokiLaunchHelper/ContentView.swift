@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  TokiLaunchHelper
-//
-//  Created by tnixc on 23/9/2024.
-//
-
 import SwiftUI
 
 struct ContentView: View {
