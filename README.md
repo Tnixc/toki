@@ -3,11 +3,11 @@
 ## Core
 
 
-- [ ] **add opts for show apps <1 min in most used apps**
 - [ ] hotkey to summon window
 - [ ] Week view
 - [ ] Month view
 - [ ] Updater
+- [x] add opts for show apps <1 min in most used apps
 - [x] choose start of week
 - [x] launch on login
 - [x] Clock out reminders via overlay
