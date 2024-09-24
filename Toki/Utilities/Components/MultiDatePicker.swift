@@ -4,6 +4,8 @@ struct MultiDatePicker: View {
   @Binding var startDate: Date?
   @Binding var endDate: Date?
   @State private var currentMonth: Date = Date()
+  @State private var firstDayOfWeek: Int = UserDefaults.standard.integer(
+    forKey: "firstDayOfWeek")
 
   private let calendar = Calendar.current
   private let dateFormatter: DateFormatter = {
@@ -35,8 +37,10 @@ struct MultiDatePicker: View {
       .padding(.horizontal)
 
       HStack {
-        ForEach(["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"], id: \.self) { day in
-          Text(day)
+        ForEach(0..<7) { index in
+          let weekdayIndex = mod((index + firstDayOfWeek - 1), 7)
+          let dayname = Calendar.current.weekdaySymbols[weekdayIndex]
+          Text(dayname.capitalized.prefix(3))
             .font(.caption)
             .foregroundColor(.secondary)
             .frame(maxWidth: .infinity)
@@ -49,15 +53,17 @@ struct MultiDatePicker: View {
       ) {
         ForEach(0..<42, id: \.self) { index in
           MultiDateCell(
-            index: index,
-            currentMonth: currentMonth,
-            startDate: $startDate,
-            endDate: $endDate,
-            today: Date())
+            index: index, currentMonth: currentMonth, startDate: $startDate,
+            endDate: $endDate, today: Date(), firstDayOfWeek: firstDayOfWeek)
         }
       }
     }
     .frame(width: 300, height: 350)
+    .onReceive(
+      NotificationCenter.default.publisher(for: .firstDayOfWeekChanged)
+    ) { _ in
+      firstDayOfWeek = UserDefaults.standard.integer(forKey: "firstDayOfWeek")
+    }
   }
 
   private func changeMonth(by value: Int) {
@@ -75,6 +81,7 @@ struct MultiDateCell: View {
   @Binding var startDate: Date?
   @Binding var endDate: Date?
   let today: Date
+  let firstDayOfWeek: Int
 
   private let calendar = Calendar.current
 
@@ -114,31 +121,23 @@ struct MultiDateCell: View {
 
   private func getDate(for index: Int) -> Date? {
     guard
-      let monthInterval = calendar.dateInterval(of: .month, for: currentMonth),
-      let monthFirstWeek = calendar.dateInterval(
-        of: .weekOfMonth, for: monthInterval.start)
+      let monthInterval = calendar.dateInterval(of: .month, for: currentMonth)
     else {
       return nil
     }
 
-    let dateInterval = DateInterval(
-      start: monthFirstWeek.start, end: monthInterval.end)
-    let date = calendar.date(
-      byAdding: .day, value: index, to: dateInterval.start)
+    let monthStart = monthInterval.start
+    let weekdayOfMonthStart = calendar.component(.weekday, from: monthStart)
+    let daysToAdd = (7 + weekdayOfMonthStart - firstDayOfWeek) % 7
 
-    guard let date = date else { return nil }
-
-    if calendar.isDate(
-      date, equalTo: monthInterval.start, toGranularity: .month)
-      || calendar.isDate(
-        date, equalTo: monthInterval.end, toGranularity: .month)
-    {
-      return date
-    } else if date < monthInterval.start || date >= monthInterval.end {
+    guard
+      let startDate = calendar.date(
+        byAdding: .day, value: -daysToAdd, to: monthStart)
+    else {
       return nil
     }
 
-    return date
+    return calendar.date(byAdding: .day, value: index, to: startDate)
   }
 
   private func selectDate(_ date: Date) {

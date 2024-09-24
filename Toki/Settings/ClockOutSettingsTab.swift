@@ -118,7 +118,7 @@ struct ClockOutSettingsTab: View {
                 Spacer()
                 ForEach(0..<7) { index in
                   DayToggleButton(
-                    day: daysOfWeek[index],
+                    day: Calendar.current.weekdaySymbols[index],
                     isSelected: selectedDays.contains(index + 1)
                   ) {
                     toggleDay(index + 1)

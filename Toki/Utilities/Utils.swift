@@ -1,7 +1,9 @@
 import Foundation
 import SwiftUI
 
-public let daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+extension Notification.Name {
+  static let firstDayOfWeekChanged = Notification.Name("firstDayOfWeekChanged")
+}
 
 func triggerHapticFeedback() {
   NSHapticFeedbackManager.defaultPerformer.perform(
@@ -100,4 +102,10 @@ extension Color {
       opacity: Double(a) / 255
     )
   }
+}
+
+func mod(_ a: Int, _ n: Int) -> Int {
+  precondition(n > 0, "modulus must be positive")
+  let r = a % n
+  return r >= 0 ? r : r + n
 }
