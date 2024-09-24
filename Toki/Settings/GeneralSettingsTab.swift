@@ -6,6 +6,8 @@ struct GeneralSettingsTab: View {
   @State private var endOfDayTime: Date
   @State private var firstDayOfWeek: Int
   @State private var launchAtLogin: Bool
+  @State private var showTimeUnderMinute: Bool = UserDefaults.standard.bool(
+    forKey: "showTimeUnderMinute", defaultValue: true)
 
   private let timeOptions: [Date]
   private let timeFormatter: DateFormatter
@@ -15,6 +17,8 @@ struct GeneralSettingsTab: View {
     let defaults = UserDefaults.standard
     _showAppColors = State(initialValue: defaults.bool(forKey: "showAppColors"))
     _launchAtLogin = State(initialValue: defaults.bool(forKey: "launchAtLogin"))
+    _showTimeUnderMinute = State(
+      initialValue: UserDefaults.standard.bool(forKey: "showTimeUnderMinute", defaultValue: true))
 
     let defaultEndOfDay =
       Calendar.current.date(from: DateComponents(hour: 4, minute: 0)) ?? Date()
@@ -122,6 +126,25 @@ struct GeneralSettingsTab: View {
         .toggleStyle(SwitchToggleStyle(tint: .accentColor))
         .scaleEffect(0.8, anchor: .trailing)
       }
+      SettingItem(
+        title: "Show Times Under Minute",
+        description:
+          "Display values under a minute. They will still be counted towards the total",
+        icon: "clock"
+      ) {
+        Toggle(
+          "",
+          isOn: Binding(
+            get: { self.showTimeUnderMinute },
+            set: {
+              self.showTimeUnderMinute = $0
+              UserDefaults.standard.set($0, forKey: "showTimeUnderMinute")
+            }
+          )
+        )
+        .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+        .scaleEffect(0.8, anchor: .trailing)
+      }
 
       Spacer()
       InfoBox {
@@ -141,5 +164,13 @@ struct GeneralSettingsTab: View {
     } else {
       try? SMAppService.mainApp.unregister()
     }
+  }
+}
+extension UserDefaults {
+  func bool(forKey key: String, defaultValue: Bool) -> Bool {
+    if object(forKey: key) == nil {
+      set(defaultValue, forKey: key)
+    }
+    return bool(forKey: key)
   }
 }

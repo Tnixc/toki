@@ -58,36 +58,6 @@ class Day {
     } catch {
       print("Error querying database: \(error)")
     }
-
     return activityEntries
-  }
-
-  func getMostUsedApps(for date: Date) -> [AppUsage] {
-    let calendar = Calendar.current
-    let startOfDay = calendar.startOfDay(for: date)
-    let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
-
-    let query =
-      activities
-      .filter(timestamp >= startOfDay && timestamp < endOfDay)
-      .select(appName, timestamp)
-      .order(timestamp.asc)
-
-    var usages = [String: TimeInterval]()
-    do {
-      for row in try db.prepare(query) {
-        let currentApp = row[appName]
-        usages[currentApp, default: 0] += Double(Watcher.INTERVAL)
-      }
-    } catch {
-      print("Error querying database: \(error)")
-    }
-
-    let sortedUsage = usages.map {
-      AppUsage(appName: $0.key, duration: $0.value)
-    }
-    .sorted { $0.duration > $1.duration }
-
-    return sortedUsage
   }
 }

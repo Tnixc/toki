@@ -67,10 +67,17 @@ class TimelineDayLogic: ObservableObject {
     self.cachedActivities = activities
     self.precomputeSegmentData()
     self.computeAppUsage()
+    let showTimeUnderMinute = UserDefaults.standard.bool(
+      forKey: "showTimeUnderMinute", defaultValue: true)
     self.mostUsedApps = self.appUsageDurations.map {
       AppUsage(appName: $0.key, duration: $0.value)
     }
     .sorted { $0.duration > $1.duration }
+    .filter {
+      showTimeUnderMinute
+        || $0.duration > TimeInterval.Datatype(integerLiteral: 60)
+    }
+
     self.calculateDayStats()
     self.objectWillChange.send()
   }
@@ -130,7 +137,7 @@ class TimelineDayLogic: ObservableObject {
     let newSegment = segmentForLocation(location, width: width)
     if newSegment != currentHoverSegment {
       currentHoverSegment = newSegment
-      if !appsForSegment(newSegment).isEmpty {
+      if isSegmentActive(newSegment) {
         triggerHapticFeedback()
       }
     }
@@ -172,7 +179,6 @@ class TimelineDayLogic: ObservableObject {
           }
         }
       }
-
       DispatchQueue.main.async {
         self.objectWillChange.send()
       }
@@ -246,7 +252,14 @@ class TimelineDayLogic: ObservableObject {
       }
     }
 
+    let showTimeUnderMinute = UserDefaults.standard.bool(
+      forKey: "showTimeUnderMinute", defaultValue: true)
+
     return appUsage.map { AppUsage(appName: $0.key, duration: $0.value) }
+      .filter {
+        showTimeUnderMinute
+          || $0.duration > TimeInterval.Datatype(integerLiteral: 60)
+      }
       .sorted { (app1, app2) -> Bool in
         if Int(app1.duration / 60) == Int(app2.duration / 60) {
           return app1.appName < app2.appName
