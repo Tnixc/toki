@@ -36,7 +36,7 @@ struct CustomDatePicker: View {
       }
       .padding(.horizontal)
 
-      HStack {
+      HStack(spacing: 0) {
         ForEach(0..<7) { index in
           let weekdayIndex = mod((index + firstDayOfWeek - 1), 7)
           let dayname = Calendar.current.weekdaySymbols[weekdayIndex]

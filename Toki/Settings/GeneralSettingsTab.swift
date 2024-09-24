@@ -1,9 +1,11 @@
+import ServiceManagement
 import SwiftUI
 
 struct GeneralSettingsTab: View {
   @State private var showAppColors: Bool
   @State private var endOfDayTime: Date
   @State private var firstDayOfWeek: Int
+  @State private var launchAtLogin: Bool
 
   private let timeOptions: [Date]
   private let timeFormatter: DateFormatter
@@ -12,6 +14,7 @@ struct GeneralSettingsTab: View {
   init() {
     let defaults = UserDefaults.standard
     _showAppColors = State(initialValue: defaults.bool(forKey: "showAppColors"))
+    _launchAtLogin = State(initialValue: defaults.bool(forKey: "launchAtLogin"))
 
     let defaultEndOfDay =
       Calendar.current.date(from: DateComponents(hour: 4, minute: 0)) ?? Date()
@@ -100,6 +103,26 @@ struct GeneralSettingsTab: View {
         .pickerStyle(.menu).frame(maxWidth: 100)
       }
 
+      SettingItem(
+        title: "Launch at Login",
+        description: "Automatically start Toki when you log in.",
+        icon: "power"
+      ) {
+        Toggle(
+          "",
+          isOn: Binding(
+            get: { self.launchAtLogin },
+            set: {
+              self.launchAtLogin = $0
+              UserDefaults.standard.set($0, forKey: "launchAtLogin")
+              self.setLaunchAtLogin($0)
+            }
+          )
+        )
+        .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+        .scaleEffect(0.8, anchor: .trailing)
+      }
+
       Spacer()
       InfoBox {
         HStack {
@@ -109,6 +132,14 @@ struct GeneralSettingsTab: View {
           Spacer()
         }
       }
+    }
+  }
+
+  private func setLaunchAtLogin(_ enable: Bool) {
+    if enable {
+      try? SMAppService.mainApp.register()
+    } else {
+      try? SMAppService.mainApp.unregister()
     }
   }
 }
