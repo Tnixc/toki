@@ -7,13 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		394CEBC22CA0F51A00973A39 /* Overlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394CEBC12CA0F51900973A39 /* Overlay.swift */; };
 		394E3A7E2CA0704500DFC1AD /* ExportSettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394E3A7D2CA0704500DFC1AD /* ExportSettingsTab.swift */; };
 		394E3A802CA0706A00DFC1AD /* ExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394E3A7F2CA0706A00DFC1AD /* ExportManager.swift */; };
 		394E3A842CA08D5F00DFC1AD /* ClockOutSettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394E3A832CA08D5F00DFC1AD /* ClockOutSettingsTab.swift */; };
 		3958B61D2C9F5E17005FC95A /* TimelineUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3958B61C2C9F5E17005FC95A /* TimelineUtils.swift */; };
 		3958B6202C9F973E005FC95A /* SettingsKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3958B61F2C9F973E005FC95A /* SettingsKit */; };
 		3958B6242C9F99FA005FC95A /* StorageSettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3958B6232C9F99FA005FC95A /* StorageSettingsTab.swift */; };
+		396339462CA3873700365897 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396339452CA3873700365897 /* Constants.swift */; };
+		396339482CA3879900365897 /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396339472CA3879900365897 /* Styles.swift */; };
 		39B14DB32C9CE173003A457D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B14DB12C9CE173003A457D /* Utils.swift */; };
 		39B90B9B2C9B07CE0002823D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 39B90B9A2C9B07CE0002823D /* SQLite */; };
 		39B90BA12C9B24A40002823D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 39B90BA02C9B24A40002823D /* SQLite */; };
@@ -31,13 +32,14 @@
 
 /* Begin PBXFileReference section */
 		393609172CA24038007FCA0F /* TokiLaunchHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TokiLaunchHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		394CEBC12CA0F51900973A39 /* Overlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Overlay.swift; sourceTree = "<group>"; };
 		394E3A7D2CA0704500DFC1AD /* ExportSettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportSettingsTab.swift; sourceTree = "<group>"; };
 		394E3A7F2CA0706A00DFC1AD /* ExportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportManager.swift; sourceTree = "<group>"; };
 		394E3A832CA08D5F00DFC1AD /* ClockOutSettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockOutSettingsTab.swift; sourceTree = "<group>"; };
 		3958B61C2C9F5E17005FC95A /* TimelineUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineUtils.swift; sourceTree = "<group>"; };
 		3958B6232C9F99FA005FC95A /* StorageSettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageSettingsTab.swift; sourceTree = "<group>"; };
 		396338F82CA310A600365897 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		396339452CA3873700365897 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		396339472CA3879900365897 /* Styles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Styles.swift; sourceTree = "<group>"; };
 		39B14DB12C9CE173003A457D /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		4180AEAA2839753E0054FEA9 /* Toki.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Toki.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4180AEAD2839753E0054FEA9 /* Toki.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toki.swift; sourceTree = "<group>"; };
@@ -185,7 +187,8 @@
 		4180AEEC2839A0560054FEA9 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				394CEBC12CA0F51900973A39 /* Overlay.swift */,
+				396339472CA3879900365897 /* Styles.swift */,
+				396339452CA3873700365897 /* Constants.swift */,
 				394E3A7F2CA0706A00DFC1AD /* ExportManager.swift */,
 				3958B61C2C9F5E17005FC95A /* TimelineUtils.swift */,
 				39B14DB12C9CE173003A457D /* Utils.swift */,
@@ -323,10 +326,11 @@
 				4180AEBD283975670054FEA9 /* MainScene.swift in Sources */,
 				4180AEDC283984740054FEA9 /* ExportCommands.swift in Sources */,
 				4180AEEE2839A0660054FEA9 /* BundleExtensions.swift in Sources */,
+				396339462CA3873700365897 /* Constants.swift in Sources */,
 				4180AEC4283979530054FEA9 /* MainView.swift in Sources */,
+				396339482CA3879900365897 /* Styles.swift in Sources */,
 				394E3A842CA08D5F00DFC1AD /* ClockOutSettingsTab.swift in Sources */,
 				4180AEC2283976F80054FEA9 /* GeneralSettingsTab.swift in Sources */,
-				394CEBC22CA0F51A00973A39 /* Overlay.swift in Sources */,
 				4180AEDE283985190054FEA9 /* MyExportDocument.swift in Sources */,
 				3958B61D2C9F5E17005FC95A /* TimelineUtils.swift in Sources */,
 				4180AEC0283976740054FEA9 /* SettingsWindow.swift in Sources */,
