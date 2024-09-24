@@ -9,8 +9,12 @@ struct CustomButton: View {
   let align: Alignment?
 
   init(
-    action: @escaping () -> Void, label: String, icon: String? = nil,
-    width: CGFloat? = nil, height: CGFloat? = nil, align: Alignment? = nil
+    action: @escaping () -> Void,
+    label: String,
+    icon: String? = nil,
+    width: CGFloat? = nil,
+    height: CGFloat? = nil,
+    align: Alignment? = nil
   ) {
     self.action = action
     self.label = label
@@ -23,29 +27,35 @@ struct CustomButton: View {
   var body: some View {
     Button(action: action) {
       HStack {
-        if align == Alignment.trailing {
+        if align == .trailing {
           Spacer()
         }
         if let icon = icon {
           Image(systemName: icon)
+            .font(.system(size: Style.Colors.Icon.size))
         }
         if !label.isEmpty {
           Text(label)
         }
-        if align == Alignment.leading {
+        if align == .leading {
           Spacer()
         }
       }
-      .padding()
-      .frame(width: width, height: height)
-      .background(Color.secondary.opacity(0.1))
-      .clipShape(RoundedRectangle(cornerRadius: 10))
-      .contentShape(RoundedRectangle(cornerRadius: 10))
-      .overlay(
-        RoundedRectangle(cornerRadius: 10)
-          .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+      .padding(Style.Colors.Layout.padding)
+      .frame(width: width, height: height ?? Style.Colors.Button.height)
+      .background(Style.Colors.Settings.itembg)
+      .clipShape(
+        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
       )
-
+      .contentShape(
+        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+      )
+      .overlay(
+        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+          .stroke(
+            Style.Colors.Settings.itemBorder,
+            lineWidth: Style.Colors.Layout.borderWidth)
+      )
     }
     .buttonStyle(.plain)
     .hoverEffect()
@@ -61,8 +71,12 @@ struct CustomButtonPlain: View {
   let align: Alignment?
 
   init(
-    action: @escaping () -> Void, label: String, icon: String? = nil,
-    width: CGFloat? = nil, height: CGFloat? = nil, align: Alignment? = nil
+    action: @escaping () -> Void,
+    label: String,
+    icon: String? = nil,
+    width: CGFloat? = nil,
+    height: CGFloat? = nil,
+    align: Alignment? = nil
   ) {
     self.action = action
     self.label = label
@@ -75,26 +89,31 @@ struct CustomButtonPlain: View {
   var body: some View {
     Button(action: action) {
       HStack {
-        if align == Alignment.trailing {
+        if align == .trailing {
           Spacer()
         }
         if let icon = icon {
           Image(systemName: icon)
+            .font(.system(size: Style.Colors.Icon.size))
         }
         if !label.isEmpty {
           Text(label)
         }
-        if align == Alignment.leading {
+        if align == .leading {
           Spacer()
         }
       }
-      .padding()
-      .frame(width: width, height: height)
+      .padding(Style.Colors.Layout.padding)
+      .frame(width: width, height: height ?? Style.Colors.Button.height)
       .background(.clear)
-      .contentShape(RoundedRectangle(cornerRadius: 10))
-      .clipShape(RoundedRectangle(cornerRadius: 10))
+      .contentShape(
+        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+      )
+      .clipShape(
+        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+      )
       .overlay(
-        RoundedRectangle(cornerRadius: 10)
+        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
           .fill(.clear)
       )
     }
