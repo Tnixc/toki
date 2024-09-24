@@ -3,10 +3,13 @@ import SwiftUI
 struct TimelineWeek: View {
   @StateObject private var logic = TimelineWeekLogic()
   @Binding var selectedViewType: TimelineViewType
+  @State private var firstDayOfWeek: Int = UserDefaults.standard.integer(
+    forKey: "firstDayOfWeek")
 
   private let maxWidth: CGFloat = 800
   private let dayColumnWidth: CGFloat = 100
   private let hourLabelWidth: CGFloat = 50
+  private let displayedHours = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24]
 
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
@@ -18,6 +21,12 @@ struct TimelineWeek: View {
     .frame(maxWidth: maxWidth)
     .onAppear {
       logic.loadData()
+    }
+    .onReceive(
+      NotificationCenter.default.publisher(for: .firstDayOfWeekChanged)
+    ) { _ in
+      firstDayOfWeek = UserDefaults.standard.integer(forKey: "firstDayOfWeek")
+      logic.updateWeekDays(firstDayOfWeek: firstDayOfWeek)
     }
   }
 
@@ -90,10 +99,12 @@ struct TimelineWeek: View {
   private func hourLabels(height: CGFloat) -> some View {
     VStack(spacing: 0) {
       Text("Hour").font(.caption).frame(height: 20)
-      ForEach(0..<24) { hour in
+      ForEach(displayedHours.dropLast(), id: \.self) { hour in
         Text("\(hour):00")
           .font(.caption)
-          .frame(height: (height - 20) / 24, alignment: .top)
+          .frame(
+            height: (height - 20) / CGFloat(displayedHours.count - 1),
+            alignment: .top)
       }
     }
   }
@@ -105,7 +116,7 @@ struct TimelineWeek: View {
         .frame(height: 20)
       ZStack(alignment: .top) {
         VStack(spacing: 0) {
-          ForEach(0..<24) { _ in
+          ForEach(displayedHours.dropLast(), id: \.self) { _ in
             Divider()
             Spacer()
           }

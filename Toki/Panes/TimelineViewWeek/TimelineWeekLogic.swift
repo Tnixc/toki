@@ -4,6 +4,7 @@ class TimelineWeekLogic: ObservableObject {
   @Published var weekDays: [Date] = []
   @Published var activities: [Date: [ActivityEntry]] = [:]
 
+  let segmentCount: Int = 144
   private let calendar = Calendar.current
   private let day = Day()
 
@@ -13,6 +14,8 @@ class TimelineWeekLogic: ObservableObject {
     self.weekStart = Calendar.current.date(
       from: Calendar.current.dateComponents(
         [.yearForWeekOfYear, .weekOfYear], from: Date()))!
+    updateWeekDays(
+      firstDayOfWeek: UserDefaults.standard.integer(forKey: "firstDayOfWeek"))
   }
 
   var weekStartString: String {
@@ -37,14 +40,9 @@ class TimelineWeekLogic: ObservableObject {
   }
 
   func loadData() {
-    weekDays = (0...6).map {
-      calendar.date(byAdding: .day, value: $0, to: weekStart)!
-    }
-
     for day in weekDays {
       activities[day] = self.day.getActivityForDay(date: day)
     }
-
     objectWillChange.send()
   }
 
@@ -53,7 +51,18 @@ class TimelineWeekLogic: ObservableObject {
       byAdding: .weekOfYear, value: value, to: weekStart)
     {
       weekStart = min(newWeekStart, Date())
+      updateWeekDays(
+        firstDayOfWeek: UserDefaults.standard.integer(forKey: "firstDayOfWeek"))
       loadData()
+    }
+  }
+
+  func updateWeekDays(firstDayOfWeek: Int) {
+    let adjustedFirstDayOfWeek = firstDayOfWeek == 1 ? 1 : firstDayOfWeek
+    let adjustedWeekStart = calendar.date(
+      bySetting: .weekday, value: adjustedFirstDayOfWeek, of: weekStart)!
+    weekDays = (0...6).map {
+      calendar.date(byAdding: .day, value: $0, to: adjustedWeekStart)!
     }
   }
 
@@ -69,7 +78,7 @@ class TimelineWeekLogic: ObservableObject {
     var mergedSegments: [(Int, Int)] = []
     var currentStart: Int?
 
-    for segment in 0..<144 {
+    for segment in 0..<segmentCount {
       if isSegmentActive(segment, for: day) {
         if currentStart == nil {
           currentStart = segment
@@ -83,7 +92,7 @@ class TimelineWeekLogic: ObservableObject {
     }
 
     if let start = currentStart {
-      mergedSegments.append((start, 143))
+      mergedSegments.append((start, segmentCount - 1))
     }
 
     return mergedSegments
@@ -104,12 +113,10 @@ class TimelineWeekLogic: ObservableObject {
   }
 
   func yPositionForSegment(_ segment: Int, height: CGFloat) -> CGFloat {
-    CGFloat(segment) / CGFloat(144) * height
+    CGFloat(segment) / CGFloat(segmentCount) * height
   }
 
   func colorForSegment(_ segment: Int, day: Date) -> Color {
-    // You can implement your own color logic here
-    // For now, we'll use a static color
     Color.accentColor.opacity(0.8)
   }
 }
