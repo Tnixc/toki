@@ -57,9 +57,9 @@ class TimelineWeekLogic: ObservableObject {
     }
   }
 
-  func formatDate(_ date: Date) -> String {
+  func formatWeekday(_ date: Date) -> String {
     let formatter = DateFormatter()
-    formatter.dateFormat = "EEEE, MMM d"
+    formatter.dateFormat = "EEE"
     return formatter.string(from: date)
   }
 
@@ -82,7 +82,6 @@ class TimelineWeekLogic: ObservableObject {
       }
     }
 
-    // Add the last segment if it's active
     if let start = currentStart {
       mergedSegments.append((start, 143))
     }
@@ -104,64 +103,13 @@ class TimelineWeekLogic: ObservableObject {
     }
   }
 
-  func xPositionForSegment(_ segment: Int, width: CGFloat) -> CGFloat {
-    CGFloat(segment) / CGFloat(144) * width
+  func yPositionForSegment(_ segment: Int, height: CGFloat) -> CGFloat {
+    CGFloat(segment) / CGFloat(144) * height
   }
 
   func colorForSegment(_ segment: Int, day: Date) -> Color {
-    guard let dayActivities = activities[day] else { return .clear }
-
-    let segmentStart = calendar.date(
-      byAdding: .minute, value: segment * 10, to: calendar.startOfDay(for: day))!
-    let segmentEnd = calendar.date(
-      byAdding: .minute, value: (segment + 1) * 10,
-      to: calendar.startOfDay(for: day))!
-
-    let segmentActivities = dayActivities.filter { activity in
-      activity.timestamp >= segmentStart && activity.timestamp < segmentEnd
-    }
-
-    if segmentActivities.max(by: { $0.appName < $1.appName })?
-      .appName != nil
-    {
-      return Color.accentColor
-    }
-
-    return .clear
-  }
-
-  func formatDuration(_ duration: TimeInterval) -> String {
-    TimelineUtils.formatDuration(duration) ?? "N/A"
-  }
-
-  func activeTimeForDay(_ day: Date) -> TimeInterval {
-    guard let dayActivities = activities[day] else { return 0 }
-    return TimelineUtils.calculateDayStats(activities: dayActivities).2
-  }
-
-  func clockInTimeForDay(_ day: Date) -> String {
-    guard let dayActivities = activities[day],
-      let clockInTime = TimelineUtils.calculateDayStats(
-        activities: dayActivities
-      ).0
-    else {
-      return "N/A"
-    }
-    let formatter = DateFormatter()
-    formatter.dateFormat = "HH:mm"
-    return formatter.string(from: clockInTime)
-  }
-
-  func clockOutTimeForDay(_ day: Date) -> String {
-    guard let dayActivities = activities[day],
-      let clockOutTime = TimelineUtils.calculateDayStats(
-        activities: dayActivities
-      ).1
-    else {
-      return "N/A"
-    }
-    let formatter = DateFormatter()
-    formatter.dateFormat = "HH:mm"
-    return formatter.string(from: clockOutTime)
+    // You can implement your own color logic here
+    // For now, we'll use a static color
+    Color.accentColor.opacity(0.8)
   }
 }

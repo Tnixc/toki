@@ -4,20 +4,18 @@ struct TimelineWeek: View {
   @StateObject private var logic = TimelineWeekLogic()
   @Binding var selectedViewType: TimelineViewType
 
+  private let maxWidth: CGFloat = 800
+  private let dayColumnWidth: CGFloat = 100
+  private let hourLabelWidth: CGFloat = 50
+
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
       headerView
       weekConfigView()
-      ScrollView {
-        VStack(spacing: 20) {
-          ForEach(logic.weekDays, id: \.self) { day in
-            dayView(for: day)
-          }
-        }
-      }
+      weekTimelineView
     }
     .padding()
-    .frame(maxWidth: 600)
+    .frame(maxWidth: maxWidth)
     .onAppear {
       logic.loadData()
     }
@@ -64,59 +62,70 @@ struct TimelineWeek: View {
       action: action, label: "", icon: iconName, width: 40, height: 40)
   }
 
-  private func dayView(for day: Date) -> some View {
-    VStack(alignment: .leading, spacing: 5) {
-      Text(logic.formatDate(day))
-        .font(.headline)
-      timelineView(for: day)
-      dayStatsView(for: day)
-    }
-  }
-
-  private func timelineView(for day: Date) -> some View {
+  private var weekTimelineView: some View {
     GeometryReader { geometry in
-      let width = geometry.size.width
-      ZStack(alignment: .topLeading) {
-        backgroundView(width: width)
-        activityBarsView(for: day, width: width)
-      }
-    }
-    .frame(height: 50)
-  }
+      HStack(alignment: .top, spacing: 0) {
+        hourLabels(height: geometry.size.height)
+          .frame(width: hourLabelWidth)
 
-  private func backgroundView(width: CGFloat) -> some View {
-    RoundedRectangle(cornerRadius: 10)
-      .fill(Color.accentColor.opacity(0.1))
-      .frame(width: width, height: 50)
+        HStack(spacing: 0) {
+          ForEach(logic.weekDays, id: \.self) { day in
+            dayColumn(for: day, height: geometry.size.height)
+          }
+        }
+        .frame(width: dayColumnWidth * 7)
+      }
+      .background(
+        RoundedRectangle(cornerRadius: 10)
+          .fill(Color.accentColor.opacity(0.1))
+      )
       .overlay(
         RoundedRectangle(cornerRadius: 10)
           .stroke(Color.accentColor.opacity(0.3), lineWidth: 1)
       )
+    }
+    .frame(height: 500)
   }
 
-  private func activityBarsView(for day: Date, width: CGFloat) -> some View {
-    ForEach(logic.mergeAdjacentSegments(for: day), id: \.0) {
-      startSegment, endSegment in
-      let startX = logic.xPositionForSegment(startSegment, width: width)
-      let endX = logic.xPositionForSegment(endSegment + 1, width: width)
-      let barWidth = endX - startX
-
-      RoundedRectangle(cornerRadius: 5)
-        .fill(logic.colorForSegment(startSegment, day: day))
-        .frame(width: barWidth, height: 50)
-        .position(x: startX + barWidth / 2, y: 25)
+  private func hourLabels(height: CGFloat) -> some View {
+    VStack(spacing: 0) {
+      Text("Hour").font(.caption).frame(height: 20)
+      ForEach(0..<24) { hour in
+        Text("\(hour):00")
+          .font(.caption)
+          .frame(height: (height - 20) / 24, alignment: .top)
+      }
     }
   }
 
-  private func dayStatsView(for day: Date) -> some View {
-    HStack {
-      Text("Active: \(logic.formatDuration(logic.activeTimeForDay(day)))")
-      Spacer()
-      Text("Start: \(logic.clockInTimeForDay(day))")
-      Spacer()
-      Text("End: \(logic.clockOutTimeForDay(day))")
+  private func dayColumn(for day: Date, height: CGFloat) -> some View {
+    VStack(spacing: 0) {
+      Text(logic.formatWeekday(day))
+        .font(.caption)
+        .frame(height: 20)
+      ZStack(alignment: .top) {
+        VStack(spacing: 0) {
+          ForEach(0..<24) { _ in
+            Divider()
+            Spacer()
+          }
+        }
+        ForEach(logic.mergeAdjacentSegments(for: day), id: \.0) {
+          startSegment, endSegment in
+          let startY = logic.yPositionForSegment(
+            startSegment, height: height - 20)
+          let endY = logic.yPositionForSegment(
+            endSegment + 1, height: height - 20)
+          let barHeight = max(0, endY - startY)
+
+          RoundedRectangle(cornerRadius: 5)
+            .fill(logic.colorForSegment(startSegment, day: day))
+            .frame(width: dayColumnWidth - 2, height: barHeight)
+            .position(x: (dayColumnWidth - 2) / 2, y: startY + barHeight / 2)
+        }
+      }
+      .frame(height: height - 20)
     }
-    .font(.caption)
-    .foregroundColor(.secondary)
+    .frame(width: dayColumnWidth)
   }
 }
