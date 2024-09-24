@@ -37,6 +37,7 @@
 		394E3A832CA08D5F00DFC1AD /* ClockOutSettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockOutSettingsTab.swift; sourceTree = "<group>"; };
 		3958B61C2C9F5E17005FC95A /* TimelineUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineUtils.swift; sourceTree = "<group>"; };
 		3958B6232C9F99FA005FC95A /* StorageSettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageSettingsTab.swift; sourceTree = "<group>"; };
+		396338F82CA310A600365897 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		39B14DB12C9CE173003A457D /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		4180AEAA2839753E0054FEA9 /* Toki.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Toki.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4180AEAD2839753E0054FEA9 /* Toki.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toki.swift; sourceTree = "<group>"; };
@@ -114,6 +115,7 @@
 		4180AEA12839753E0054FEA9 = {
 			isa = PBXGroup;
 			children = (
+				396338F82CA310A600365897 /* README.md */,
 				4180AEAC2839753E0054FEA9 /* Toki */,
 				393609182CA24038007FCA0F /* TokiLaunchHelper */,
 				4180AEAB2839753E0054FEA9 /* Products */,
