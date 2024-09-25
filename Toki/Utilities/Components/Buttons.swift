@@ -34,7 +34,7 @@ struct CustomButton: View {
         }
         if let icon = icon {
           Image(systemName: icon)
-            .font(.system(size: Style.Colors.Icon.sizeSM))
+            .font(.system(size: Style.Icon.sizeSM))
         }
         if !label.isEmpty {
           Text(label)
@@ -43,20 +43,20 @@ struct CustomButton: View {
           Spacer()
         }
       }
-      .padding(Style.Colors.Layout.padding)
-      .frame(width: width, height: height ?? Style.Colors.Button.height)
-      .background(Style.Colors.Button.bg)
+      .padding(Style.Layout.padding)
+      .frame(width: width, height: height ?? Style.Button.height)
+      .background(Style.Button.bg)
       .clipShape(
-        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius)
       )
       .contentShape(
-        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius)
       )
       .overlay(
-        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius)
           .stroke(
-            Style.Colors.Button.border,
-            lineWidth: Style.Colors.Layout.borderWidth)
+            Style.Button.border,
+            lineWidth: Style.Layout.borderWidth)
       )
     }
     .buttonStyle(.plain)
@@ -96,7 +96,7 @@ struct CustomButtonPlain: View {
         }
         if let icon = icon {
           Image(systemName: icon)
-            .font(.system(size: Style.Colors.Icon.sizeSM))
+            .font(.system(size: Style.Icon.sizeSM))
         }
         if !label.isEmpty {
           Text(label)
@@ -105,17 +105,17 @@ struct CustomButtonPlain: View {
           Spacer()
         }
       }
-      .padding(Style.Colors.Layout.padding)
-      .frame(width: width, height: height ?? Style.Colors.Button.height)
+      .padding(Style.Layout.padding)
+      .frame(width: width, height: height ?? Style.Button.height)
       .background(.clear)
       .contentShape(
-        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius)
       )
       .clipShape(
-        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius)
       )
       .overlay(
-        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius)
           .fill(.clear)
       )
     }

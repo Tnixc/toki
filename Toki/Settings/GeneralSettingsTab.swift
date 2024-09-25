@@ -50,7 +50,7 @@ struct GeneralSettingsTab: View {
   }
 
   var body: some View {
-    VStack(alignment: .leading, spacing: Style.Colors.Layout.padding) {
+    VStack(alignment: .leading, spacing: Style.Layout.padding) {
       Text("General").font(.title).padding()
 
       SettingItem(

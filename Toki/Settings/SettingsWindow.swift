@@ -27,12 +27,12 @@ struct SettingsWindow: View {
       height: Constants.Settings.windowHeight
     )
     .background(VisualEffect().ignoresSafeArea())
-    .padding(Style.Colors.Layout.padding)
+    .padding(Style.Layout.padding)
   }
 
   var sidebar: some View {
     HStack {
-      VStack(spacing: Style.Colors.Layout.paddingSM) {
+      VStack(spacing: Style.Layout.paddingSM) {
         SettingsTabButton(
           title: "General",
           icon: "gear",
@@ -97,7 +97,7 @@ struct SettingsTabButton: View {
         label: title,
         icon: icon,
         width: LocalConstants.sidebarWidth,
-        height: Style.Colors.Button.heightSM,
+        height: Style.Button.heightSM,
         align: .leading
       )
     } else {
@@ -106,7 +106,7 @@ struct SettingsTabButton: View {
         label: title,
         icon: icon,
         width: LocalConstants.sidebarWidth,
-        height: Style.Colors.Button.heightSM,
+        height: Style.Button.heightSM,
         align: .leading
       )
     }

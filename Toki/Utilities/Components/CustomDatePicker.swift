@@ -93,13 +93,13 @@ struct NavigationButton: View {
       Image(systemName: direction == .forward ? "arrow.right" : "arrow.left")
         .fontWeight(.bold)
         .frame(
-          width: Style.Colors.Button.height,
-          height: Style.Colors.Button.height
+          width: Style.Button.height,
+          height: Style.Button.height
         )
         .contentShape(Rectangle())
     }
     .buttonStyle(PlainButtonStyle())
-    .cornerRadius(Style.Colors.Layout.cornerRadius)
+    .cornerRadius(Style.Layout.cornerRadius)
     .hoverEffect()
   }
 }
@@ -138,14 +138,14 @@ struct DateCell: View {
       }) {
         Text(String(calendar.component(.day, from: date)))
           .frame(
-            width: Style.Colors.Button.height,
-            height: Style.Colors.Button.height
+            width: Style.Button.height,
+            height: Style.Button.height
           )
           .contentShape(Rectangle())
       }
       .buttonStyle(PlainButtonStyle())
       .background(
-        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius).fill(
+        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius).fill(
           bg)
       )
       .foregroundColor(fg)
@@ -154,8 +154,8 @@ struct DateCell: View {
     } else {
       Color.clear
         .frame(
-          width: Style.Colors.Button.height,
-          height: Style.Colors.Button.height)
+          width: Style.Button.height,
+          height: Style.Button.height)
     }
   }
 
@@ -187,7 +187,7 @@ struct HoverEffect: ViewModifier {
   func body(content: Content) -> some View {
     content
       .background(
-        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius)
           .fill(isHovered ? Color.gray.opacity(0.2) : Color.clear)
       )
       .onHover { hovering in

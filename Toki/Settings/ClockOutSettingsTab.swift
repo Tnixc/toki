@@ -41,12 +41,12 @@ struct ClockOutSettingsTab: View {
 
   var body: some View {
     ScrollView {
-      VStack(alignment: .leading, spacing: Style.Colors.Layout.padding) {
+      VStack(alignment: .leading, spacing: Style.Layout.padding) {
         Text("Clock Out").font(.title).padding()
 
-        VStack(alignment: .leading, spacing: Style.Colors.Layout.padding) {
+        VStack(alignment: .leading, spacing: Style.Layout.padding) {
           SettingItemGroup {
-            VStack(alignment: .leading, spacing: Style.Colors.Layout.paddingSM) {
+            VStack(alignment: .leading, spacing: Style.Layout.paddingSM) {
               SettingItemRow(
                 title: "Enable Clock Out",
                 description: "Turn on/off clock out notifications",
@@ -107,7 +107,7 @@ struct ClockOutSettingsTab: View {
                       message: "It's more effective than a notification",
                       dismissAfter: Constants.overlayDismissTime)
                   }, label: "Show overlay", icon: "circle.dotted",
-                  height: Style.Colors.Button.heightSM)
+                  height: Style.Button.heightSM)
               }
 
               Divider()
@@ -134,7 +134,7 @@ struct ClockOutSettingsTab: View {
           }
 
           SettingItemGroup {
-            VStack(alignment: .leading, spacing: Style.Colors.Layout.paddingSM) {
+            VStack(alignment: .leading, spacing: Style.Layout.paddingSM) {
               SettingItemRow(
                 title: "Enable Persistent Reminders",
                 description:
@@ -215,16 +215,16 @@ struct DayToggleButton: View {
     Button(action: action) {
       Text(day)
         .font(.caption)
-        .frame(width: 35, height: Style.Colors.Button.heightXS)
-        .background(isSelected ? Color.accentColor : Style.Colors.Button.bg)
+        .frame(width: 35, height: Style.Button.heightXS)
+        .background(isSelected ? Color.accentColor : Style.Button.bg)
         .overlay(
-          RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius / 2)
+          RoundedRectangle(cornerRadius: Style.Layout.cornerRadius / 2)
             .stroke(
-              Style.Colors.Button.border,
-              lineWidth: Style.Colors.Layout.borderWidth)
+              Style.Button.border,
+              lineWidth: Style.Layout.borderWidth)
         )
         .foregroundColor(isSelected ? .white : .primary)
-        .cornerRadius(Style.Colors.Layout.cornerRadius / 2)
+        .cornerRadius(Style.Layout.cornerRadius / 2)
     }
     .buttonStyle(.borderless)
   }

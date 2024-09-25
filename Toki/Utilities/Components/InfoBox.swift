@@ -11,14 +11,14 @@ struct InfoBox<Content: View>: View {
 
   var body: some View {
     content
-      .padding(Style.Colors.Layout.padding)
-      .background(Style.Colors.MostUsedApps.bg)
-      .cornerRadius(Style.Colors.Layout.cornerRadius)
+      .padding(Style.Layout.padding)
+      .background(Style.MostUsedApps.bg)
+      .cornerRadius(Style.Layout.cornerRadius)
       .overlay(
-        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius)
           .stroke(
-            Style.Colors.MostUsedApps.border,
-            lineWidth: Style.Colors.Layout.borderWidth)
+            Style.MostUsedApps.border,
+            lineWidth: Style.Layout.borderWidth)
       )
   }
 }

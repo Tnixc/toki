@@ -36,9 +36,6 @@ class TimelineDayLogic: ObservableObject {
   let hoverLineExtension: CGFloat = 10
 
   private var cachedActivities: [ActivityEntry] = []
-  private var activeSegments: Set<Int> = []
-
-  private var segmentDominantApps: [Int: String] = [:]
   private var appUsageDurations: [String: TimeInterval] = [:]
 
   init() {
@@ -66,7 +63,6 @@ class TimelineDayLogic: ObservableObject {
 
   private func updateWithData(_ activities: [ActivityEntry]) {
     self.cachedActivities = activities
-    self.precomputeSegmentData()
     self.computeAppUsage()
     let showTimeUnderMinute = UserDefaults.standard.bool(
       forKey: "showTimeUnderMinute", defaultValue: true)
@@ -106,9 +102,7 @@ class TimelineDayLogic: ObservableObject {
     let calendar = Calendar.current
     let zero = calendar.startOfDay(
       for: calendar.date(from: selectedDate) ?? Date())
-
     let endOfDayHour = calendar.component(.hour, from: endOfDayTime)
-
     return calendar.date(byAdding: .hour, value: endOfDayHour, to: zero) ?? zero
   }
 
@@ -164,53 +158,6 @@ class TimelineDayLogic: ObservableObject {
       "\(formatter.string(from: startTime)) - \(formatter.string(from: endTime))"
   }
 
-  private func precomputeSegmentData() {
-    DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-      guard let self = self else { return }
-
-      self.activeSegments.removeAll()
-      self.segmentDominantApps.removeAll()
-
-      for segment in 0..<self.segmentCount {
-        let (isActive, dominantApp) = self.computeSegmentInfo(segment)
-        if isActive {
-          self.activeSegments.insert(segment)
-          if let app = dominantApp {
-            self.segmentDominantApps[segment] = app
-          }
-        }
-      }
-      DispatchQueue.main.async {
-        self.objectWillChange.send()
-      }
-    }
-  }
-  private func computeSegmentInfo(_ segment: Int) -> (Bool, String?) {
-    let startTime = calendar.date(
-      byAdding: .minute, value: segment * segmentDuration,
-      to: calendar.startOfDay(for: selectedDayStart))!
-    let endTime = startTime.addingTimeInterval(
-      TimeInterval(segmentDuration * 60))
-
-    var isActive = false
-    var appUsage: [String: TimeInterval] = [:]
-
-    for activity in cachedActivities {
-      if activity.timestamp >= startTime && activity.timestamp < endTime {
-        isActive = true
-        let duration = min(
-          endTime.timeIntervalSince(activity.timestamp),
-          TimeInterval(segmentDuration * 60))
-        appUsage[activity.appName, default: 0] += duration
-      } else if activity.timestamp >= endTime {
-        break
-      }
-    }
-
-    let dominantApp = appUsage.max(by: { $0.value < $1.value })?.key
-    return (isActive, dominantApp)
-  }
-
   private func computeAppUsage() {
     appUsageDurations.removeAll()
     var lastApp: String?
@@ -223,23 +170,28 @@ class TimelineDayLogic: ObservableObject {
   }
 
   func isSegmentActive(_ segment: Int) -> Bool {
-    return activeSegments.contains(segment)
+    let startTime = calendar.date(
+      byAdding: .minute, value: segment * segmentDuration, to: selectedDayStart)!
+    let endTime = startTime.addingTimeInterval(
+      TimeInterval(segmentDuration * 60))
+    return cachedActivities.contains {
+      $0.timestamp >= startTime && $0.timestamp < endTime
+    }
   }
 
   func colorForSegment(_ segment: Int) -> Color {
-    if useColors,
-      let dominantApp = segmentDominantApps[segment]
-    {
-      return colorForApp(dominantApp)
-    } else {
-      return Color.accentColor.opacity(0.8)
+    if useColors {
+      let apps = appsForSegment(segment)
+      if let dominantApp = apps.max(by: { $0.duration < $1.duration })?.appName {
+        return colorForApp(dominantApp)
+      }
     }
+    return Color.accentColor.opacity(0.8)
   }
 
   func appsForSegment(_ segment: Int) -> [AppUsage] {
     let startTime = calendar.date(
-      byAdding: .minute, value: segment * segmentDuration,
-      to: calendar.startOfDay(for: selectedDayStart))!
+      byAdding: .minute, value: segment * segmentDuration, to: selectedDayStart)!
     let endTime = startTime.addingTimeInterval(
       TimeInterval(segmentDuration * 60))
 
@@ -294,6 +246,7 @@ class TimelineDayLogic: ObservableObject {
 
     return mergedSegments
   }
+
   var dateString: String {
     let formatter = DateFormatter()
     formatter.dateStyle = .medium
@@ -320,15 +273,11 @@ class TimelineDayLogic: ObservableObject {
     let labels = hourLabels(for: width)
     return width / CGFloat(labels.count - 1)
   }
+
   func colorForApp(_ appName: String) -> Color {
     let hash = appName.unicodeScalars.reduce(0) { $0 + $1.value }
     let index = Int(hash) % Int(colorSet.count)
     return colorSet[Int(index)]
-  }
-
-  func dominantAppForSegment(_ segment: Int) -> String? {
-    let apps = appsForSegment(segment)
-    return apps.max(by: { $0.duration < $1.duration })?.appName
   }
 
   func calculateDayStats() {
@@ -353,8 +302,8 @@ class TimelineDayLogic: ObservableObject {
   func formatDuration(_ duration: TimeInterval) -> String {
     return TimelineUtils.formatDuration(duration) ?? ""
   }
-
 }
+
 extension Array {
   func group<Key: Hashable>(by keyPath: (Element) -> Key) -> [Key: [Element]] {
     return Dictionary(grouping: self, by: keyPath)

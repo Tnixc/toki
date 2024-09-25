@@ -8,7 +8,7 @@ struct TimelineDay: View {
   private let circleSize = 10.0
 
   var body: some View {
-    VStack(alignment: .leading, spacing: Style.Colors.Layout.padding) {
+    VStack(alignment: .leading, spacing: Style.Layout.padding) {
       headerView
       timelineSection
       timelineConfigView()
@@ -46,12 +46,12 @@ struct TimelineDay: View {
             .snappy, value: logic.selectedDate)
         let longDayName = formatDateLong(components: logic.selectedDate)
         Text("\(longDayName)").font(.title3).foregroundStyle(.secondary)
-          .padding(.leading, Style.Colors.Layout.paddingSM)
+          .padding(.leading, Style.Layout.paddingSM)
           .contentTransition(.numericText()).animation(
             .snappy, value: logic.selectedDate)
       }
       Spacer()
-      settingsButton.offset(y: -Style.Colors.Layout.paddingSM)
+      settingsButton.offset(y: -Style.Layout.paddingSM)
     }
   }
 
@@ -77,7 +77,7 @@ struct TimelineDay: View {
       }
       .zIndex(99)
     }
-    .padding(.horizontal, Style.Colors.Layout.padding)
+    .padding(.horizontal, Style.Layout.padding)
     .zIndex(99)
     .frame(
       height: Constants.TimelineDay.timelineHeight + Constants.TimelineDay
@@ -87,13 +87,14 @@ struct TimelineDay: View {
   private func loadingView(width: CGFloat, height: CGFloat) -> some View {
     VStack(spacing: 0) {
       ZStack(alignment: .center) {
-        backgroundView(width: width + Style.Colors.Layout.paddingSM)
-          .offset(x: Style.Colors.Layout.paddingSM)
+        backgroundView(width: width + Style.Layout.paddingSM)
+          .offset(x: Style.Layout.paddingSM)
           .blur(radius: 20).scaleEffect(0.8)
 
         Text("Loading timeline...")
           .foregroundColor(.secondary)
-      }.offset(y: -Style.Colors.Layout.padding)
+          .offset(y: -Constants.TimelineDay.hoverLineExtension)
+      }.offset(y: Constants.TimelineDay.hoverLineExtension)
         .frame(width: width, height: height)
     }
   }
@@ -107,7 +108,7 @@ struct TimelineDay: View {
           .frame(width: logic.hourLabelWidth(for: width))
       }
     }
-    .padding(.vertical, Style.Colors.Layout.paddingSM)
+    .padding(.vertical, Style.Layout.paddingSM)
     .frame(width: width)
   }
 
@@ -127,7 +128,7 @@ struct TimelineDay: View {
     return Rectangle()
       .fill(Color.primary.opacity(position != 0 ? 0.1 : 0))
       .frame(
-        width: Style.Colors.Layout.borderWidth,
+        width: Style.Layout.borderWidth,
         height: Constants.TimelineDay.timelineHeight - Constants.TimelineDay
           .hoverLineExtension * 2
       )
@@ -140,13 +141,13 @@ struct TimelineDay: View {
       if logic.isHovering {
         let segment = Int(
           (logic.hoverPosition / width) * CGFloat(logic.segmentCount))
-        VStack(alignment: .leading, spacing: Style.Colors.Layout.paddingSM) {
+        VStack(alignment: .leading, spacing: Style.Layout.paddingSM) {
           Text(logic.timeRangeForSegment(segment))
             .font(.subheadline)
             .monospaced()
 
           ForEach(logic.appsForSegment(segment), id: \.appName) { usage in
-            HStack(spacing: Style.Colors.Layout.paddingSM) {
+            HStack(spacing: Style.Layout.paddingSM) {
               Circle()
                 .fill(logic.colorForApp(usage.appName))
                 .frame(
@@ -161,15 +162,15 @@ struct TimelineDay: View {
           }
         }
         .zIndex(99)
-        .padding(Style.Colors.Layout.padding)
+        .padding(Style.Layout.padding)
         .background(.thickMaterial)
         .overlay(
-          RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+          RoundedRectangle(cornerRadius: Style.Layout.cornerRadius)
             .stroke(
               Color.secondary.opacity(0.1),
-              lineWidth: Style.Colors.Layout.borderWidth)
+              lineWidth: Style.Layout.borderWidth)
         )
-        .cornerRadius(Style.Colors.Layout.cornerRadius)
+        .cornerRadius(Style.Layout.cornerRadius)
         .shadow(color: Color.black.opacity(0.1), radius: 8, y: 4)
         .frame(maxWidth: 200)
         .offset(
@@ -182,19 +183,19 @@ struct TimelineDay: View {
 
   // MARK: - Background View
   private func backgroundView(width: CGFloat) -> some View {
-    RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
-      .fill(Style.Colors.Timeline.bg)
+    RoundedRectangle(cornerRadius: Style.Layout.cornerRadius)
+      .fill(Style.Timeline.bg)
       .frame(
-        width: width + 2 * Style.Colors.Layout.paddingSM,
+        width: width + 2 * Style.Layout.paddingSM,
         height: Constants.TimelineDay.timelineHeight
       )
       .overlay(
-        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius)
           .stroke(
-            Style.Colors.Timeline.border,
-            lineWidth: Style.Colors.Layout.borderWidth)
+            Style.Timeline.border,
+            lineWidth: Style.Layout.borderWidth)
       )
-      .offset(x: -Style.Colors.Layout.paddingSM)
+      .offset(x: -Style.Layout.paddingSM)
   }
 
   // MARK: - Activity Bars
@@ -207,7 +208,7 @@ struct TimelineDay: View {
 
       ZStack {
         // Outer shape (joined appearance)
-        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius / 2)
+        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius / 2)
           .fill(Color.clear)
           .padding(.vertical, Constants.TimelineDay.hoverLineExtension)
           .frame(
@@ -216,10 +217,10 @@ struct TimelineDay: View {
               - Constants.TimelineDay.hoverLineExtension
           )
           .overlay(
-            RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius / 2)
+            RoundedRectangle(cornerRadius: Style.Layout.cornerRadius / 2)
               .stroke(
                 Color.secondary.opacity(0.1),
-                lineWidth: Style.Colors.Layout.borderWidth * 3
+                lineWidth: Style.Layout.borderWidth * 3
               )
               .padding(.vertical, Constants.TimelineDay.hoverLineExtension / 2))
 
@@ -232,7 +233,7 @@ struct TimelineDay: View {
           }
         }
         .clipShape(
-          RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius / 2)
+          RoundedRectangle(cornerRadius: Style.Layout.cornerRadius / 2)
         )
         .padding(.vertical, Constants.TimelineDay.hoverLineExtension)
         .frame(width: barWidth, height: Constants.TimelineDay.timelineHeight)
@@ -244,10 +245,10 @@ struct TimelineDay: View {
 
   // MARK: - Hover Line
   private func hoverLineView(width: CGFloat) -> some View {
-    RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+    RoundedRectangle(cornerRadius: Style.Layout.cornerRadius)
       .fill(Color.white.opacity(0.7))
       .frame(
-        width: Style.Colors.Layout.borderWidth,
+        width: Style.Layout.borderWidth,
         height: Constants.TimelineDay.timelineHeight + 2
           * Constants.TimelineDay.hoverLineExtension
       )
@@ -285,18 +286,18 @@ struct TimelineDay: View {
       }
       .frame(width: width, height: Constants.TimelineDay.timelineHeight)
       .clipShape(
-        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius))
+        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius))
   }
 
   // MARK: - Timeline Configuration
   private func timelineConfigView() -> some View {
-    VStack(alignment: .leading, spacing: Style.Colors.Layout.paddingSM) {
-      HStack(spacing: Style.Colors.Layout.paddingSM) {
+    VStack(alignment: .leading, spacing: Style.Layout.paddingSM) {
+      HStack(spacing: Style.Layout.paddingSM) {
         dateNavigationView
         Spacer()
         TimelineViewSelector(selectedViewType: $selectedViewType)
       }
-      .frame(minHeight: Style.Colors.Button.height)
+      .frame(minHeight: Style.Button.height)
     }.zIndex(10)
   }
 
@@ -305,7 +306,7 @@ struct TimelineDay: View {
     Button(action: { try? openSettingsLegacy() }) {
       Image(systemName: "slider.horizontal.3")
         .foregroundColor(.secondary)
-        .font(.system(size: Style.Colors.Icon.size))
+        .font(.system(size: Style.Icon.size))
     }
     .buttonStyle(PlainButtonStyle())
   }
@@ -332,14 +333,14 @@ struct TimelineDay: View {
   {
     CustomButton(
       action: action, label: "", icon: iconName,
-      width: Style.Colors.Button.heightSM, height: Style.Colors.Button.heightSM)
+      width: Style.Button.heightSM, height: Style.Button.heightSM)
   }
 
   private var datePickerButton: some View {
     CustomButton(
       action: { logic.showDatePicker.toggle() }, label: logic.dateString,
       icon: "calendar",
-      width: 150, height: Style.Colors.Button.height
+      width: 150, height: Style.Button.height
     )
     .popover(isPresented: $logic.showDatePicker) {
       CustomDatePicker(
@@ -360,11 +361,11 @@ struct TimelineDay: View {
     HStack {
       InfoBox {
         HStack {
-          HStack(spacing: Style.Colors.Layout.padding) {
+          HStack(spacing: Style.Layout.padding) {
             VStack {
               Image(systemName: "clock").font(.largeTitle)
             }.aspectRatio(1, contentMode: .fill).padding(
-              .leading, Style.Colors.Layout.paddingSM)
+              .leading, Style.Layout.paddingSM)
             VStack(alignment: .leading) {
               HStack {
                 Text("Active Time:")
@@ -376,7 +377,7 @@ struct TimelineDay: View {
                 .contentTransition(.numericText()).animation(
                   .snappy, value: logic.activeTime
                 )
-                .frame(height: Style.Colors.Button.heightSM)
+                .frame(height: Style.Button.heightSM)
             }
             .frame(width: 100)
             .font(.title)
@@ -388,7 +389,7 @@ struct TimelineDay: View {
           VStack(alignment: .leading, spacing: 7) {
             HStack {
               Image(systemName: "rectangle.righthalf.inset.filled.arrow.right")
-                .frame(width: Style.Colors.Icon.size)
+                .frame(width: Style.Icon.size)
               Text("Clocked in:")
               Spacer()
               Text(
@@ -400,7 +401,7 @@ struct TimelineDay: View {
             }
             HStack {
               Image(systemName: "moon.zzz.fill").frame(
-                width: Style.Colors.Icon.size)
+                width: Style.Icon.size)
               Text("Clocked out:")
               Spacer()
               Text(
@@ -418,11 +419,11 @@ struct TimelineDay: View {
   }
 
   private func mostUsedAppsView() -> some View {
-    VStack(alignment: .leading, spacing: Style.Colors.Layout.padding) {
+    VStack(alignment: .leading, spacing: Style.Layout.padding) {
       HStack {
         Text("Most Used Apps")
           .font(.headline)
-        Spacer().frame(height: Style.Colors.Layout.borderWidth)
+        Spacer().frame(height: Style.Layout.borderWidth)
       }
       Divider()
       ZStack {
@@ -462,12 +463,12 @@ struct TimelineDay: View {
       }
     }
     .padding()
-    .background(Style.Colors.MostUsedApps.bg)
-    .cornerRadius(Style.Colors.Layout.cornerRadius)
+    .background(Style.MostUsedApps.bg)
+    .cornerRadius(Style.Layout.cornerRadius)
     .overlay(
-      RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius).stroke(
-        Style.Colors.MostUsedApps.border,
-        lineWidth: Style.Colors.Layout.borderWidth)
+      RoundedRectangle(cornerRadius: Style.Layout.cornerRadius).stroke(
+        Style.MostUsedApps.border,
+        lineWidth: Style.Layout.borderWidth)
     )
     .animation(
       .spring(duration: 0.3, bounce: 0.2),

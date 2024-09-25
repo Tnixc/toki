@@ -100,8 +100,8 @@ struct MultiDateCell: View {
       }) {
         Text(String(calendar.component(.day, from: date)))
           .frame(
-            width: Style.Colors.Button.height,
-            height: Style.Colors.Button.height
+            width: Style.Button.height,
+            height: Style.Button.height
           )
           .background(
             backgroundColor(
@@ -114,7 +114,7 @@ struct MultiDateCell: View {
               isEndDate: isEndDate)
           )
           .clipShape(
-            RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius))
+            RoundedRectangle(cornerRadius: Style.Layout.cornerRadius))
       }
       .buttonStyle(.borderless)
       .disabled(date > today)
@@ -122,8 +122,8 @@ struct MultiDateCell: View {
     } else {
       Color.clear
         .frame(
-          width: Style.Colors.Button.height,
-          height: Style.Colors.Button.height)
+          width: Style.Button.height,
+          height: Style.Button.height)
     }
   }
 

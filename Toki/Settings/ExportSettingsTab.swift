@@ -10,7 +10,7 @@ struct ExportSettingsTab: View {
   @State private var alertMessage = ""
 
   var body: some View {
-    VStack(alignment: .leading, spacing: Style.Colors.Layout.padding) {
+    VStack(alignment: .leading, spacing: Style.Layout.padding) {
       Text("Export").font(.title).padding()
 
       SettingItem(
@@ -23,7 +23,7 @@ struct ExportSettingsTab: View {
           label: "Export All",
           icon: "arrow.down.doc.fill",
           width: 120,
-          height: Style.Colors.Button.heightSM
+          height: Style.Button.heightSM
         )
       }
 
@@ -38,7 +38,7 @@ struct ExportSettingsTab: View {
           icon:
             "arrowtriangle.right.and.line.vertical.and.arrowtriangle.left.fill",
           width: 180,
-          height: Style.Colors.Button.heightSM
+          height: Style.Button.heightSM
         )
         .popover(isPresented: $showDatePicker) {
           VStack {
@@ -53,7 +53,7 @@ struct ExportSettingsTab: View {
               },
               label: "Export Selected Range",
               icon: "arrow.down.doc.fill",
-              height: Style.Colors.Button.heightSM
+              height: Style.Button.heightSM
             )
             .padding()
             .disabled(startDate == nil || endDate == nil)
@@ -71,7 +71,7 @@ struct ExportSettingsTab: View {
           action: showDatabaseInFinder,
           label: "Show in Finder",
           icon: "folder",
-          height: Style.Colors.Button.heightSM
+          height: Style.Button.heightSM
         )
       }
 

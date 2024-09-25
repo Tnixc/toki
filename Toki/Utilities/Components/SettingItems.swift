@@ -7,11 +7,11 @@ struct SettingItem<Content: View>: View {
   let content: () -> Content
 
   var body: some View {
-    HStack(spacing: Style.Colors.Layout.paddingSM) {
+    HStack(spacing: Style.Layout.paddingSM) {
       Image(systemName: icon)
         .renderingMode(.template)
         .font(.title3)
-        .frame(width: Style.Colors.Icon.size, height: Style.Colors.Icon.size)
+        .frame(width: Style.Icon.size, height: Style.Icon.size)
       VStack(alignment: .leading) {
         Text(title)
         Text(description)
@@ -22,15 +22,15 @@ struct SettingItem<Content: View>: View {
       Spacer()
       content()
     }
-    .padding(Style.Colors.Layout.padding)
+    .padding(Style.Layout.padding)
     .overlay(
-      RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+      RoundedRectangle(cornerRadius: Style.Layout.cornerRadius)
         .stroke(
-          Style.Colors.Settings.itemBorder,
-          lineWidth: Style.Colors.Layout.borderWidth)
+          Style.Settings.itemBorder,
+          lineWidth: Style.Layout.borderWidth)
     )
-    .background(Style.Colors.Settings.itembg)
-    .clipShape(RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius))
+    .background(Style.Settings.itembg)
+    .clipShape(RoundedRectangle(cornerRadius: Style.Layout.cornerRadius))
   }
 }
 
@@ -41,11 +41,11 @@ struct SettingItemRow<Content: View>: View {
   let content: () -> Content
 
   var body: some View {
-    HStack(spacing: Style.Colors.Layout.paddingSM) {
+    HStack(spacing: Style.Layout.paddingSM) {
       Image(systemName: icon)
         .renderingMode(.template)
         .font(.title3)
-        .frame(width: Style.Colors.Icon.size, height: Style.Colors.Icon.size)
+        .frame(width: Style.Icon.size, height: Style.Icon.size)
       VStack(alignment: .leading) {
         Text(title)
         Text(description)
@@ -64,15 +64,15 @@ struct SettingItemGroup<Content: View>: View {
 
   var body: some View {
     content()
-      .padding(Style.Colors.Layout.padding)
+      .padding(Style.Layout.padding)
       .overlay(
-        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius)
           .stroke(
-            Style.Colors.Settings.itemBorder,
-            lineWidth: Style.Colors.Layout.borderWidth)
+            Style.Settings.itemBorder,
+            lineWidth: Style.Layout.borderWidth)
       )
-      .background(Style.Colors.Settings.itembg)
+      .background(Style.Settings.itembg)
       .clipShape(
-        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius))
+        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius))
   }
 }

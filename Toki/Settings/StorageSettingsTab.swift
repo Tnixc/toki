@@ -12,7 +12,7 @@ struct StorageSettingsTab: View {
   @State private var databaseInfo: DatabaseInfo = DatabaseInfo()
 
   var body: some View {
-    VStack(alignment: .leading, spacing: Style.Colors.Layout.padding) {
+    VStack(alignment: .leading, spacing: Style.Layout.padding) {
       Text("Storage").font(.title).padding()
       InfoSection(databaseInfo: databaseInfo)
       Divider()
@@ -34,7 +34,7 @@ struct InfoSection: View {
 
   var body: some View {
     InfoBox {
-      VStack(alignment: .leading, spacing: Style.Colors.Layout.padding) {
+      VStack(alignment: .leading, spacing: Style.Layout.padding) {
         InfoRow(
           title: "Recording Interval",
           value: "Every \(Constants.interval) seconds")
@@ -88,8 +88,8 @@ struct ClearDatabaseButton: View {
     }
     .background(Color.red.opacity(0.2))
     .hoverEffect()
-    .frame(height: Style.Colors.Button.height)
-    .cornerRadius(Style.Colors.Layout.cornerRadius)
+    .frame(height: Style.Button.height)
+    .cornerRadius(Style.Layout.cornerRadius)
     .buttonStyle(.borderless)
     .alert(isPresented: $showingConfirmation) {
       Alert(
@@ -104,8 +104,8 @@ struct ClearDatabaseButton: View {
       )
     }
     .overlay(
-      RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius).stroke(
-        Color.red, lineWidth: Style.Colors.Layout.borderWidth))
+      RoundedRectangle(cornerRadius: Style.Layout.cornerRadius).stroke(
+        Color.red, lineWidth: Style.Layout.borderWidth))
   }
 
   private func clearDatabase() {
