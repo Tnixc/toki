@@ -1,3 +1,5 @@
+// ExportSettingsTab.swift
+
 import SwiftUI
 
 struct ExportSettingsTab: View {
@@ -8,7 +10,7 @@ struct ExportSettingsTab: View {
   @State private var alertMessage = ""
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 10) {
+    VStack(alignment: .leading, spacing: Style.Colors.Layout.padding) {
       Text("Export").font(.title).padding()
 
       SettingItem(
@@ -21,7 +23,7 @@ struct ExportSettingsTab: View {
           label: "Export All",
           icon: "arrow.down.doc.fill",
           width: 120,
-          height: 36
+          height: Style.Colors.Button.heightSM
         )
       }
 
@@ -36,11 +38,14 @@ struct ExportSettingsTab: View {
           icon:
             "arrowtriangle.right.and.line.vertical.and.arrowtriangle.left.fill",
           width: 180,
-          height: 36
+          height: Style.Colors.Button.heightSM
         )
         .popover(isPresented: $showDatePicker) {
           VStack {
             MultiDatePicker(startDate: $startDate, endDate: $endDate)
+              .frame(
+                width: Constants.DatePicker.width,
+                height: Constants.DatePicker.height)
             CustomButton(
               action: {
                 exportSelectedDateRange()
@@ -48,7 +53,7 @@ struct ExportSettingsTab: View {
               },
               label: "Export Selected Range",
               icon: "arrow.down.doc.fill",
-              height: 36
+              height: Style.Colors.Button.heightSM
             )
             .padding()
             .disabled(startDate == nil || endDate == nil)
@@ -66,7 +71,7 @@ struct ExportSettingsTab: View {
           action: showDatabaseInFinder,
           label: "Show in Finder",
           icon: "folder",
-          height: 36
+          height: Style.Colors.Button.heightSM
         )
       }
 
@@ -74,8 +79,10 @@ struct ExportSettingsTab: View {
     }
     .alert(isPresented: $showingExportAlert) {
       Alert(
-        title: Text("Export"), message: Text(alertMessage),
-        dismissButton: .default(Text("OK")))
+        title: Text("Export"),
+        message: Text(alertMessage),
+        dismissButton: .default(Text("OK"))
+      )
     }
   }
 
@@ -125,7 +132,7 @@ struct ExportSettingsTab: View {
       .documentDirectory, .userDomainMask, true
     ).first!
     let dbURL = URL(fileURLWithPath: path).appendingPathComponent(
-      "activities.sqlite3")
+      Constants.dbFileName)
     NSWorkspace.shared.selectFile(dbURL.path, inFileViewerRootedAtPath: path)
   }
 }

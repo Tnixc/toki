@@ -1,15 +1,18 @@
+// StorageSettingsTab.swift
+
 import SQLite
 import SwiftUI
 
 typealias View = SwiftUI.View
 typealias Binding = SwiftUI.Binding
 typealias Table = SQLite.Table
+
 struct StorageSettingsTab: View {
   @State private var showingConfirmation = false
   @State private var databaseInfo: DatabaseInfo = DatabaseInfo()
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 10) {
+    VStack(alignment: .leading, spacing: Style.Colors.Layout.padding) {
       Text("Storage").font(.title).padding()
       InfoSection(databaseInfo: databaseInfo)
       Divider()
@@ -31,13 +34,16 @@ struct InfoSection: View {
 
   var body: some View {
     InfoBox {
-      VStack(alignment: .leading, spacing: 10) {
-        InfoRow(title: "Recording Interval", value: "Every 6 seconds")
+      VStack(alignment: .leading, spacing: Style.Colors.Layout.padding) {
+        InfoRow(
+          title: "Recording Interval",
+          value: "Every \(Constants.interval) seconds")
         InfoRow(title: "Number of Entries", value: "\(databaseInfo.entryCount)")
         InfoRow(title: "Earliest Entry", value: databaseInfo.earliestEntry)
         InfoRow(title: "Database Size", value: databaseInfo.dbSize)
-      }
+      }.padding(5)
     }
+
     InfoBox {
       HStack {
         Text(
@@ -45,7 +51,7 @@ struct InfoSection: View {
         )
         .foregroundStyle(.secondary)
         Spacer()
-      }
+      }.padding(5)
     }
   }
 }
@@ -82,8 +88,8 @@ struct ClearDatabaseButton: View {
     }
     .background(Color.red.opacity(0.2))
     .hoverEffect()
-    .frame(height: 40)
-    .cornerRadius(10)
+    .frame(height: Style.Colors.Button.height)
+    .cornerRadius(Style.Colors.Layout.cornerRadius)
     .buttonStyle(.borderless)
     .alert(isPresented: $showingConfirmation) {
       Alert(
@@ -97,7 +103,9 @@ struct ClearDatabaseButton: View {
         secondaryButton: .cancel()
       )
     }
-    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.red, lineWidth: 1))
+    .overlay(
+      RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius).stroke(
+        Color.red, lineWidth: Style.Colors.Layout.borderWidth))
   }
 
   private func clearDatabase() {
@@ -121,7 +129,7 @@ class DatabaseManager {
     let path = NSSearchPathForDirectoriesInDomains(
       .documentDirectory, .userDomainMask, true
     ).first!
-    db = try! Connection("\(path)/activities.sqlite3")
+    db = try! Connection("\(path)/\(Constants.dbFileName)")
     activities = Table("activities")
   }
 
@@ -142,8 +150,10 @@ class DatabaseManager {
         info.earliestEntry = formatter.string(from: earliestTimestamp)
       }
 
-      if let dbPath = db.description.components(separatedBy: "sqlite3").first {
-        let fileURL = URL(fileURLWithPath: dbPath + "sqlite3")
+      if let dbPath = db.description.components(
+        separatedBy: Constants.dbFileName
+      ).first {
+        let fileURL = URL(fileURLWithPath: dbPath + Constants.dbFileName)
         let attributes = try FileManager.default.attributesOfItem(
           atPath: fileURL.path)
         let fileSize = attributes[.size] as! Int64
