@@ -25,8 +25,6 @@
 		4180AEC0283976740054FEA9 /* SettingsWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEBF283976740054FEA9 /* SettingsWindow.swift */; };
 		4180AEC2283976F80054FEA9 /* GeneralSettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEC1283976F80054FEA9 /* GeneralSettingsTab.swift */; };
 		4180AEC4283979530054FEA9 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEC3283979530054FEA9 /* MainView.swift */; };
-		4180AEDC283984740054FEA9 /* ExportCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEDB283984740054FEA9 /* ExportCommands.swift */; };
-		4180AEDE283985190054FEA9 /* MyExportDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEDD283985190054FEA9 /* MyExportDocument.swift */; };
 		4180AEEE2839A0660054FEA9 /* BundleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AEED2839A0660054FEA9 /* BundleExtensions.swift */; };
 /* End PBXBuildFile section */
 
@@ -49,8 +47,6 @@
 		4180AEBF283976740054FEA9 /* SettingsWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindow.swift; sourceTree = "<group>"; };
 		4180AEC1283976F80054FEA9 /* GeneralSettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsTab.swift; sourceTree = "<group>"; };
 		4180AEC3283979530054FEA9 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		4180AEDB283984740054FEA9 /* ExportCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportCommands.swift; sourceTree = "<group>"; };
-		4180AEDD283985190054FEA9 /* MyExportDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyExportDocument.swift; sourceTree = "<group>"; };
 		4180AEED2839A0660054FEA9 /* BundleExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -143,7 +139,6 @@
 				398DCB7A2C9A64DC00BB9310 /* Menu Bar */,
 				4180AEEC2839A0560054FEA9 /* Utilities */,
 				4180AEBE283976620054FEA9 /* Settings */,
-				4180AEE528399DDE0054FEA9 /* Export */,
 				4180AECA28397C3A0054FEA9 /* Panes */,
 				4180AEC3283979530054FEA9 /* MainView.swift */,
 				4180AEBC283975670054FEA9 /* MainScene.swift */,
@@ -173,15 +168,6 @@
 				39B14DBE2C9D00FB003A457D /* TimelineViewDay */,
 			);
 			path = Panes;
-			sourceTree = "<group>";
-		};
-		4180AEE528399DDE0054FEA9 /* Export */ = {
-			isa = PBXGroup;
-			children = (
-				4180AEDB283984740054FEA9 /* ExportCommands.swift */,
-				4180AEDD283985190054FEA9 /* MyExportDocument.swift */,
-			);
-			path = Export;
 			sourceTree = "<group>";
 		};
 		4180AEEC2839A0560054FEA9 /* Utilities */ = {
@@ -324,14 +310,12 @@
 				394E3A802CA0706A00DFC1AD /* ExportManager.swift in Sources */,
 				3958B6242C9F99FA005FC95A /* StorageSettingsTab.swift in Sources */,
 				4180AEBD283975670054FEA9 /* MainScene.swift in Sources */,
-				4180AEDC283984740054FEA9 /* ExportCommands.swift in Sources */,
 				4180AEEE2839A0660054FEA9 /* BundleExtensions.swift in Sources */,
 				396339462CA3873700365897 /* Constants.swift in Sources */,
 				4180AEC4283979530054FEA9 /* MainView.swift in Sources */,
 				396339482CA3879900365897 /* Styles.swift in Sources */,
 				394E3A842CA08D5F00DFC1AD /* ClockOutSettingsTab.swift in Sources */,
 				4180AEC2283976F80054FEA9 /* GeneralSettingsTab.swift in Sources */,
-				4180AEDE283985190054FEA9 /* MyExportDocument.swift in Sources */,
 				3958B61D2C9F5E17005FC95A /* TimelineUtils.swift in Sources */,
 				4180AEC0283976740054FEA9 /* SettingsWindow.swift in Sources */,
 				4180AEAE2839753E0054FEA9 /* Toki.swift in Sources */,
