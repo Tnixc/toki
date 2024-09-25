@@ -13,7 +13,10 @@ struct ClockOutSettingsTab: View {
 
   init() {
     let defaultClockOutTime =
-      Calendar.current.date(from: DateComponents(hour: 18, minute: 0)) ?? Date()
+      Calendar.current.date(
+        from: DateComponents(
+          hour: Constants.defaultClockOutHour,
+          minute: Constants.defaultClockOutMinute)) ?? Date()
     _clockOutTime = State(
       initialValue: defaults.object(forKey: "clockOutTime") as? Date
         ?? defaultClockOutTime)
@@ -27,7 +30,8 @@ struct ClockOutSettingsTab: View {
       initialValue: defaults.bool(forKey: "clockOutUseOverlay"))
 
     if defaults.object(forKey: "clockOutReminderInterval") == nil {
-      defaults.set(15, forKey: "clockOutReminderInterval")
+      defaults.set(
+        Constants.defaultReminderInterval, forKey: "clockOutReminderInterval")
     }
 
     if let savedDays = defaults.object(forKey: "clockOutSelectedDays") as? [Int] {
@@ -37,14 +41,12 @@ struct ClockOutSettingsTab: View {
 
   var body: some View {
     ScrollView {
-      VStack(alignment: .leading, spacing: 10) {
-
+      VStack(alignment: .leading, spacing: Style.Colors.Layout.padding) {
         Text("Clock Out").font(.title).padding()
 
-        VStack(alignment: .leading, spacing: 10) {
-
+        VStack(alignment: .leading, spacing: Style.Colors.Layout.padding) {
           SettingItemGroup {
-            VStack(alignment: .leading, spacing: 5) {
+            VStack(alignment: .leading, spacing: Style.Colors.Layout.paddingSM) {
               SettingItemRow(
                 title: "Enable Clock Out",
                 description: "Turn on/off clock out notifications",
@@ -86,7 +88,6 @@ struct ClockOutSettingsTab: View {
                 description: "Use a blurred overlay to remind you to clock out",
                 icon: "circle.rectangle.filled.pattern.diagonalline"
               ) {
-
                 Toggle("", isOn: $clockOutUseOverlay)
                   .toggleStyle(SwitchToggleStyle(tint: .accentColor))
                   .scaleEffect(0.8, anchor: .trailing)
@@ -104,8 +105,9 @@ struct ClockOutSettingsTab: View {
                     Notifier.shared.showOverlay(
                       title: "This is a demo overlay",
                       message: "It's more effective than a notification",
-                      dismissAfter: 5)
-                  }, label: "Show overlay", icon: "circle.dotted", height: 36)
+                      dismissAfter: Constants.overlayDismissTime)
+                  }, label: "Show overlay", icon: "circle.dotted",
+                  height: Style.Colors.Button.heightSM)
               }
 
               Divider()
@@ -132,7 +134,7 @@ struct ClockOutSettingsTab: View {
           }
 
           SettingItemGroup {
-            VStack(alignment: .leading, spacing: 5) {
+            VStack(alignment: .leading, spacing: Style.Colors.Layout.paddingSM) {
               SettingItemRow(
                 title: "Enable Persistent Reminders",
                 description:
@@ -177,6 +179,7 @@ struct ClockOutSettingsTab: View {
               }
             }
           }
+
           InfoBox {
             HStack {
               Text(
@@ -212,16 +215,16 @@ struct DayToggleButton: View {
     Button(action: action) {
       Text(day)
         .font(.caption)
-        .frame(width: 35, height: 25)
-        .background(
-          isSelected ? Color.accentColor : Color.secondary.opacity(0.2)
-        )
+        .frame(width: 35, height: Style.Colors.Button.heightXS)
+        .background(isSelected ? Color.accentColor : Style.Colors.Button.bg)
         .overlay(
-          RoundedRectangle(cornerRadius: 5).stroke(
-            Color.secondary.opacity(0.2), lineWidth: 1)
+          RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius / 2)
+            .stroke(
+              Style.Colors.Button.border,
+              lineWidth: Style.Colors.Layout.borderWidth)
         )
         .foregroundColor(isSelected ? .white : .primary)
-        .cornerRadius(5)
+        .cornerRadius(Style.Colors.Layout.cornerRadius / 2)
     }
     .buttonStyle(.borderless)
   }
