@@ -21,7 +21,6 @@ class TimelineDayLogic: ObservableObject {
   @Published var activeTime: TimeInterval = 0
   @Published var isLoading = false
 
-  private var cache: [DateComponents: [ActivityEntry]] = [:]
   private let queue = DispatchQueue(
     label: "com.toki.dataLoading", qos: .userInitiated)
 
@@ -37,6 +36,7 @@ class TimelineDayLogic: ObservableObject {
 
   private var cachedActivities: [ActivityEntry] = []
   private var appUsageDurations: [String: TimeInterval] = [:]
+  private var segmentData: [SegmentInfo] = []
 
   init() {
     let today = Date()
@@ -47,6 +47,7 @@ class TimelineDayLogic: ObservableObject {
   func loadData(for dateComponents: DateComponents) {
     isLoading = true
     cachedActivities.removeAll()
+    segmentData.removeAll()
 
     queue.async { [weak self] in
       guard let self = self else { return }
@@ -76,7 +77,17 @@ class TimelineDayLogic: ObservableObject {
     }
 
     self.calculateDayStats()
+    self.precomputeSegmentData()
     self.objectWillChange.send()
+  }
+
+  private func precomputeSegmentData() {
+    segmentData = (0..<segmentCount).map { segment in
+      let isActive = isSegmentActive(segment)
+      let apps = appsForSegment(segment)
+      let color = colorForSegment(segment, apps: apps)
+      return SegmentInfo(isActive: isActive, apps: apps, color: color)
+    }
   }
 
   func endOfDayPosition(width: CGFloat) -> CGFloat {
@@ -132,7 +143,7 @@ class TimelineDayLogic: ObservableObject {
     let newSegment = segmentForLocation(location, width: width)
     if newSegment != currentHoverSegment {
       currentHoverSegment = newSegment
-      if isSegmentActive(newSegment) {
+      if segmentData[newSegment].isActive {
         triggerHapticFeedback()
       }
     }
@@ -179,9 +190,8 @@ class TimelineDayLogic: ObservableObject {
     }
   }
 
-  func colorForSegment(_ segment: Int) -> Color {
+  func colorForSegment(_ segment: Int, apps: [AppUsage]) -> Color {
     if useColors {
-      let apps = appsForSegment(segment)
       if let dominantApp = apps.max(by: { $0.duration < $1.duration })?.appName {
         return colorForApp(dominantApp)
       }
@@ -225,9 +235,9 @@ class TimelineDayLogic: ObservableObject {
   func mergeAdjacentSegments() -> [(Int, Int)] {
     var mergedSegments: [(Int, Int)] = []
     var currentStart: Int?
-
+    guard !segmentData.isEmpty else { return [] }
     for segment in 0..<segmentCount {
-      if isSegmentActive(segment) {
+      if segmentData[segment].isActive {
         if currentStart == nil {
           currentStart = segment
         }
@@ -302,6 +312,12 @@ class TimelineDayLogic: ObservableObject {
   func formatDuration(_ duration: TimeInterval) -> String {
     return TimelineUtils.formatDuration(duration) ?? ""
   }
+}
+
+struct SegmentInfo {
+  let isActive: Bool
+  let apps: [AppUsage]
+  let color: Color
 }
 
 extension Array {

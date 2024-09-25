@@ -200,46 +200,72 @@ struct TimelineDay: View {
 
   // MARK: - Activity Bars
   private func activityBarsView(width: CGFloat) -> some View {
-    ForEach(logic.mergeAdjacentSegments(), id: \.0) {
-      startSegment, endSegment in
+    ForEach(logic.mergeAdjacentSegments(), id: \.0) { segment in
+      ActivityBarView(
+        segment: segment,
+        width: width,
+        logic: logic
+      )
+    }
+  }
+
+  private struct ActivityBarView: View {
+    let segment: (Int, Int)
+    let width: CGFloat
+    let logic: TimelineDayLogic
+
+    var body: some View {
+      let (startSegment, endSegment) = segment
       let startX = logic.xPositionForSegment(startSegment, width: width)
       let endX = logic.xPositionForSegment(endSegment + 1, width: width)
       let barWidth = endX - startX
 
       ZStack {
-        // Outer shape (joined appearance)
-        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius / 2)
-          .fill(Color.clear)
-          .padding(.vertical, Constants.TimelineDay.hoverLineExtension)
-          .frame(
-            width: barWidth,
-            height: Constants.TimelineDay.timelineHeight
-              - Constants.TimelineDay.hoverLineExtension
-          )
-          .overlay(
-            RoundedRectangle(cornerRadius: Style.Layout.cornerRadius / 2)
-              .stroke(
-                Color.secondary.opacity(0.1),
-                lineWidth: Style.Layout.borderWidth * 3
-              )
-              .padding(.vertical, Constants.TimelineDay.hoverLineExtension / 2))
-
-        // Inner colored segments
-        HStack(spacing: 0) {
-          ForEach(startSegment...endSegment, id: \.self) { segment in
-            Rectangle()
-              .fill(logic.colorForSegment(segment))
-              .frame(width: barWidth / CGFloat(endSegment - startSegment + 1))
-          }
-        }
-        .clipShape(
-          RoundedRectangle(cornerRadius: Style.Layout.cornerRadius / 2)
+        outerShape(barWidth: barWidth)
+        innerColoredSegments(
+          startSegment: startSegment, endSegment: endSegment, barWidth: barWidth
         )
-        .padding(.vertical, Constants.TimelineDay.hoverLineExtension)
-        .frame(width: barWidth, height: Constants.TimelineDay.timelineHeight)
       }
       .position(
-        x: startX + barWidth / 2, y: Constants.TimelineDay.timelineHeight / 2)
+        x: startX + barWidth / 2,
+        y: Constants.TimelineDay.timelineHeight / 2
+      )
+    }
+
+    private func outerShape(barWidth: CGFloat) -> some View {
+      RoundedRectangle(cornerRadius: Style.Layout.cornerRadius / 2)
+        .fill(Color.clear)
+        .padding(.vertical, Constants.TimelineDay.hoverLineExtension)
+        .frame(
+          width: barWidth,
+          height: Constants.TimelineDay.timelineHeight
+            - Constants.TimelineDay.hoverLineExtension
+        )
+        .overlay(
+          RoundedRectangle(cornerRadius: Style.Layout.cornerRadius / 2)
+            .stroke(
+              Color.secondary.opacity(0.1),
+              lineWidth: Style.Layout.borderWidth * 3
+            )
+            .padding(.vertical, Constants.TimelineDay.hoverLineExtension / 2)
+        )
+    }
+
+    private func innerColoredSegments(
+      startSegment: Int, endSegment: Int, barWidth: CGFloat
+    ) -> some View {
+      HStack(spacing: 0) {
+        ForEach(startSegment...endSegment, id: \.self) { segment in
+          Rectangle()
+            .fill(logic.colorForSegment(segment, apps: logic.appsForSegment(segment)))
+            .frame(width: barWidth / CGFloat(endSegment - startSegment + 1))
+        }
+      }
+      .clipShape(
+        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius / 2)
+      )
+      .padding(.vertical, Constants.TimelineDay.hoverLineExtension)
+      .frame(width: barWidth, height: Constants.TimelineDay.timelineHeight)
     }
   }
 
