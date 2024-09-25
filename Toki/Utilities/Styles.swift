@@ -17,7 +17,8 @@ enum Style {
     enum Button {
       static let height: CGFloat = 40
       static let heightSM: CGFloat = 36
-      static let border = Color.accentColor.opacity(0.3)
+      static let bg = Color.secondary.opacity(0.1)
+      static let border = Color.secondary.opacity(0.3)
     }
 
     // MARK: - Icons

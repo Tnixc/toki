@@ -1,3 +1,5 @@
+// CustomButton.swift
+
 import SwiftUI
 
 struct CustomButton: View {
@@ -32,7 +34,7 @@ struct CustomButton: View {
         }
         if let icon = icon {
           Image(systemName: icon)
-            .font(.system(size: Style.Colors.Icon.size))
+            .font(.system(size: Style.Colors.Icon.sizeSM))
         }
         if !label.isEmpty {
           Text(label)
@@ -43,7 +45,7 @@ struct CustomButton: View {
       }
       .padding(Style.Colors.Layout.padding)
       .frame(width: width, height: height ?? Style.Colors.Button.height)
-      .background(Style.Colors.Settings.itembg)
+      .background(Style.Colors.Button.bg)
       .clipShape(
         RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
       )
@@ -53,7 +55,7 @@ struct CustomButton: View {
       .overlay(
         RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
           .stroke(
-            Style.Colors.Settings.itemBorder,
+            Style.Colors.Button.border,
             lineWidth: Style.Colors.Layout.borderWidth)
       )
     }
@@ -94,7 +96,7 @@ struct CustomButtonPlain: View {
         }
         if let icon = icon {
           Image(systemName: icon)
-            .font(.system(size: Style.Colors.Icon.size))
+            .font(.system(size: Style.Colors.Icon.sizeSM))
         }
         if !label.isEmpty {
           Text(label)
