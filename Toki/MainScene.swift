@@ -23,8 +23,6 @@ struct MainScene: Scene {
     .windowToolbarStyle(.unified(showsTitle: false))
 
     .commands {
-      SidebarCommands()
-      ExportCommands()
       CommandGroup(replacing: .newItem) {}
     }
 
