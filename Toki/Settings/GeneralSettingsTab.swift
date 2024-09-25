@@ -1,13 +1,20 @@
 import ServiceManagement
 import SwiftUI
 
+// Local constants
+private enum LocalConstants {
+  static let defaultEndOfDayHour: Int = 4
+  static let defaultEndOfDayMinute: Int = 0
+  static let timeOptionCount: Int = 7
+  static let pickerMaxWidth: CGFloat = 100
+}
+
 struct GeneralSettingsTab: View {
   @State private var showAppColors: Bool
   @State private var endOfDayTime: Date
   @State private var firstDayOfWeek: Int
   @State private var launchAtLogin: Bool
-  @State private var showTimeUnderMinute: Bool = UserDefaults.standard.bool(
-    forKey: "showTimeUnderMinute", defaultValue: true)
+  @State private var showTimeUnderMinute: Bool
 
   private let timeOptions: [Date]
   private let timeFormatter: DateFormatter
@@ -18,10 +25,14 @@ struct GeneralSettingsTab: View {
     _showAppColors = State(initialValue: defaults.bool(forKey: "showAppColors"))
     _launchAtLogin = State(initialValue: defaults.bool(forKey: "launchAtLogin"))
     _showTimeUnderMinute = State(
-      initialValue: UserDefaults.standard.bool(forKey: "showTimeUnderMinute", defaultValue: true))
+      initialValue: defaults.bool(
+        forKey: "showTimeUnderMinute", defaultValue: true))
 
     let defaultEndOfDay =
-      Calendar.current.date(from: DateComponents(hour: 4, minute: 0)) ?? Date()
+      Calendar.current.date(
+        from: DateComponents(
+          hour: LocalConstants.defaultEndOfDayHour,
+          minute: LocalConstants.defaultEndOfDayMinute)) ?? Date()
     _endOfDayTime = State(
       initialValue: defaults.object(forKey: "endOfDayTime") as? Date
         ?? defaultEndOfDay)
@@ -29,7 +40,7 @@ struct GeneralSettingsTab: View {
     _firstDayOfWeek = State(
       initialValue: defaults.integer(forKey: "firstDayOfWeek"))
 
-    self.timeOptions = (0...6).map { hour in
+    self.timeOptions = (0..<LocalConstants.timeOptionCount).map { hour in
       Calendar.current.date(from: DateComponents(hour: hour, minute: 0))
         ?? Date()
     }
@@ -39,7 +50,7 @@ struct GeneralSettingsTab: View {
   }
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 10) {
+    VStack(alignment: .leading, spacing: Style.Colors.Layout.padding) {
       Text("General").font(.title).padding()
 
       SettingItem(
@@ -47,18 +58,9 @@ struct GeneralSettingsTab: View {
         description: "Show hashed app colors in the day timeline view.",
         icon: "swatchpalette"
       ) {
-        Toggle(
-          "",
-          isOn: Binding(
-            get: { self.showAppColors },
-            set: {
-              self.showAppColors = $0
-              UserDefaults.standard.set($0, forKey: "showAppColors")
-            }
-          )
-        )
-        .toggleStyle(SwitchToggleStyle(tint: .accentColor))
-        .scaleEffect(0.8, anchor: .trailing)
+        Toggle("", isOn: appColorBinding)
+          .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+          .scaleEffect(0.8, anchor: .trailing)
       }
 
       SettingItem(
@@ -66,21 +68,13 @@ struct GeneralSettingsTab: View {
         description: "Set the time that starts a new day. Requires restart.",
         icon: "square.and.line.vertical.and.square.filled"
       ) {
-        Picker(
-          "",
-          selection: Binding(
-            get: { self.endOfDayTime },
-            set: {
-              self.endOfDayTime = $0
-              UserDefaults.standard.set($0, forKey: "endOfDayTime")
-            }
-          )
-        ) {
+        Picker("", selection: endOfDayBinding) {
           ForEach(timeOptions, id: \.self) { date in
             Text(timeFormatter.string(from: date))
           }
         }
-        .pickerStyle(.menu).frame(maxWidth: 100)
+        .pickerStyle(.menu)
+        .frame(maxWidth: LocalConstants.pickerMaxWidth)
       }
 
       SettingItem(
@@ -88,23 +82,13 @@ struct GeneralSettingsTab: View {
         description: "Set the first day of the week for the calendar views.",
         icon: "calendar"
       ) {
-        Picker(
-          "",
-          selection: Binding(
-            get: { self.firstDayOfWeek },
-            set: {
-              self.firstDayOfWeek = $0
-              UserDefaults.standard.set($0, forKey: "firstDayOfWeek")
-              NotificationCenter.default.post(
-                name: .firstDayOfWeekChanged, object: nil)
-            }
-          )
-        ) {
+        Picker("", selection: firstDayOfWeekBinding) {
           ForEach(1...7, id: \.self) { index in
             Text(Calendar.current.weekdaySymbols[index - 1]).tag(index)
           }
         }
-        .pickerStyle(.menu).frame(maxWidth: 100)
+        .pickerStyle(.menu)
+        .frame(maxWidth: LocalConstants.pickerMaxWidth)
       }
 
       SettingItem(
@@ -112,38 +96,20 @@ struct GeneralSettingsTab: View {
         description: "Automatically start Toki when you log in.",
         icon: "power"
       ) {
-        Toggle(
-          "",
-          isOn: Binding(
-            get: { self.launchAtLogin },
-            set: {
-              self.launchAtLogin = $0
-              UserDefaults.standard.set($0, forKey: "launchAtLogin")
-              self.setLaunchAtLogin($0)
-            }
-          )
-        )
-        .toggleStyle(SwitchToggleStyle(tint: .accentColor))
-        .scaleEffect(0.8, anchor: .trailing)
+        Toggle("", isOn: launchAtLoginBinding)
+          .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+          .scaleEffect(0.8, anchor: .trailing)
       }
+
       SettingItem(
         title: "Show Times Under Minute",
         description:
           "Display values under a minute. They will still be counted towards the total",
         icon: "clock"
       ) {
-        Toggle(
-          "",
-          isOn: Binding(
-            get: { self.showTimeUnderMinute },
-            set: {
-              self.showTimeUnderMinute = $0
-              UserDefaults.standard.set($0, forKey: "showTimeUnderMinute")
-            }
-          )
-        )
-        .toggleStyle(SwitchToggleStyle(tint: .accentColor))
-        .scaleEffect(0.8, anchor: .trailing)
+        Toggle("", isOn: showTimeUnderMinuteBinding)
+          .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+          .scaleEffect(0.8, anchor: .trailing)
       }
 
       Spacer()
@@ -158,6 +124,59 @@ struct GeneralSettingsTab: View {
     }
   }
 
+  private var appColorBinding: Binding<Bool> {
+    Binding(
+      get: { self.showAppColors },
+      set: {
+        self.showAppColors = $0
+        UserDefaults.standard.set($0, forKey: "showAppColors")
+      }
+    )
+  }
+
+  private var endOfDayBinding: Binding<Date> {
+    Binding(
+      get: { self.endOfDayTime },
+      set: {
+        self.endOfDayTime = $0
+        UserDefaults.standard.set($0, forKey: "endOfDayTime")
+      }
+    )
+  }
+
+  private var firstDayOfWeekBinding: Binding<Int> {
+    Binding(
+      get: { self.firstDayOfWeek },
+      set: {
+        self.firstDayOfWeek = $0
+        UserDefaults.standard.set($0, forKey: "firstDayOfWeek")
+        NotificationCenter.default.post(
+          name: .firstDayOfWeekChanged, object: nil)
+      }
+    )
+  }
+
+  private var launchAtLoginBinding: Binding<Bool> {
+    Binding(
+      get: { self.launchAtLogin },
+      set: {
+        self.launchAtLogin = $0
+        UserDefaults.standard.set($0, forKey: "launchAtLogin")
+        self.setLaunchAtLogin($0)
+      }
+    )
+  }
+
+  private var showTimeUnderMinuteBinding: Binding<Bool> {
+    Binding(
+      get: { self.showTimeUnderMinute },
+      set: {
+        self.showTimeUnderMinute = $0
+        UserDefaults.standard.set($0, forKey: "showTimeUnderMinute")
+      }
+    )
+  }
+
   private func setLaunchAtLogin(_ enable: Bool) {
     if enable {
       try? SMAppService.mainApp.register()
@@ -166,6 +185,7 @@ struct GeneralSettingsTab: View {
     }
   }
 }
+
 extension UserDefaults {
   func bool(forKey key: String, defaultValue: Bool) -> Bool {
     if object(forKey: key) == nil {

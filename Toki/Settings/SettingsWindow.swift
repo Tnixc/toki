@@ -1,5 +1,10 @@
 import SwiftUI
 
+// Local constants
+private enum LocalConstants {
+  static let sidebarWidth: CGFloat = 200
+}
+
 struct SettingsWindow: View {
   private enum Tabs: Hashable {
     case general
@@ -17,14 +22,17 @@ struct SettingsWindow: View {
       tabContent
       Spacer()
     }
-    .frame(width: 700, height: 600)
+    .frame(
+      width: Constants.Settings.windowWidth,
+      height: Constants.Settings.windowHeight
+    )
     .background(VisualEffect().ignoresSafeArea())
-    .padding(10)
+    .padding(Style.Colors.Layout.padding)
   }
 
   var sidebar: some View {
     HStack {
-      VStack(spacing: 6) {
+      VStack(spacing: Style.Colors.Layout.paddingSM) {
         SettingsTabButton(
           title: "General",
           icon: "gear",
@@ -85,12 +93,22 @@ struct SettingsTabButton: View {
   var body: some View {
     if isSelected {
       CustomButton(
-        action: action, label: title, icon: icon, width: 200, height: 36,
-        align: .leading)
+        action: action,
+        label: title,
+        icon: icon,
+        width: LocalConstants.sidebarWidth,
+        height: Style.Colors.Button.heightSM,
+        align: .leading
+      )
     } else {
       CustomButtonPlain(
-        action: action, label: title, icon: icon, width: 200, height: 36,
-        align: .leading)
+        action: action,
+        label: title,
+        icon: icon,
+        width: LocalConstants.sidebarWidth,
+        height: Style.Colors.Button.heightSM,
+        align: .leading
+      )
     }
   }
 }
