@@ -5,13 +5,13 @@ struct MenuBarView: View {
   @Environment(\.openWindow) private var openWindow
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 10) {
+    VStack(alignment: .leading, spacing: Style.Layout.padding) {
 
-      VStack(alignment: .leading, spacing: 10) {
+      VStack(alignment: .leading, spacing: Style.Layout.padding) {
 
         HStack {
           Image(systemName: "clock").font(.title)
-            .padding(.trailing, 4)
+            .padding(.trailing, Style.Layout.paddingSM)
           VStack(alignment: .leading) {
             Text("Active Time:").foregroundStyle(.secondary).font(.caption)
             Text(menuBarModel.activeDuration).font(.title2)
@@ -21,7 +21,7 @@ struct MenuBarView: View {
 
         Divider()
 
-        VStack(spacing: 6) {
+        VStack(spacing: Style.Layout.paddingSM) {
           HStack {
             Image(systemName: "arrow.right.to.line")
             Text("Clocked in:")
@@ -44,12 +44,12 @@ struct MenuBarView: View {
 
       Divider()
 
-      HStack(spacing: 10) {
+      HStack(spacing: Style.Layout.padding) {
         CustomButton(
           action: {
             NSApp.activate(ignoringOtherApps: true)
             openWindow(id: "main")
-          }, label: "Open Toki", height: 30
+          }, label: "Open Toki", height: Style.Button.heightSM
         )
         CustomButton(
           action: {
@@ -57,11 +57,11 @@ struct MenuBarView: View {
           },
           label: "Quit",
           icon: "xmark",
-          height: 30
+          height: Style.Button.heightSM
         )
       }
     }
-    .padding()
+    .padding(Style.Layout.padding)
     .background(VisualEffect().ignoresSafeArea())
   }
 }

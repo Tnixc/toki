@@ -143,7 +143,7 @@ class TimelineDayLogic: ObservableObject {
     let newSegment = segmentForLocation(location, width: width)
     if newSegment != currentHoverSegment {
       currentHoverSegment = newSegment
-      if segmentData[newSegment].isActive {
+      if isSegmentActive(newSegment) {
         triggerHapticFeedback()
       }
     }
