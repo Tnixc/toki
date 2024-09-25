@@ -10,7 +10,7 @@ struct TimelineDay: View {
   var body: some View {
     VStack(alignment: .leading, spacing: Style.Layout.padding) {
       headerView
-      timelineSection
+      timelineSection.padding(.bottom, Style.Layout.padding)
       timelineConfigView()
       dayStatsView()
       mostUsedAppsView()
@@ -43,12 +43,12 @@ struct TimelineDay: View {
         Text("\(dayName)'s Timeline")
           .font(.largeTitle)
           .contentTransition(.numericText()).animation(
-            .snappy, value: logic.selectedDate)
+            .bouncy, value: logic.selectedDate)
         let longDayName = formatDateLong(components: logic.selectedDate)
         Text("\(longDayName)").font(.title3).foregroundStyle(.secondary)
           .padding(.leading, Style.Layout.paddingSM)
           .contentTransition(.numericText()).animation(
-            .snappy, value: logic.selectedDate)
+            .bouncy, value: logic.selectedDate)
       }
       Spacer()
       settingsButton.offset(y: -Style.Layout.paddingSM)
@@ -257,7 +257,10 @@ struct TimelineDay: View {
       HStack(spacing: 0) {
         ForEach(startSegment...endSegment, id: \.self) { segment in
           Rectangle()
-            .fill(logic.colorForSegment(segment, apps: logic.appsForSegment(segment)))
+            .fill(
+              logic.colorForSegment(
+                segment, apps: logic.appsForSegment(segment))
+            )
             .frame(width: barWidth / CGFloat(endSegment - startSegment + 1))
         }
       }
@@ -301,7 +304,7 @@ struct TimelineDay: View {
       .onContinuousHover { phase in
         switch phase {
         case .active(let location):
-          withAnimation(.spring(duration: 0.1)) {
+          withAnimation(.spring(duration: 0.15)) {
             logic.isHovering = true
             logic.updateHoverPosition(at: location, width: width)
           }
@@ -359,7 +362,7 @@ struct TimelineDay: View {
   {
     CustomButton(
       action: action, label: "", icon: iconName,
-      width: Style.Button.heightSM, height: Style.Button.heightSM)
+      width: Style.Button.height, height: Style.Button.height)
   }
 
   private var datePickerButton: some View {
@@ -401,9 +404,10 @@ struct TimelineDay: View {
               }
               Text(logic.formatDuration(logic.activeTime))
                 .contentTransition(.numericText()).animation(
-                  .snappy, value: logic.activeTime
+                  .smooth, value: logic.activeTime
                 )
-                .frame(height: Style.Button.heightSM)
+                .frame(height: 28)
+                .offset(y: -2)
             }
             .frame(width: 100)
             .font(.title)
@@ -423,7 +427,7 @@ struct TimelineDay: View {
                   ?? ""
               )
               .contentTransition(.numericText()).animation(
-                .snappy, value: logic.clockOutTime)
+                .bouncy, value: logic.clockOutTime)
             }
             HStack {
               Image(systemName: "moon.zzz.fill").frame(
@@ -435,7 +439,7 @@ struct TimelineDay: View {
                   ?? ""
               )
               .contentTransition(.numericText()).animation(
-                .snappy, value: logic.clockOutTime)
+                .bouncy, value: logic.clockOutTime)
             }
           }
         }
@@ -489,11 +493,11 @@ struct TimelineDay: View {
       }
     }
     .padding()
-    .background(Style.MostUsedApps.bg)
+    .background(Style.Box.bg)
     .cornerRadius(Style.Layout.cornerRadius)
     .overlay(
       RoundedRectangle(cornerRadius: Style.Layout.cornerRadius).stroke(
-        Style.MostUsedApps.border,
+        Style.Box.border,
         lineWidth: Style.Layout.borderWidth)
     )
     .animation(

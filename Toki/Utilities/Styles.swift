@@ -15,7 +15,7 @@ enum Style {
     static let height: CGFloat = 40
     static let heightSM: CGFloat = 36
     static let heightXS: CGFloat = 24
-    static let bg = Color.secondary.opacity(0.1)
+    static let bg = Material.ultraThin
     static let border = Color.secondary.opacity(0.3)
   }
 
@@ -32,8 +32,8 @@ enum Style {
   }
 
   // MARK: - Most Used Apps
-  enum MostUsedApps {
-    static let bg = Color.secondary.opacity(0.1)
+  enum Box {
+    static let bg = Material.ultraThin
     static let border = Color.secondary.opacity(0.2)
   }
 

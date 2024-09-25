@@ -61,7 +61,7 @@ struct OverlayView: View {
             .font(.title2)
             .foregroundStyle(.secondary)
             .contentTransition(.numericText(countsDown: true))
-            .animation(.snappy, value: remainingTime)
+            .animation(.bouncy, value: remainingTime)
             .frame(width: 12)
         }
       }

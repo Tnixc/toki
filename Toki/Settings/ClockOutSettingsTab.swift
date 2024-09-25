@@ -216,7 +216,9 @@ struct DayToggleButton: View {
       Text(day)
         .font(.caption)
         .frame(width: 35, height: Style.Button.heightXS)
-        .background(isSelected ? Color.accentColor : Style.Button.bg)
+        .background(
+          isSelected ? AnyView(Color.accentColor) : AnyView(Rectangle().fill(Style.Button.bg))
+        )
         .overlay(
           RoundedRectangle(cornerRadius: Style.Layout.cornerRadius / 2)
             .stroke(

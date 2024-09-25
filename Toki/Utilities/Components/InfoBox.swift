@@ -12,12 +12,12 @@ struct InfoBox<Content: View>: View {
   var body: some View {
     content
       .padding(Style.Layout.padding)
-      .background(Style.MostUsedApps.bg)
+      .background(Style.Box.bg)
       .cornerRadius(Style.Layout.cornerRadius)
       .overlay(
         RoundedRectangle(cornerRadius: Style.Layout.cornerRadius)
           .stroke(
-            Style.MostUsedApps.border,
+            Style.Box.border,
             lineWidth: Style.Layout.borderWidth)
       )
   }
