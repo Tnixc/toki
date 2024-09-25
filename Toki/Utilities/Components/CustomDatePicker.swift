@@ -1,3 +1,5 @@
+// CustomDatePicker.swift
+
 import SwiftUI
 
 struct CustomDatePicker: View {
@@ -48,8 +50,8 @@ struct CustomDatePicker: View {
       }
 
       LazyVGrid(
-        columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 7),
-        alignment: .leading, spacing: 0
+        columns: Array(repeating: GridItem(.flexible(), spacing: 1), count: 7),
+        alignment: .leading, spacing: 2
       ) {
         ForEach(0..<42, id: \.self) { index in
           DateCell(
@@ -59,7 +61,9 @@ struct CustomDatePicker: View {
         }
       }
     }
-    .frame(width: 300, height: 350)
+    .frame(
+      width: Constants.DatePicker.width, height: Constants.DatePicker.height
+    )
     .onReceive(
       NotificationCenter.default.publisher(for: .firstDayOfWeekChanged)
     ) { _ in
@@ -88,12 +92,14 @@ struct NavigationButton: View {
     Button(action: action) {
       Image(systemName: direction == .forward ? "arrow.right" : "arrow.left")
         .fontWeight(.bold)
-        .frame(width: 44, height: 44)
+        .frame(
+          width: Style.Colors.Button.height,
+          height: Style.Colors.Button.height
+        )
         .contentShape(Rectangle())
     }
     .buttonStyle(PlainButtonStyle())
-    .cornerRadius(10)
-
+    .cornerRadius(Style.Colors.Layout.cornerRadius)
     .hoverEffect()
   }
 }
@@ -131,17 +137,25 @@ struct DateCell: View {
         }
       }) {
         Text(String(calendar.component(.day, from: date)))
-          .frame(width: 42, height: 42)
+          .frame(
+            width: Style.Colors.Button.height,
+            height: Style.Colors.Button.height
+          )
           .contentShape(Rectangle())
       }
       .buttonStyle(PlainButtonStyle())
-      .background(RoundedRectangle(cornerRadius: 10).fill(bg))
+      .background(
+        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius).fill(
+          bg)
+      )
       .foregroundColor(fg)
       .disabled(date > today)
       .modifier(ConditionalHoverEffect(isEnabled: date <= today))
     } else {
       Color.clear
-        .frame(width: 40, height: 40)
+        .frame(
+          width: Style.Colors.Button.height,
+          height: Style.Colors.Button.height)
     }
   }
 
@@ -173,7 +187,7 @@ struct HoverEffect: ViewModifier {
   func body(content: Content) -> some View {
     content
       .background(
-        RoundedRectangle(cornerRadius: 10)
+        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
           .fill(isHovered ? Color.gray.opacity(0.2) : Color.clear)
       )
       .onHover { hovering in
@@ -181,6 +195,7 @@ struct HoverEffect: ViewModifier {
       }
   }
 }
+
 struct ConditionalHoverEffect: ViewModifier {
   let isEnabled: Bool
 
