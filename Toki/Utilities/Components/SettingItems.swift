@@ -5,26 +5,32 @@ struct SettingItem<Content: View>: View {
   let description: String
   let icon: String
   let content: () -> Content
+
   var body: some View {
-    HStack(spacing: 5) {
-      Image(systemName: icon).renderingMode(.template).font(.title3).frame(
-        width: 30, height: 30)
+    HStack(spacing: Style.Colors.Layout.paddingSM) {
+      Image(systemName: icon)
+        .renderingMode(.template)
+        .font(.title3)
+        .frame(width: Style.Colors.Icon.size, height: Style.Colors.Icon.size)
       VStack(alignment: .leading) {
         Text(title)
-        Text(description).font(.caption).foregroundStyle(.secondary)
+        Text(description)
+          .font(.caption)
+          .foregroundStyle(.secondary)
           .multilineTextAlignment(.leading)
       }
       Spacer()
       content()
     }
-
-    .padding(10)
+    .padding(Style.Colors.Layout.padding)
     .overlay(
-      RoundedRectangle(cornerRadius: 10)
-        .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+      RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+        .stroke(
+          Style.Colors.Settings.itemBorder,
+          lineWidth: Style.Colors.Layout.borderWidth)
     )
-    .background(Color.secondary.opacity(0.1))
-    .clipShape(RoundedRectangle(cornerRadius: 10))
+    .background(Style.Colors.Settings.itembg)
+    .clipShape(RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius))
   }
 }
 
@@ -33,13 +39,18 @@ struct SettingItemRow<Content: View>: View {
   let description: String
   let icon: String
   let content: () -> Content
+
   var body: some View {
-    HStack(spacing: 5) {
-      Image(systemName: icon).renderingMode(.template).font(.title3).frame(
-        width: 30, height: 30)
+    HStack(spacing: Style.Colors.Layout.paddingSM) {
+      Image(systemName: icon)
+        .renderingMode(.template)
+        .font(.title3)
+        .frame(width: Style.Colors.Icon.size, height: Style.Colors.Icon.size)
       VStack(alignment: .leading) {
         Text(title)
-        Text(description).font(.caption).foregroundStyle(.secondary)
+        Text(description)
+          .font(.caption)
+          .foregroundStyle(.secondary)
           .multilineTextAlignment(.leading)
       }
       Spacer()
@@ -50,14 +61,18 @@ struct SettingItemRow<Content: View>: View {
 
 struct SettingItemGroup<Content: View>: View {
   let content: () -> Content
+
   var body: some View {
     content()
-      .padding(10)
+      .padding(Style.Colors.Layout.padding)
       .overlay(
-        RoundedRectangle(cornerRadius: 10)
-          .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+          .stroke(
+            Style.Colors.Settings.itemBorder,
+            lineWidth: Style.Colors.Layout.borderWidth)
       )
-      .background(Color.secondary.opacity(0.1))
-      .clipShape(RoundedRectangle(cornerRadius: 10))
+      .background(Style.Colors.Settings.itembg)
+      .clipShape(
+        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius))
   }
 }

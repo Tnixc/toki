@@ -11,6 +11,9 @@ struct TimelineViewSelector: View {
   @State private var isExpanded = false
   @State private var isButtonEnabled = true
 
+  static let width = 120.0
+  static let itemHeight = 30.0
+
   var body: some View {
     ZStack(alignment: .top) {
       if isExpanded {
@@ -39,14 +42,17 @@ struct TimelineViewSelector: View {
           .fontWeight(.bold)
       }
       .padding()
-      .frame(width: 120, height: 40)
-      .background(Color.secondary.opacity(0.1))
-      .clipShape(RoundedRectangle(cornerRadius: 10))
+      .frame(width: TimelineViewSelector.width, height: Style.Colors.Button.height)
+      .background(Style.Colors.Button.bg)
+      .clipShape(
+        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius))
     }
     .buttonStyle(.plain)
     .overlay(
-      RoundedRectangle(cornerRadius: 10).stroke(
-        Color.secondary.opacity(0.2), lineWidth: 1)
+      RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+        .stroke(
+          Style.Colors.Button.border, lineWidth: Style.Colors.Layout.borderWidth
+        )
     )
   }
 
@@ -58,17 +64,21 @@ struct TimelineViewSelector: View {
     }
     .padding(2)
     .background(.thickMaterial)
-    .background(Color.secondary.opacity(0.1))
+    .background(Style.Colors.Button.bg)
     .overlay(
-      RoundedRectangle(cornerRadius: 12)
+      RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius + 2)
         .stroke(Color.primary.opacity(0.2), lineWidth: 2)
     )
-    .clipShape(RoundedRectangle(cornerRadius: 12))
-    .frame(width: 120)
+    .clipShape(
+      RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius + 2)
+    )
+    .frame(width: TimelineViewSelector.width)
     .offset(y: 75)
     .transition(.blurReplace)
     .zIndex(50)
-    .frame(maxHeight: 40).fixedSize(horizontal: true, vertical: true)
+    .frame(maxHeight: Style.Colors.Button.height).fixedSize(
+      horizontal: true, vertical: true
+    )
     .shadow(color: Color.black.opacity(0.1), radius: 9)
   }
 
@@ -80,19 +90,20 @@ struct TimelineViewSelector: View {
           .foregroundColor(selectedViewType == viewType ? .primary : .clear)
           .fontWeight(.medium)
           .frame(width: 15)
-          .padding(.leading, 10)
+          .padding(.leading, Style.Colors.Layout.padding)
         Text(viewType.rawValue)
           .foregroundColor(.primary)
           .padding(.vertical)
-          .frame(height: 30)
+          .frame(height: TimelineViewSelector.itemHeight)
           .frame(maxWidth: .infinity, alignment: .leading)
-          .clipShape(RoundedRectangle(cornerRadius: 10))
+          .clipShape(
+            RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius))
       }
       .frame(maxWidth: .infinity, alignment: .leading)
     }
     .hoverEffect()
     .buttonStyle(.borderless)
-    .frame(height: 30)
+    .frame(height: TimelineViewSelector.itemHeight)
   }
 
   // MARK: - Helper Functions

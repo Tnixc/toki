@@ -66,8 +66,6 @@ struct OverlayView: View {
         }
       }
       .padding()
-      .frame(width: 400)
-      .cornerRadius(20)
     }
     .onAppear {
       startTimer(interval: 1)
