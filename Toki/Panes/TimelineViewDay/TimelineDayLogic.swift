@@ -25,6 +25,7 @@ class TimelineDayLogic: ObservableObject {
   private let queue = DispatchQueue(
     label: "com.toki.dataLoading", qos: .userInitiated)
 
+  let useColors = SettingsManager.shared.bool(forKey: "showAppColors")
   let calendar = Calendar.current
   let day = Day()
 
@@ -226,7 +227,7 @@ class TimelineDayLogic: ObservableObject {
   }
 
   func colorForSegment(_ segment: Int) -> Color {
-    if SettingsManager.shared.bool(forKey: "showAppColors"),
+    if useColors,
       let dominantApp = segmentDominantApps[segment]
     {
       return colorForApp(dominantApp)

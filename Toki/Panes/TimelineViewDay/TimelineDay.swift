@@ -5,6 +5,8 @@ struct TimelineDay: View {
   @StateObject private var logic = TimelineDayLogic()
   @Binding var selectedViewType: TimelineViewType
 
+  private let circleSize = 10.0
+
   var body: some View {
     VStack(alignment: .leading, spacing: Style.Colors.Layout.padding) {
       headerView
@@ -78,7 +80,8 @@ struct TimelineDay: View {
     .padding(.horizontal, Style.Colors.Layout.padding)
     .zIndex(99)
     .frame(
-      height: Constants.TimelineDay.timelineHeight + Constants.TimelineDay.hoverLineExtension * 2)
+      height: Constants.TimelineDay.timelineHeight + Constants.TimelineDay
+        .hoverLineExtension * 2)
   }
 
   private func loadingView(width: CGFloat, height: CGFloat) -> some View {
@@ -147,8 +150,8 @@ struct TimelineDay: View {
               Circle()
                 .fill(logic.colorForApp(usage.appName))
                 .frame(
-                  width: Style.Colors.Icon.sizeSM,
-                  height: Style.Colors.Icon.sizeSM)
+                  width: circleSize,
+                  height: circleSize)
               Text(usage.appName)
               Spacer()
               Text(logic.formatDuration(usage.duration))
@@ -158,7 +161,7 @@ struct TimelineDay: View {
           }
         }
         .zIndex(99)
-        .padding(Style.Colors.Layout.paddingSM)
+        .padding(Style.Colors.Layout.padding)
         .background(.thickMaterial)
         .overlay(
           RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
@@ -436,8 +439,8 @@ struct TimelineDay: View {
                 Circle()
                   .fill(logic.colorForApp(appUsage.appName))
                   .frame(
-                    width: Style.Colors.Icon.sizeSM,
-                    height: Style.Colors.Icon.sizeSM)
+                    width: circleSize,
+                    height: circleSize)
                 Text(appUsage.appName)
                   .font(.subheadline)
                 Spacer()
