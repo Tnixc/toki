@@ -1,3 +1,5 @@
+// InfoBox.swift
+
 import SwiftUI
 
 struct InfoBox<Content: View>: View {
@@ -9,12 +11,14 @@ struct InfoBox<Content: View>: View {
 
   var body: some View {
     content
-      .padding()
-      .background(Color.secondary.opacity(0.1))
-      .cornerRadius(10)
+      .padding(Style.Colors.Layout.padding)
+      .background(Style.Colors.MostUsedApps.bg)
+      .cornerRadius(Style.Colors.Layout.cornerRadius)
       .overlay(
-        RoundedRectangle(cornerRadius: 10).stroke(
-          .secondary.opacity(0.2), lineWidth: 1)
+        RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius)
+          .stroke(
+            Style.Colors.MostUsedApps.border,
+            lineWidth: Style.Colors.Layout.borderWidth)
       )
   }
 }

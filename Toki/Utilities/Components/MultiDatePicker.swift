@@ -49,7 +49,7 @@ struct MultiDatePicker: View {
 
       LazyVGrid(
         columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 7),
-        alignment: .leading, spacing: 0
+        alignment: .leading, spacing: 2
       ) {
         ForEach(0..<42, id: \.self) { index in
           MultiDateCell(
@@ -58,7 +58,9 @@ struct MultiDatePicker: View {
         }
       }
     }
-    .frame(width: 300, height: 350)
+    .frame(
+      width: Constants.DatePicker.width, height: Constants.DatePicker.height
+    )
     .onReceive(
       NotificationCenter.default.publisher(for: .firstDayOfWeekChanged)
     ) { _ in
@@ -97,7 +99,10 @@ struct MultiDateCell: View {
         selectDate(date)
       }) {
         Text(String(calendar.component(.day, from: date)))
-          .frame(width: 42, height: 42)
+          .frame(
+            width: Style.Colors.Button.height,
+            height: Style.Colors.Button.height
+          )
           .background(
             backgroundColor(
               for: date, isInRange: isInRange, isStartDate: isStartDate,
@@ -108,14 +113,17 @@ struct MultiDateCell: View {
               for: date, isInRange: isInRange, isStartDate: isStartDate,
               isEndDate: isEndDate)
           )
-          .clipShape(RoundedRectangle(cornerRadius: 10))
+          .clipShape(
+            RoundedRectangle(cornerRadius: Style.Colors.Layout.cornerRadius))
       }
       .buttonStyle(.borderless)
       .disabled(date > today)
       .modifier(ConditionalHoverEffect(isEnabled: date <= today))
     } else {
       Color.clear
-        .frame(width: 40, height: 40)
+        .frame(
+          width: Style.Colors.Button.height,
+          height: Style.Colors.Button.height)
     }
   }
 
