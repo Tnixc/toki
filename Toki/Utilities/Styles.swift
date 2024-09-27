@@ -15,7 +15,8 @@ enum Style {
     static let height: CGFloat = 40
     static let heightSM: CGFloat = 36
     static let heightXS: CGFloat = 24
-    static let bg = Color.secondary.opacity(0.1
+    static let bg = Color.secondary.opacity(
+      0.1
     )
     static let border = Color.secondary.opacity(0.3)
   }

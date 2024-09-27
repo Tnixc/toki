@@ -37,7 +37,10 @@ struct MainScene: Scene {
 
 struct VisualEffect: NSViewRepresentable {
   func makeNSView(context: Self.Context) -> NSView {
-    return NSVisualEffectView()
+    let visualEffectView = NSVisualEffectView()
+    visualEffectView.state = NSVisualEffectView.State.active
+    visualEffectView.isEmphasized = true
+    return visualEffectView
   }
   func updateNSView(_ nsView: NSView, context: Context) {}
 }

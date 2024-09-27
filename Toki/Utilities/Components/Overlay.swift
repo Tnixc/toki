@@ -87,16 +87,17 @@ struct VisualEffectView: NSViewRepresentable {
   let material: NSVisualEffectView.Material
   let blendingMode: NSVisualEffectView.BlendingMode
 
-  func makeNSView(context: Context) -> NSVisualEffectView {
+  func makeNSView(context _: Context) -> NSVisualEffectView {
     let visualEffectView = NSVisualEffectView()
     visualEffectView.material = material
     visualEffectView.blendingMode = blendingMode
-    visualEffectView.state = .active
+    visualEffectView.state = NSVisualEffectView.State.active
+    visualEffectView.isEmphasized = true
     return visualEffectView
   }
 
-  func updateNSView(_ nsView: NSVisualEffectView, context: Context) {
-    nsView.material = material
-    nsView.blendingMode = blendingMode
+  func updateNSView(_ visualEffectView: NSVisualEffectView, context _: Context) {
+    visualEffectView.material = material
+    visualEffectView.blendingMode = blendingMode
   }
 }
