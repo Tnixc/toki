@@ -15,6 +15,7 @@
 		3958B6242C9F99FA005FC95A /* StorageSettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3958B6232C9F99FA005FC95A /* StorageSettingsTab.swift */; };
 		396339462CA3873700365897 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396339452CA3873700365897 /* Constants.swift */; };
 		396339482CA3879900365897 /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396339472CA3879900365897 /* Styles.swift */; };
+		3983226A2CA6F77D009BDB3D /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 398322692CA6F77D009BDB3D /* Luminare */; };
 		39B14DB32C9CE173003A457D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B14DB12C9CE173003A457D /* Utils.swift */; };
 		39B90B9B2C9B07CE0002823D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 39B90B9A2C9B07CE0002823D /* SQLite */; };
 		39B90BA12C9B24A40002823D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 39B90BA02C9B24A40002823D /* SQLite */; };
@@ -103,6 +104,7 @@
 				3958B6202C9F973E005FC95A /* SettingsKit in Frameworks */,
 				39D69B062C9E71E100923741 /* SettingsAccess in Frameworks */,
 				39B90BA12C9B24A40002823D /* SQLite in Frameworks */,
+				3983226A2CA6F77D009BDB3D /* Luminare in Frameworks */,
 				39B90B9B2C9B07CE0002823D /* SQLite in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -264,6 +266,7 @@
 				39B90B992C9B07CE0002823D /* XCRemoteSwiftPackageReference "SQLite.swift" */,
 				39D69B042C9E71E100923741 /* XCRemoteSwiftPackageReference "SettingsAccess" */,
 				3958B61E2C9F973E005FC95A /* XCRemoteSwiftPackageReference "SettingsKit-macOS" */,
+				398322682CA6F77D009BDB3D /* XCRemoteSwiftPackageReference "Luminare" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4180AEAB2839753E0054FEA9 /* Products */;
@@ -613,6 +616,14 @@
 				minimumVersion = 0.2.4;
 			};
 		};
+		398322682CA6F77D009BDB3D /* XCRemoteSwiftPackageReference "Luminare" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MrKai77/Luminare";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		39B90B992C9B07CE0002823D /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
@@ -636,6 +647,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3958B61E2C9F973E005FC95A /* XCRemoteSwiftPackageReference "SettingsKit-macOS" */;
 			productName = SettingsKit;
+		};
+		398322692CA6F77D009BDB3D /* Luminare */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 398322682CA6F77D009BDB3D /* XCRemoteSwiftPackageReference "Luminare" */;
+			productName = Luminare;
 		};
 		39B90B9A2C9B07CE0002823D /* SQLite */ = {
 			isa = XCSwiftPackageProductDependency;
