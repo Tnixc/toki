@@ -7,6 +7,7 @@
 - [ ] Week view
 - [ ] Month view
 - [ ] Updater
+- [ ] color pickers w/ light dark + set custom colors for apps
 - [x] add opts for show apps <1 min in most used apps
 - [x] choose start of week
 - [x] launch on login
