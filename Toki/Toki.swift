@@ -8,7 +8,6 @@ struct Toki: App {
   init() {
     watcher.start()
   }
-
   var body: some Scene {
     MainScene()
 
@@ -19,4 +18,5 @@ struct Toki: App {
     }
     .menuBarExtraStyle(.window)
   }
+
 }

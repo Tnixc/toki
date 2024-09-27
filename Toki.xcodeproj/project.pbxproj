@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		390E973F2CA751B5001A6923 /* AppearanceSettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390E973E2CA751B5001A6923 /* AppearanceSettingsTab.swift */; };
 		394E3A7E2CA0704500DFC1AD /* ExportSettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394E3A7D2CA0704500DFC1AD /* ExportSettingsTab.swift */; };
 		394E3A802CA0706A00DFC1AD /* ExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394E3A7F2CA0706A00DFC1AD /* ExportManager.swift */; };
 		394E3A842CA08D5F00DFC1AD /* ClockOutSettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394E3A832CA08D5F00DFC1AD /* ClockOutSettingsTab.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		390E973E2CA751B5001A6923 /* AppearanceSettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsTab.swift; sourceTree = "<group>"; };
 		393609172CA24038007FCA0F /* TokiLaunchHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TokiLaunchHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		394E3A7D2CA0704500DFC1AD /* ExportSettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportSettingsTab.swift; sourceTree = "<group>"; };
 		394E3A7F2CA0706A00DFC1AD /* ExportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportManager.swift; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 		4180AEBE283976620054FEA9 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				390E973E2CA751B5001A6923 /* AppearanceSettingsTab.swift */,
 				394E3A832CA08D5F00DFC1AD /* ClockOutSettingsTab.swift */,
 				394E3A7D2CA0704500DFC1AD /* ExportSettingsTab.swift */,
 				3958B6232C9F99FA005FC95A /* StorageSettingsTab.swift */,
@@ -314,6 +317,7 @@
 				3958B6242C9F99FA005FC95A /* StorageSettingsTab.swift in Sources */,
 				4180AEBD283975670054FEA9 /* MainScene.swift in Sources */,
 				4180AEEE2839A0660054FEA9 /* BundleExtensions.swift in Sources */,
+				390E973F2CA751B5001A6923 /* AppearanceSettingsTab.swift in Sources */,
 				396339462CA3873700365897 /* Constants.swift in Sources */,
 				4180AEC4283979530054FEA9 /* MainView.swift in Sources */,
 				396339482CA3879900365897 /* Styles.swift in Sources */,

@@ -8,6 +8,7 @@ private enum LocalConstants {
 struct SettingsWindow: View {
   private enum Tabs: Hashable {
     case general
+    case appearance
     case storage
     case export
     case clockOut
@@ -39,6 +40,14 @@ struct SettingsWindow: View {
           isSelected: selectedTab == .general
         ) {
           selectedTab = .general
+        }
+
+        SettingsTabButton(
+          title: "Appearance",
+          icon: "paintbrush",
+          isSelected: selectedTab == .appearance
+        ) {
+          selectedTab = .appearance
         }
 
         SettingsTabButton(
@@ -74,6 +83,8 @@ struct SettingsWindow: View {
     switch selectedTab {
     case .general:
       GeneralSettingsTab()
+    case .appearance:
+      AppearanceSettingsTab()
     case .storage:
       StorageSettingsTab()
     case .export:

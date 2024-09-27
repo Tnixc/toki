@@ -371,6 +371,7 @@ struct TimelineDay: View {
       icon: "calendar",
       width: 150, height: Style.Button.height
     )
+
     .popover(isPresented: $logic.showDatePicker) {
       CustomDatePicker(
         selectedDate: Binding(
