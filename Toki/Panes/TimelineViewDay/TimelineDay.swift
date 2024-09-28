@@ -4,7 +4,7 @@ import SwiftUI
 struct TimelineDay: View {
   @StateObject private var logic = TimelineDayLogic()
   @Binding var selectedViewType: TimelineViewType
-
+  @State private var showLoadingText = false
   private let circleSize = 10.0
 
   var body: some View {
@@ -22,6 +22,16 @@ struct TimelineDay: View {
     }
     .onChange(of: logic.selectedDate) {
       logic.loadData(for: logic.selectedDate)
+    }
+    .onChange(of: logic.isLoading) {
+      if logic.isLoading {
+        showLoadingText = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+          showLoadingText = true
+        }
+      } else {
+        showLoadingText = false
+      }
     }
   }
 
@@ -43,19 +53,19 @@ struct TimelineDay: View {
           Text(getDay(from: logic.selectedDate))
             .font(.system(size: 36, weight: .medium, design: .default))
             .contentTransition(.numericText()).animation(
-              .bouncy, value: logic.selectedDate)
+              .spring, value: logic.selectedDate)
           VStack(alignment: .leading, spacing: 1) {
             Text(getMonth(from: logic.selectedDate))
               .font(.title3)
               .padding(.leading, Style.Layout.paddingSM)
               .contentTransition(.numericText()).animation(
-                .bouncy, value: logic.selectedDate)
+                .spring, value: logic.selectedDate)
             Text(getWeekday(from: logic.selectedDate))
               .font(.title3)
               .opacity(0.5)
               .padding(.leading, Style.Layout.paddingSM)
               .contentTransition(.numericText()).animation(
-                .bouncy, value: logic.selectedDate)
+                .spring, value: logic.selectedDate)
           }
         }
       }
@@ -82,7 +92,7 @@ struct TimelineDay: View {
           hoverInformationView(width: timelineWidth)
             .zIndex(99)
         }
-        .animation(.easeInOut(duration: 0.1), value: logic.isLoading)
+        .animation(.spring, value: logic.isLoading)
       }
       .zIndex(99)
     }
@@ -99,10 +109,11 @@ struct TimelineDay: View {
         backgroundView(width: width + Style.Layout.paddingSM)
           .offset(x: Style.Layout.paddingSM)
           .blur(radius: 20).scaleEffect(0.8)
-
-        Text("Loading timeline...")
-          .foregroundColor(.secondary)
-          .offset(y: -Constants.TimelineDay.hoverLineExtension)
+        if showLoadingText {
+          Text("Loading timeline...")
+            .foregroundColor(.secondary)
+            .offset(y: -Constants.TimelineDay.hoverLineExtension)
+        }
       }.offset(y: Constants.TimelineDay.hoverLineExtension)
         .frame(width: width, height: height)
     }
@@ -494,7 +505,7 @@ struct TimelineDay: View {
         }
         .opacity(logic.isLoading ? 0 : 1)
 
-        if logic.isLoading {
+        if logic.isLoading && showLoadingText {
           Text("Loading")
             .foregroundColor(.secondary)
             .padding()

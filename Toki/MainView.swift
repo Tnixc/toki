@@ -3,41 +3,62 @@ import UserNotifications
 
 struct MainView: View {
   @State private var selectedViewType: TimelineViewType = .day
+  @StateObject private var keyPressHandler = KeyPressHandler()
 
   init() {
     requestNotificationPermissions()
   }
 
   var body: some View {
-    ScrollView {
-      switch selectedViewType {
-      case .day:
-        TimelineDay(selectedViewType: $selectedViewType)
-      case .week:
-        TimelineWeek(selectedViewType: $selectedViewType)
-      case .month:
-        Text("Month view not implemented yet")
-          .padding()
+    ZStack {
+      ScrollView {
+        switch selectedViewType {
+        case .day:
+          TimelineDay(selectedViewType: $selectedViewType)
+            .transition(.offset(y: 40).combined(with: .opacity))
+        case .week:
+          TimelineWeek(selectedViewType: $selectedViewType)
+            .transition(.offset(y: 40).combined(with: .opacity))
+        case .month:
+          Text("Month view not implemented yet")
+            .transition(.offset(y: 40).combined(with: .opacity))
+            .padding()
+        }
+      }
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
+      .animation(.smooth(duration: 0.3), value: selectedViewType)
+      VStack {
+        Spacer()
+        if keyPressHandler.isCommandKeyHeld {
+          FloatingView(isVisible: keyPressHandler.isCommandKeyHeld)
+        }
       }
     }
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
     .onAppear {
-      NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
-        switch event.charactersIgnoringModifiers {
-        case "1":
-          selectedViewType = .day
-          return nil
-        case "2":
-          selectedViewType = .week
-          return nil
-        case "3":
-          selectedViewType = .month
-          return nil
-        default:
-          break
+      setupKeyEventMonitoring()
+    }
+  }
+
+  private func setupKeyEventMonitoring() {
+    NSEvent.addLocalMonitorForEvents(matching: [
+      .keyDown, .keyUp, .flagsChanged,
+    ]) { event in
+      switch event.type {
+      case .keyDown:
+        if let key = event.charactersIgnoringModifiers {
+          KeyPressHandler.handleKeyPress(
+            key: key, selectedViewType: $selectedViewType)
         }
-        return event
+      case .flagsChanged:
+        if event.modifierFlags.contains(.command) {
+          keyPressHandler.startCommandKeyTimer()
+        } else {
+          keyPressHandler.stopCommandKeyTimer()
+        }
+      default:
+        break
       }
+      return event
     }
   }
 
