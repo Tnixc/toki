@@ -10,8 +10,8 @@ struct FloatingView: View {
           KeyRow(label: "Day View", keys: ["1"])
           KeyRow(label: "Week View", keys: ["2"])
           KeyRow(label: "Month View", keys: ["3"])
-          KeyRow(label: "Previous", keys: ["􀰁"])
-          KeyRow(label: "Next", keys: ["􀰇"])
+          KeyRow(label: "Previous", keys: ["􀰑"])
+          KeyRow(label: "Next", keys: ["􀰌"])
           KeyRow(label: "Settings", keys: ["􀆔", ","])
         }
         .padding(.vertical, 30)
@@ -45,7 +45,7 @@ struct KeyRow: View {
             .foregroundStyle(.secondary)
         }
         Text(key)
-          .frame(width: 16, height: 16)
+          .frame(width: 20, height: 20)
           .foregroundStyle(.secondary)
           .background(.secondary.opacity(0.1))
           .clipShape(RoundedRectangle(cornerRadius: 2))
