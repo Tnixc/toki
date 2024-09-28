@@ -16,6 +16,8 @@ struct GeneralSettingsTab: View {
   @State private var launchAtLogin: Bool
   @State private var showTimeUnderMinute: Bool
 
+  @State private var activeDropdown: String?
+
   private let timeOptions: [Date]
   private let timeFormatter: DateFormatter
   private let weekdayOptions = Calendar.current.weekdaySymbols
@@ -63,33 +65,65 @@ struct GeneralSettingsTab: View {
           .scaleEffect(0.8, anchor: .trailing)
       }
 
-      SettingItem(
-        title: "End of Day",
-        description: "Set the time that starts a new day. Requires restart.",
-        icon: "square.and.line.vertical.and.square.filled"
-      ) {
-        Picker("", selection: endOfDayBinding) {
-          ForEach(timeOptions, id: \.self) { date in
-            Text(timeFormatter.string(from: date))
+      ZStack {
+        SettingItemGroup {
+          VStack(alignment: .leading, spacing: Style.Layout.paddingSM) {
+            ZStack {
+              SettingItemRow(
+                title: "End of Day",
+                description:
+                  "Set the time that starts a new day. Requires restart.",
+                icon: "square.and.line.vertical.and.square.filled"
+              ) { Spacer() }
+            }
           }
-        }
-        .pickerStyle(.menu)
-        .frame(maxWidth: LocalConstants.pickerMaxWidth)
+        }.overlay(
+          HStack {
+            Spacer()
+            UIDropdown(
+              selectedOption: endOfDayBinding,
+              options: timeOptions,
+              optionToString: { self.timeFormatter.string(from: $0) },
+              width: 150,
+              height: Style.Button.heightSM,
+              onClick: { self.activeDropdown = "endOfDay" }
+            )
+            .padding(Style.Layout.paddingSM + 2)
+            .allowsHitTesting(true)
+          }
+        )
       }
+      .zIndex(activeDropdown == "endOfDay" ? 99 : 0)
 
-      SettingItem(
-        title: "First Day of Week",
-        description: "Set the first day of the week for the calendar views.",
-        icon: "calendar"
-      ) {
-        Picker("", selection: firstDayOfWeekBinding) {
-          ForEach(1...7, id: \.self) { index in
-            Text(Calendar.current.weekdaySymbols[index - 1]).tag(index)
+      ZStack {
+        SettingItemGroup {
+          VStack(alignment: .leading, spacing: Style.Layout.paddingSM) {
+            ZStack {
+              SettingItemRow(
+                title: "First Day of Week",
+                description:
+                  "Set the first day of the week for the calendar views.",
+                icon: "calendar"
+              ) { Spacer() }
+            }
           }
-        }
-        .pickerStyle(.menu)
-        .frame(maxWidth: LocalConstants.pickerMaxWidth)
+        }.overlay(
+          HStack {
+            Spacer()
+            UIDropdown(
+              selectedOption: firstDayOfWeekBinding,
+              options: Array(1...7),
+              optionToString: { Calendar.current.weekdaySymbols[$0 - 1] },
+              width: 150,
+              height: Style.Button.heightSM,
+              onClick: { self.activeDropdown = "firstDayOfWeek" }
+            )
+            .padding(Style.Layout.paddingSM + 2)
+            .allowsHitTesting(true)
+          }
+        )
       }
+      .zIndex(activeDropdown == "firstDayOfWeek" ? 99 : 0)
 
       SettingItem(
         title: "Launch at Login",

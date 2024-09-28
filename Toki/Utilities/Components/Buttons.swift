@@ -2,7 +2,7 @@
 
 import SwiftUI
 
-struct CustomButton: View {
+struct UIButton: View {
   let action: () -> Void
   let label: String
   let icon: String?
@@ -64,7 +64,7 @@ struct CustomButton: View {
   }
 }
 
-struct CustomButtonPlain: View {
+struct UIButtonPlain: View {
   let action: () -> Void
   let label: String
   let icon: String?

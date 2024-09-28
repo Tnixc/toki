@@ -1,12 +1,3 @@
-//
-//  AppearanceSettingsTab.swift
-//  Toki
-//
-//  Created by tnixc on 27/9/2024.
-//
-
-// toki/Toki/Settings/AppearanceSettingsTab.swift
-
 import SwiftUI
 
 struct AppearanceSettingsTab: View {
@@ -18,27 +9,34 @@ struct AppearanceSettingsTab: View {
     VStack(alignment: .leading, spacing: Style.Layout.padding) {
       Text("Appearance").font(.title).padding()
 
-      SettingItemGroup {
-        VStack(alignment: .leading, spacing: Style.Layout.paddingSM) {
-          SettingItemRow(
-            title: "App Theme",
-            description: "Choose the appearance of the app",
-            icon: "paintbrush"
-          ) {
-            Picker("", selection: $selectedAppearance) {
-              ForEach(Appearance.allCases, id: \.self) { appearance in
-                Text(appearance.description).tag(appearance)
-              }
+      ZStack {
+        SettingItemGroup {
+          VStack(alignment: .leading, spacing: Style.Layout.paddingSM) {
+            ZStack {
+              SettingItemRow(
+                title: "App Theme",
+                description: "Choose the appearance of the app",
+                icon: "paintbrush"
+              ) { Spacer() }
             }
-            .pickerStyle(.segmented)
-            .frame(width: 200)
           }
-        }
+        }.overlay(
+          HStack {
+            Spacer()
+            UIDropdown(
+              selectedOption: $selectedAppearance,
+              options: Appearance.allCases,
+              optionToString: { $0.description },
+              width: 150,
+              height: Style.Button.heightSM,
+              onSelect: { _ in updateAppAppearance() }
+            )
+            .allowsHitTesting(true)
+          }
+          .padding(Style.Layout.paddingSM + 2)
+        )
       }
       Spacer()
-    }
-    .onChange(of: selectedAppearance) {
-      updateAppAppearance()
     }
   }
 

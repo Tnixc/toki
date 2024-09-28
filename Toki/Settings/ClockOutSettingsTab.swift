@@ -100,7 +100,7 @@ struct ClockOutSettingsTab: View {
 
               HStack {
                 Spacer()
-                CustomButton(
+                UIButton(
                   action: {
                     Notifier.shared.showOverlay(
                       title: "This is a demo overlay",

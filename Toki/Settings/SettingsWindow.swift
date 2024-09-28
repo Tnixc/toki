@@ -103,7 +103,7 @@ struct SettingsTabButton: View {
 
   var body: some View {
     if isSelected {
-      CustomButton(
+      UIButton(
         action: action,
         label: title,
         icon: icon,
@@ -112,7 +112,7 @@ struct SettingsTabButton: View {
         align: .leading
       )
     } else {
-      CustomButtonPlain(
+      UIButtonPlain(
         action: action,
         label: title,
         icon: icon,

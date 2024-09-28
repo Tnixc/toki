@@ -67,7 +67,7 @@ struct TimelineWeek: View {
   private func navigationButton(action: @escaping () -> Void, iconName: String)
     -> some View
   {
-    CustomButton(
+    UIButton(
       action: action, label: "", icon: iconName, width: 40, height: 40)
   }
 

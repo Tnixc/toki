@@ -24,13 +24,13 @@ struct SettingItem<Content: View>: View {
     }
     .padding(Style.Layout.padding)
     .overlay(
-      RoundedRectangle(cornerRadius: Style.Layout.cornerRadius)
+      RoundedRectangle(cornerRadius: Style.Layout.cornerRadius + 2)
         .stroke(
           Style.Settings.itemBorder,
           lineWidth: Style.Layout.borderWidth)
     )
     .background(Style.Settings.itembg)
-    .clipShape(RoundedRectangle(cornerRadius: Style.Layout.cornerRadius))
+    .clipShape(RoundedRectangle(cornerRadius: Style.Layout.cornerRadius + 2))
   }
 }
 
@@ -66,13 +66,12 @@ struct SettingItemGroup<Content: View>: View {
     content()
       .padding(Style.Layout.padding)
       .overlay(
-        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius)
+        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius + 2)
           .stroke(
             Style.Settings.itemBorder,
             lineWidth: Style.Layout.borderWidth)
       )
       .background(Style.Settings.itembg)
-      .clipShape(
-        RoundedRectangle(cornerRadius: Style.Layout.cornerRadius))
+      .clipShape(RoundedRectangle(cornerRadius: Style.Layout.cornerRadius + 2))
   }
 }

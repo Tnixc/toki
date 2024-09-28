@@ -2,7 +2,7 @@
 
 import SwiftUI
 
-struct CustomDatePicker: View {
+struct UIDatePicker: View {
   @Binding var selectedDate: Date
   @State private var currentMonth: Date = Date()
   @State private var firstDayOfWeek: Int = UserDefaults.standard.integer(

@@ -360,20 +360,20 @@ struct TimelineDay: View {
   private func navigationButton(action: @escaping () -> Void, iconName: String)
     -> some View
   {
-    CustomButton(
+    UIButton(
       action: action, label: "", icon: iconName,
       width: Style.Button.height, height: Style.Button.height)
   }
 
   private var datePickerButton: some View {
-    CustomButton(
+    UIButton(
       action: { logic.showDatePicker.toggle() }, label: logic.dateString,
       icon: "calendar",
       width: 150, height: Style.Button.height
     )
 
     .popover(isPresented: $logic.showDatePicker) {
-      CustomDatePicker(
+      UIDatePicker(
         selectedDate: Binding(
           get: { logic.calendar.date(from: logic.selectedDate) ?? Date() },
           set: { newDate in

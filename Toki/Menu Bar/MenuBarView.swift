@@ -45,13 +45,13 @@ struct MenuBarView: View {
       Divider()
 
       HStack(spacing: Style.Layout.padding) {
-        CustomButton(
+        UIButton(
           action: {
             NSApp.activate(ignoringOtherApps: true)
             openWindow(id: "main")
           }, label: "Open Toki", height: Style.Button.heightSM
         )
-        CustomButton(
+        UIButton(
           action: {
             NSApplication.shared.terminate(nil)
           },

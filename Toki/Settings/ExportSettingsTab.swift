@@ -18,7 +18,7 @@ struct ExportSettingsTab: View {
         description: "Export all activity data to CSV format.",
         icon: "shippingbox"
       ) {
-        CustomButton(
+        UIButton(
           action: exportAllData,
           label: "Export All",
           icon: "arrow.down.doc.fill",
@@ -32,7 +32,7 @@ struct ExportSettingsTab: View {
         description: "Export activity data for a specific date range.",
         icon: "calendar"
       ) {
-        CustomButton(
+        UIButton(
           action: { showDatePicker.toggle() },
           label: "Select Date Range",
           icon:
@@ -46,7 +46,7 @@ struct ExportSettingsTab: View {
               .frame(
                 width: Constants.DatePicker.width,
                 height: Constants.DatePicker.height)
-            CustomButton(
+            UIButton(
               action: {
                 exportSelectedDateRange()
                 showDatePicker = false
@@ -67,7 +67,7 @@ struct ExportSettingsTab: View {
         description: "Open the database file location in Finder.",
         icon: "folder"
       ) {
-        CustomButton(
+        UIButton(
           action: showDatabaseInFinder,
           label: "Show in Finder",
           icon: "folder",
