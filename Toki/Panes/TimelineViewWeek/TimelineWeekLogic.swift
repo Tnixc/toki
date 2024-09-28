@@ -11,6 +11,8 @@ class TimelineWeekLogic: ObservableObject {
   @Published var averageClockOut: Date?
   @Published var averageActiveTime: TimeInterval = 0
 
+  @AppStorage("showAppColors") private var showAppColors: Bool = true
+
   let segmentCount = Constants.segmentCount
   private let calendar = Calendar.current
   private let day = Day()
@@ -143,15 +145,57 @@ class TimelineWeekLogic: ObservableObject {
     }
   }
 
-  func yPositionForSegment(_ segment: Int, height: CGFloat) -> CGFloat {
-    CGFloat(segment) / CGFloat(segmentCount) * height
-  }
-
   func colorForSegment(_ segment: Int, day: Date) -> Color {
-    let opacity = opacityForSegment(segment, day: day)
+    guard let dayActivities = activities[day] else { return .clear }
+
+    let segmentStart = calendar.date(
+      byAdding: .minute, value: segment * Constants.segmentDuration,
+      to: calendar.startOfDay(for: day))!
+    let segmentEnd = calendar.date(
+      byAdding: .minute, value: (segment + 1) * Constants.segmentDuration,
+      to: calendar.startOfDay(for: day))!
+
+    let activitiesInSegment = dayActivities.filter { activity in
+      activity.timestamp >= segmentStart && activity.timestamp < segmentEnd
+    }
+
+    let opacity =
+      Double(activitiesInSegment.count)
+      / Double(Constants.segmentDuration / Watcher.INTERVAL)
+
+    if showAppColors {
+      let appCounts = activitiesInSegment.reduce(into: [:]) {
+        counts, activity in
+        counts[activity.appName, default: 0] += 1
+      }
+      if let dominantApp = appCounts.max(by: { $0.value < $1.value })?.key {
+        return colorForApp(dominantApp).opacity(opacity)
+      }
+    }
     return Style.Colors.accent.opacity(opacity)
   }
+  
+  func appsForSegment(_ segment: Int, day: Date) -> [AppUsage] {
+    guard let dayActivities = activities[day] else { return [] }
 
+    let segmentStart = calendar.date(
+      byAdding: .minute, value: segment * Constants.segmentDuration,
+      to: calendar.startOfDay(for: day))!
+    let segmentEnd = calendar.date(
+      byAdding: .minute, value: (segment + 1) * Constants.segmentDuration,
+      to: calendar.startOfDay(for: day))!
+
+    var appUsage: [String: TimeInterval] = [:]
+
+    for activity in dayActivities {
+      if activity.timestamp >= segmentStart && activity.timestamp < segmentEnd {
+        appUsage[activity.appName, default: 0] += Double(Watcher.INTERVAL)
+      }
+    }
+
+    return appUsage.map { AppUsage(appName: $0.key, duration: $0.value) }
+      .sorted { $0.duration > $1.duration }
+  }
   func opacityForSegment(_ segment: Int, day: Date) -> Double {
     guard let dayActivities = activities[day] else { return 0 }
 
@@ -168,6 +212,10 @@ class TimelineWeekLogic: ObservableObject {
 
     return Double(activitiesInSegment.count)
       / Double(Constants.segmentDuration / Watcher.INTERVAL)
+  }
+
+  func yPositionForSegment(_ segment: Int, height: CGFloat) -> CGFloat {
+    CGFloat(segment) / CGFloat(segmentCount) * height
   }
 
   private func calculateWeekStats() {

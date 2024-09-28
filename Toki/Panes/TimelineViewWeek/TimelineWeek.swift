@@ -182,10 +182,17 @@ struct TimelineWeek: View {
             endSegment + 1, height: height - 20)
           let barHeight = max(0, endY - startY)
 
-          RoundedRectangle(cornerRadius: 5)
-            .fill(logic.colorForSegment(startSegment, day: day))
-            .frame(height: barHeight)
-            .offset(y: startY)
+          VStack(spacing: 0) {
+            ForEach(startSegment...endSegment, id: \.self) { segment in
+              Rectangle()
+                .fill(logic.colorForSegment(segment, day: day))
+                .frame(
+                  height: (barHeight / CGFloat(endSegment - startSegment + 1)))
+            }
+          }
+          .frame(height: barHeight)
+          .clipShape(RoundedRectangle(cornerRadius: 5))
+          .offset(y: startY)
         }
       }
       .frame(height: height - 20)
