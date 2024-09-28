@@ -25,7 +25,7 @@ struct MainView: View {
             .padding()
         }
       }
-      .frame(maxWidth: .infinity, maxHeight: .infinity)
+      .frame(maxWidth: 650, maxHeight: .infinity)
       .animation(.smooth(duration: 0.3), value: selectedViewType)
       VStack {
         Spacer()

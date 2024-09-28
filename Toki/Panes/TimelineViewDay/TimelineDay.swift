@@ -5,7 +5,7 @@ struct TimelineDay: View {
   @StateObject private var logic = TimelineDayLogic()
   @Binding var selectedViewType: TimelineViewType
   @State private var showLoadingText = false
-  private let circleSize = 10.0
+  private let circleSize = 8.0
 
   var body: some View {
     VStack(alignment: .leading, spacing: Style.Layout.padding) {
@@ -15,8 +15,6 @@ struct TimelineDay: View {
       dayStatsView()
       mostUsedAppsView()
     }
-    .padding()
-    .frame(maxWidth: Constants.TimelineDay.maxWidth)
     .onAppear {
       logic.loadData(for: logic.selectedDate)
     }

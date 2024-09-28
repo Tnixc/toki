@@ -19,15 +19,11 @@ enum Constants {
   static let dbFileName = "activities.sqlite3"
 
   enum TimelineDay {
-    static let maxWidth: CGFloat = 600
     static let timelineHeight: CGFloat = 95
     static let hoverLineExtension: CGFloat = 10
   }
 
   enum TimelineWeek {
-    static let maxWidth: CGFloat = 600
-    static let dayColumnWidth: CGFloat = 100
-    static let hourLabelWidth: CGFloat = 50
     static let displayedHours = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24]
   }
 

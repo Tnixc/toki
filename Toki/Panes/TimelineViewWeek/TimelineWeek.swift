@@ -6,8 +6,6 @@ struct TimelineWeek: View {
   @State private var firstDayOfWeek: Int = UserDefaults.standard.integer(
     forKey: "firstDayOfWeek")
 
-  private let maxWidth: CGFloat = 800
-  private let dayColumnWidth: CGFloat = 100
   private let hourLabelWidth: CGFloat = 50
   private let displayedHours = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24]
 
@@ -17,8 +15,6 @@ struct TimelineWeek: View {
       weekConfigView()
       weekTimelineView
     }
-    .padding()
-    .frame(maxWidth: maxWidth)
     .onAppear {
       logic.loadData()
     }
@@ -77,13 +73,13 @@ struct TimelineWeek: View {
         hourLabels(height: geometry.size.height)
           .frame(width: hourLabelWidth)
 
-        HStack(spacing: 0) {
+        HStack(spacing: 10) {
           ForEach(logic.weekDays, id: \.self) { day in
             dayColumn(for: day, height: geometry.size.height)
           }
         }
-        .frame(width: dayColumnWidth * 7)
       }
+      .padding()
       .background(
         RoundedRectangle(cornerRadius: 10)
           .fill(Style.Colors.accent.opacity(0.1))
@@ -98,8 +94,7 @@ struct TimelineWeek: View {
 
   private func hourLabels(height: CGFloat) -> some View {
     VStack(spacing: 0) {
-      Text("Hour").font(.caption).frame(height: 20)
-      ForEach(displayedHours.dropLast(), id: \.self) { hour in
+      ForEach(displayedHours, id: \.self) { hour in
         Text("\(hour):00")
           .font(.caption)
           .frame(
@@ -115,13 +110,16 @@ struct TimelineWeek: View {
         .font(.caption)
         .frame(height: 20)
       ZStack(alignment: .top) {
+
         VStack(spacing: 0) {
-          ForEach(displayedHours.dropLast(), id: \.self) { _ in
-            Divider()
+          ForEach(displayedHours, id: \.self) { _ in
+            Divider().opacity(0.5)
             Spacer()
           }
         }
+
         ForEach(logic.mergeAdjacentSegments(for: day), id: \.0) {
+
           startSegment, endSegment in
           let startY = logic.yPositionForSegment(
             startSegment, height: height - 20)
@@ -131,12 +129,12 @@ struct TimelineWeek: View {
 
           RoundedRectangle(cornerRadius: 5)
             .fill(logic.colorForSegment(startSegment, day: day))
-            .frame(width: dayColumnWidth - 2, height: barHeight)
-            .position(x: (dayColumnWidth - 2) / 2, y: startY + barHeight / 2)
+            .frame(height: barHeight)
+            .offset(y: startY + barHeight / 2)
+
         }
       }
       .frame(height: height - 20)
     }
-    .frame(width: dayColumnWidth)
   }
 }

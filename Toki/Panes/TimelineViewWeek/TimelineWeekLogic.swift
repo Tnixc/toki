@@ -4,7 +4,7 @@ class TimelineWeekLogic: ObservableObject {
   @Published var weekDays: [Date] = []
   @Published var activities: [Date: [ActivityEntry]] = [:]
 
-  let segmentCount: Int = 144
+  let segmentCountPerDay: Int = 6 * 24
   private let calendar = Calendar.current
   private let day = Day()
 
@@ -78,7 +78,7 @@ class TimelineWeekLogic: ObservableObject {
     var mergedSegments: [(Int, Int)] = []
     var currentStart: Int?
 
-    for segment in 0..<segmentCount {
+    for segment in 0..<segmentCountPerDay {
       if isSegmentActive(segment, for: day) {
         if currentStart == nil {
           currentStart = segment
@@ -92,7 +92,7 @@ class TimelineWeekLogic: ObservableObject {
     }
 
     if let start = currentStart {
-      mergedSegments.append((start, segmentCount - 1))
+      mergedSegments.append((start, segmentCountPerDay - 1))
     }
 
     return mergedSegments
@@ -113,7 +113,7 @@ class TimelineWeekLogic: ObservableObject {
   }
 
   func yPositionForSegment(_ segment: Int, height: CGFloat) -> CGFloat {
-    CGFloat(segment) / CGFloat(segmentCount) * height
+    CGFloat(segment) / CGFloat(segmentCountPerDay) * height
   }
 
   func colorForSegment(_ segment: Int, day: Date) -> Color {
