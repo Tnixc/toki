@@ -5,9 +5,26 @@ struct AppearanceSettingsTab: View {
     .system
   @Environment(\.colorScheme) var colorScheme
 
+  @State private var showAppColors: Bool
+
+  init() {
+    let defaults = UserDefaults.standard
+    _showAppColors = State(initialValue: defaults.bool(forKey: "showAppColors"))
+  }
+
   var body: some View {
     VStack(alignment: .leading, spacing: Style.Layout.padding) {
       Text("Appearance").font(.title).padding()
+
+      SettingItem(
+        title: "App Colors",
+        description: "Show hashed app colors in the day timeline view.",
+        icon: "swatchpalette"
+      ) {
+        Toggle("", isOn: appColorBinding)
+          .toggleStyle(SwitchToggleStyle(tint: Style.Colors.accent))
+          .scaleEffect(0.8, anchor: .trailing)
+      }
 
       ZStack {
         SettingItemGroup {
@@ -38,6 +55,16 @@ struct AppearanceSettingsTab: View {
       }
       Spacer()
     }
+  }
+
+  private var appColorBinding: Binding<Bool> {
+    Binding(
+      get: { self.showAppColors },
+      set: {
+        self.showAppColors = $0
+        UserDefaults.standard.set($0, forKey: "showAppColors")
+      }
+    )
   }
 
   public func updateAppAppearance() {

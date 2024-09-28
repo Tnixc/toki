@@ -10,7 +10,6 @@ private enum LocalConstants {
 }
 
 struct GeneralSettingsTab: View {
-  @State private var showAppColors: Bool
   @State private var endOfDayTime: Date
   @State private var firstDayOfWeek: Int
   @State private var launchAtLogin: Bool
@@ -29,7 +28,6 @@ struct GeneralSettingsTab: View {
 
   init() {
     let defaults = UserDefaults.standard
-    _showAppColors = State(initialValue: defaults.bool(forKey: "showAppColors"))
     _launchAtLogin = State(initialValue: defaults.bool(forKey: "launchAtLogin"))
     _showTimeUnderMinute = State(
       initialValue: defaults.bool(
@@ -59,16 +57,6 @@ struct GeneralSettingsTab: View {
   var body: some View {
     VStack(alignment: .leading, spacing: Style.Layout.padding) {
       Text("General").font(.title).padding()
-
-      SettingItem(
-        title: "App Colors",
-        description: "Show hashed app colors in the day timeline view.",
-        icon: "swatchpalette"
-      ) {
-        Toggle("", isOn: appColorBinding)
-          .toggleStyle(SwitchToggleStyle(tint: Style.Colors.accent))
-          .scaleEffect(0.8, anchor: .trailing)
-      }
 
       ZStack {
         SettingItemGroup {
@@ -161,16 +149,6 @@ struct GeneralSettingsTab: View {
         }
       }
     }
-  }
-
-  private var appColorBinding: Binding<Bool> {
-    Binding(
-      get: { self.showAppColors },
-      set: {
-        self.showAppColors = $0
-        UserDefaults.standard.set($0, forKey: "showAppColors")
-      }
-    )
   }
 
   private var endOfDayBinding: Binding<Date> {

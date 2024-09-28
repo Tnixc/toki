@@ -35,16 +35,6 @@ struct TimelineDay: View {
     }
   }
 
-  private var loadingView: some View {
-    VStack {
-      Text("Loading data...")
-        .font(.caption)
-        .foregroundColor(.secondary)
-    }
-    .padding()
-    .frame(maxWidth: .infinity)
-  }
-
   // MARK: - Header Section
   private var headerView: some View {
     return HStack {
@@ -82,19 +72,20 @@ struct TimelineDay: View {
         hourLabelsView(width: timelineWidth)
         ZStack(alignment: .topLeading) {
           if logic.isLoading {
-            loadingView(
-              width: timelineWidth, height: Constants.TimelineDay.timelineHeight
-            )
+            if showLoadingText {
+              loadingView(
+                width: timelineWidth,
+                height: Constants.TimelineDay.timelineHeight
+              ).transition(.blurReplace)
+            }
           } else {
             timelineView(width: timelineWidth)
               .transition(.blurReplace)
           }
           hoverInformationView(width: timelineWidth)
-            .zIndex(99)
         }
-        .animation(.spring, value: logic.isLoading)
+        .animation(.snappy(duration: 0.2), value: logic.isLoading)
       }
-      .zIndex(99)
     }
     .padding(.horizontal, Style.Layout.padding)
     .zIndex(99)
@@ -265,7 +256,7 @@ struct TimelineDay: View {
           RoundedRectangle(cornerRadius: Style.Layout.cornerRadius / 2)
             .stroke(
               Color.secondary.opacity(0.1),
-              lineWidth: Style.Layout.borderWidth * 3
+              lineWidth: Style.Layout.borderWidth
             )
             .padding(.vertical, Constants.TimelineDay.hoverLineExtension / 2)
         )

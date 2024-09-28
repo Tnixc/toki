@@ -190,10 +190,20 @@ class TimelineDayLogic: ObservableObject {
     }
   }
 
+  func calculateActivityRatio(
+    appUsages: [AppUsage], segmentDuration: TimeInterval
+  ) -> Double {
+    let totalDuration = appUsages.reduce(0) { $0 + $1.duration }
+    let ratio = totalDuration / segmentDuration
+    return min(max(ratio, 0.1), 1)
+  }
+
   func colorForSegment(_ segment: Int, apps: [AppUsage]) -> Color {
+    let opacity = calculateActivityRatio(
+      appUsages: apps, segmentDuration: TimeInterval(segmentDuration * 60))
     if useColors {
       if let dominantApp = apps.max(by: { $0.duration < $1.duration })?.appName {
-        return colorForApp(dominantApp)
+        return colorForApp(dominantApp).opacity(opacity)
       }
     }
     return Style.Colors.accent.opacity(0.8)
@@ -312,6 +322,7 @@ class TimelineDayLogic: ObservableObject {
   func formatDuration(_ duration: TimeInterval) -> String {
     return TimelineUtils.formatDuration(duration) ?? ""
   }
+
 }
 
 struct SegmentInfo {
