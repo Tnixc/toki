@@ -1,6 +1,12 @@
 // styles.swift
 import SwiftUI
 
+func colorForApp(_ appName: String) -> Color {
+  let hash = appName.unicodeScalars.reduce(0) { $0 + $1.value }
+  let index = Int(hash) % Int(colorSet.count)
+  return colorSet[Int(index)]
+}
+
 enum Style {
   enum Colors {
     static let accent: Color = Color.init(hex: "#6EA3FE")

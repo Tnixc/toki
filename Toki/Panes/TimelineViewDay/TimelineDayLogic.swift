@@ -296,12 +296,6 @@ class TimelineDayLogic: ObservableObject {
     return width / CGFloat(labels.count - 1)
   }
 
-  func colorForApp(_ appName: String) -> Color {
-    let hash = appName.unicodeScalars.reduce(0) { $0 + $1.value }
-    let index = Int(hash) % Int(colorSet.count)
-    return colorSet[Int(index)]
-  }
-
   func calculateDayStats() {
     let dayStart = selectedDayStart
     let nextDayStart = calendar.date(byAdding: .day, value: 1, to: dayStart)!

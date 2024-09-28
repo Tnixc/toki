@@ -158,7 +158,7 @@ struct TimelineDay: View {
           ForEach(logic.appsForSegment(segment), id: \.appName) { usage in
             HStack(spacing: Style.Layout.paddingSM) {
               Circle()
-                .fill(logic.colorForApp(usage.appName))
+                .fill(colorForApp(usage.appName))
                 .frame(
                   width: circleSize,
                   height: circleSize)
@@ -478,7 +478,7 @@ struct TimelineDay: View {
             ForEach(logic.mostUsedApps, id: \.appName) { appUsage in
               HStack {
                 Circle()
-                  .fill(logic.colorForApp(appUsage.appName))
+                  .fill(colorForApp(appUsage.appName))
                   .frame(
                     width: circleSize,
                     height: circleSize)

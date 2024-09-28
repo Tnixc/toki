@@ -12,10 +12,12 @@ class TimelineWeekLogic: ObservableObject {
   @Published var averageActiveTime: TimeInterval = 0
 
   let segmentCount = Constants.segmentCount
-
   private let calendar = Calendar.current
   private let day = Day()
   private var cancellables = Set<AnyCancellable>()
+  private let queue = DispatchQueue(
+    label: "com.toki.weekDataLoading", qos: .userInitiated,
+    attributes: .concurrent)
 
   @Published private(set) var weekStart: Date
 
@@ -50,22 +52,28 @@ class TimelineWeekLogic: ObservableObject {
 
   func loadData() {
     isLoading = true
+    activities.removeAll()
 
-    Future<Void, Never> { promise in
-      DispatchQueue.global(qos: .userInitiated).async {
-        for day in self.weekDays {
-          self.activities[day] = self.day.getActivityForDay(date: day)
+    let group = DispatchGroup()
+
+    for day in weekDays {
+      group.enter()
+      queue.async { [weak self] in
+        guard let self = self else { return }
+        let dayActivities = self.day.getActivityForDay(date: day)
+        DispatchQueue.main.async {
+          self.activities[day] = dayActivities
+          group.leave()
         }
-        self.calculateWeekStats()
-        promise(.success(()))
       }
     }
-    .receive(on: DispatchQueue.main)
-    .sink { [weak self] _ in
-      self?.isLoading = false
-      self?.objectWillChange.send()
+
+    group.notify(queue: .main) { [weak self] in
+      guard let self = self else { return }
+      self.calculateWeekStats()
+      self.isLoading = false
+      self.objectWillChange.send()
     }
-    .store(in: &cancellables)
   }
 
   func changeWeek(by value: Int) {
@@ -95,13 +103,13 @@ class TimelineWeekLogic: ObservableObject {
   }
 
   func mergeAdjacentSegments(for day: Date) -> [(Int, Int)] {
-    guard activities[day] != nil else { return [] }
+    guard let dayActivities = activities[day] else { return [] }
 
     var mergedSegments: [(Int, Int)] = []
     var currentStart: Int?
 
     for segment in 0..<segmentCount {
-      if isSegmentActive(segment, for: day) {
+      if isSegmentActive(segment, for: day, activities: dayActivities) {
         if currentStart == nil {
           currentStart = segment
         }
@@ -120,16 +128,17 @@ class TimelineWeekLogic: ObservableObject {
     return mergedSegments
   }
 
-  func isSegmentActive(_ segment: Int, for day: Date) -> Bool {
-    guard let dayActivities = activities[day] else { return false }
-
+  func isSegmentActive(
+    _ segment: Int, for day: Date, activities: [ActivityEntry]
+  ) -> Bool {
     let segmentStart = calendar.date(
-      byAdding: .minute, value: segment * 10, to: calendar.startOfDay(for: day))!
+      byAdding: .minute, value: segment * Constants.segmentDuration,
+      to: calendar.startOfDay(for: day))!
     let segmentEnd = calendar.date(
-      byAdding: .minute, value: (segment + 1) * 10,
+      byAdding: .minute, value: (segment + 1) * Constants.segmentDuration,
       to: calendar.startOfDay(for: day))!
 
-    return dayActivities.contains { activity in
+    return activities.contains { activity in
       activity.timestamp >= segmentStart && activity.timestamp < segmentEnd
     }
   }
@@ -147,16 +156,18 @@ class TimelineWeekLogic: ObservableObject {
     guard let dayActivities = activities[day] else { return 0 }
 
     let segmentStart = calendar.date(
-      byAdding: .minute, value: segment * 10, to: calendar.startOfDay(for: day))!
+      byAdding: .minute, value: segment * Constants.segmentDuration,
+      to: calendar.startOfDay(for: day))!
     let segmentEnd = calendar.date(
-      byAdding: .minute, value: (segment + 1) * 10,
+      byAdding: .minute, value: (segment + 1) * Constants.segmentDuration,
       to: calendar.startOfDay(for: day))!
 
     let activitiesInSegment = dayActivities.filter { activity in
       activity.timestamp >= segmentStart && activity.timestamp < segmentEnd
     }
 
-    return Double(activitiesInSegment.count) / Double(6)  // 6 is the max number of activities in a 10-minute segment
+    return Double(activitiesInSegment.count)
+      / Double(Constants.segmentDuration / Watcher.INTERVAL)
   }
 
   private func calculateWeekStats() {
@@ -181,33 +192,28 @@ class TimelineWeekLogic: ObservableObject {
       }
     }
 
-    DispatchQueue.main.async { [weak self] in
-      guard let self = self else { return }
+    averageActiveTime = totalActiveTime / Double(weekDays.count)
+    earliestClockIn = clockIns.min()
+    latestClockOut = clockOuts.max()
 
-      self.averageActiveTime = totalActiveTime / Double(self.weekDays.count)
-
-      self.earliestClockIn = clockIns.min()
-      self.latestClockOut = clockOuts.max()
-
-      if !clockIns.isEmpty {
-        let totalClockInSeconds = clockIns.reduce(0) {
-          $0 + $1.timeIntervalSince1970
-        }
-        self.averageClockIn = Date(
-          timeIntervalSince1970: totalClockInSeconds / Double(clockIns.count))
-      } else {
-        self.averageClockIn = nil
+    if !clockIns.isEmpty {
+      let totalClockInSeconds = clockIns.reduce(0) {
+        $0 + $1.timeIntervalSince1970
       }
+      averageClockIn = Date(
+        timeIntervalSince1970: totalClockInSeconds / Double(clockIns.count))
+    } else {
+      averageClockIn = nil
+    }
 
-      if !clockOuts.isEmpty {
-        let totalClockOutSeconds = clockOuts.reduce(0) {
-          $0 + $1.timeIntervalSince1970
-        }
-        self.averageClockOut = Date(
-          timeIntervalSince1970: totalClockOutSeconds / Double(clockOuts.count))
-      } else {
-        self.averageClockOut = nil
+    if !clockOuts.isEmpty {
+      let totalClockOutSeconds = clockOuts.reduce(0) {
+        $0 + $1.timeIntervalSince1970
       }
+      averageClockOut = Date(
+        timeIntervalSince1970: totalClockOutSeconds / Double(clockOuts.count))
+    } else {
+      averageClockOut = nil
     }
   }
 }
