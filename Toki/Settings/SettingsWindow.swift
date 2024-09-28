@@ -123,9 +123,3 @@ struct SettingsTabButton: View {
     }
   }
 }
-
-struct SettingsWindow_Previews: PreviewProvider {
-  static var previews: some View {
-    SettingsWindow()
-  }
-}

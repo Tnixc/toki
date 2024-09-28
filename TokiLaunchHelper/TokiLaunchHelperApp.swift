@@ -3,9 +3,7 @@ import SwiftUI
 @main
 struct TokiLauncherApp: App {
   var body: some Scene {
-    WindowGroup {
-      ContentView()
-    }
+    WindowGroup {}
   }
 
   init() {
