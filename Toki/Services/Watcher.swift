@@ -6,6 +6,28 @@ typealias Expression = SQLite.Expression
 class Watcher {
   static let INTERVAL = 6
   static let IDLE_TIME = 60
+  static let dbURL: URL = {
+    let fileManager = FileManager.default
+    let appSupportURL = fileManager.urls(
+      for: .applicationSupportDirectory, in: .userDomainMask
+    ).first!
+    let appDirectoryURL = appSupportURL.appendingPathComponent(
+      "Toki", isDirectory: true)
+
+    // Create the app directory if it doesn't exist
+    if !fileManager.fileExists(atPath: appDirectoryURL.path) {
+      do {
+        try fileManager.createDirectory(
+          at: appDirectoryURL, withIntermediateDirectories: true,
+          attributes: nil)
+      } catch {
+        print("Error creating app directory: \(error)")
+      }
+    }
+
+    return appDirectoryURL.appendingPathComponent("activities.sqlite3")
+  }()
+
   private var timer: Timer?
   private let db: Connection
   private let activities: Table
@@ -14,11 +36,7 @@ class Watcher {
 
   init() {
     // Initialize SQLite database
-    let path = NSSearchPathForDirectoriesInDomains(
-      .documentDirectory, .userDomainMask, true
-    ).first!
-
-    db = try! Connection("\(path)/activities.sqlite3")
+    db = try! Connection(Watcher.dbURL.path)
 
     activities = Table("activities")
     try! db.run(
@@ -40,9 +58,9 @@ class Watcher {
     timer?.invalidate()
     timer = nil
   }
+
   private func checkActivity() {
     //clock out
-
     Notifier.shared.checkClockOutTime()
 
     // watcher

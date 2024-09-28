@@ -128,11 +128,6 @@ struct ExportSettingsTab: View {
   }
 
   private func showDatabaseInFinder() {
-    let path = NSSearchPathForDirectoriesInDomains(
-      .documentDirectory, .userDomainMask, true
-    ).first!
-    let dbURL = URL(fileURLWithPath: path).appendingPathComponent(
-      Constants.dbFileName)
-    NSWorkspace.shared.selectFile(dbURL.path, inFileViewerRootedAtPath: path)
+    NSWorkspace.shared.selectFile(Watcher.dbURL.path, inFileViewerRootedAtPath: Watcher.dbURL.path)
   }
 }

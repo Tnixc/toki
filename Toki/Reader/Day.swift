@@ -25,12 +25,35 @@ class Day {
   private let appName = Expression<String>("app_name")
 
   init() {
-    let path = NSSearchPathForDirectoriesInDomains(
-      .documentDirectory, .userDomainMask, true
+    // Initialize SQLite database
+    let fileManager = FileManager.default
+    let appSupportURL = fileManager.urls(
+      for: .applicationSupportDirectory, in: .userDomainMask
     ).first!
-    db = try! Connection("\(path)/activities.sqlite3")
+    let appDirectoryURL = appSupportURL.appendingPathComponent(
+      Bundle.main.name, isDirectory: true)
+
+    // Create the app directory if it doesn't exist
+    if !fileManager.fileExists(atPath: appDirectoryURL.path) {
+      do {
+        try fileManager.createDirectory(
+          at: appDirectoryURL, withIntermediateDirectories: true,
+          attributes: nil)
+      } catch {
+        print("Error creating app directory: \(error)")
+      }
+    }
+
+    let dbURL = appDirectoryURL.appendingPathComponent("activities.sqlite3")
+
+    db = try! Connection(dbURL.path)
 
     activities = Table("activities")
+    try! db.run(
+      activities.create(ifNotExists: true) { t in
+        t.column(timestamp)
+        t.column(appName)
+      })
   }
 
   func getActivityForDay(date: Date) -> [ActivityEntry] {

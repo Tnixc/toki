@@ -126,10 +126,7 @@ class DatabaseManager {
   private let activities: Table
 
   init() {
-    let path = NSSearchPathForDirectoriesInDomains(
-      .documentDirectory, .userDomainMask, true
-    ).first!
-    db = try! Connection("\(path)/\(Constants.dbFileName)")
+    db = try! Connection(Watcher.dbURL.path)
     activities = Table("activities")
   }
 

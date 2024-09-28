@@ -370,7 +370,7 @@ struct TimelineDay: View {
     -> some View
   {
     UIButton(
-      action: action, label: "", icon: iconName,
+      action: action, icon: iconName,
       width: Style.Button.height, height: Style.Button.height)
   }
 

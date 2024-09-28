@@ -4,7 +4,7 @@ import SwiftUI
 
 struct UIButton: View {
   let action: () -> Void
-  let label: String
+  let label: String?
   let icon: String?
   let width: CGFloat?
   let height: CGFloat?
@@ -12,7 +12,7 @@ struct UIButton: View {
 
   init(
     action: @escaping () -> Void,
-    label: String,
+    label: String? = nil,
     icon: String? = nil,
     width: CGFloat? = nil,
     height: CGFloat? = nil,
@@ -36,8 +36,8 @@ struct UIButton: View {
           Image(systemName: icon)
             .font(.system(size: Style.Icon.sizeSM))
         }
-        if !label.isEmpty {
-          Text(label)
+        if label != nil {
+          Text(label ?? "")
         }
         if align == .leading {
           Spacer()
@@ -66,7 +66,7 @@ struct UIButton: View {
 
 struct UIButtonPlain: View {
   let action: () -> Void
-  let label: String
+  let label: String?
   let icon: String?
   let width: CGFloat?
   let height: CGFloat?
@@ -74,7 +74,7 @@ struct UIButtonPlain: View {
 
   init(
     action: @escaping () -> Void,
-    label: String,
+    label: String? = nil,
     icon: String? = nil,
     width: CGFloat? = nil,
     height: CGFloat? = nil,
@@ -98,8 +98,8 @@ struct UIButtonPlain: View {
           Image(systemName: icon)
             .font(.system(size: Style.Icon.sizeSM))
         }
-        if !label.isEmpty {
-          Text(label)
+        if label != nil {
+          Text(label ?? "")
         }
         if align == .leading {
           Spacer()

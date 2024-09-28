@@ -1,12 +1,21 @@
+import Combine
 import SwiftUI
 
 class TimelineWeekLogic: ObservableObject {
   @Published var weekDays: [Date] = []
   @Published var activities: [Date: [ActivityEntry]] = [:]
+  @Published var isLoading: Bool = false
+  @Published var latestClockOut: Date?
+  @Published var earliestClockIn: Date?
+  @Published var averageClockIn: Date?
+  @Published var averageClockOut: Date?
+  @Published var averageActiveTime: TimeInterval = 0
 
-  let segmentCountPerDay: Int = 6 * 24
+  let segmentCountPerDay: Int = 6 * 24  // 6 * 10 min segments => 60 mins => 60mins * 24 hours
+
   private let calendar = Calendar.current
   private let day = Day()
+  private var cancellables = Set<AnyCancellable>()
 
   @Published private(set) var weekStart: Date
 
@@ -40,10 +49,23 @@ class TimelineWeekLogic: ObservableObject {
   }
 
   func loadData() {
-    for day in weekDays {
-      activities[day] = self.day.getActivityForDay(date: day)
+    isLoading = true
+
+    Future<Void, Never> { promise in
+      DispatchQueue.global(qos: .userInitiated).async {
+        for day in self.weekDays {
+          self.activities[day] = self.day.getActivityForDay(date: day)
+        }
+        self.calculateWeekStats()
+        promise(.success(()))
+      }
     }
-    objectWillChange.send()
+    .receive(on: DispatchQueue.main)
+    .sink { [weak self] _ in
+      self?.isLoading = false
+      self?.objectWillChange.send()
+    }
+    .store(in: &cancellables)
   }
 
   func changeWeek(by value: Int) {
@@ -117,6 +139,75 @@ class TimelineWeekLogic: ObservableObject {
   }
 
   func colorForSegment(_ segment: Int, day: Date) -> Color {
-    Style.Colors.accent.opacity(0.8)
+    let opacity = opacityForSegment(segment, day: day)
+    return Style.Colors.accent.opacity(opacity)
+  }
+
+  func opacityForSegment(_ segment: Int, day: Date) -> Double {
+    guard let dayActivities = activities[day] else { return 0 }
+
+    let segmentStart = calendar.date(
+      byAdding: .minute, value: segment * 10, to: calendar.startOfDay(for: day))!
+    let segmentEnd = calendar.date(
+      byAdding: .minute, value: (segment + 1) * 10,
+      to: calendar.startOfDay(for: day))!
+
+    let activitiesInSegment = dayActivities.filter { activity in
+      activity.timestamp >= segmentStart && activity.timestamp < segmentEnd
+    }
+
+    return Double(activitiesInSegment.count) / Double(6)  // 6 is the max number of activities in a 10-minute segment
+  }
+
+  private func calculateWeekStats() {
+    var totalActiveTime: TimeInterval = 0
+    var clockIns: [Date] = []
+    var clockOuts: [Date] = []
+
+    for day in weekDays {
+      if let activities = activities[day] {
+        let (clockIn, clockOut, activeTime) = TimelineUtils.calculateDayStats(
+          activities: activities)
+
+        if let clockIn = clockIn {
+          clockIns.append(clockIn)
+        }
+
+        if let clockOut = clockOut {
+          clockOuts.append(clockOut)
+        }
+
+        totalActiveTime += activeTime
+      }
+    }
+
+    DispatchQueue.main.async { [weak self] in
+      guard let self = self else { return }
+
+      self.averageActiveTime = totalActiveTime / Double(self.weekDays.count)
+
+      self.earliestClockIn = clockIns.min()
+      self.latestClockOut = clockOuts.max()
+
+      if !clockIns.isEmpty {
+        let totalClockInSeconds = clockIns.reduce(0) {
+          $0 + $1.timeIntervalSince1970
+        }
+        self.averageClockIn = Date(
+          timeIntervalSince1970: totalClockInSeconds / Double(clockIns.count))
+      } else {
+        self.averageClockIn = nil
+      }
+
+      if !clockOuts.isEmpty {
+        let totalClockOutSeconds = clockOuts.reduce(0) {
+          $0 + $1.timeIntervalSince1970
+        }
+        self.averageClockOut = Date(
+          timeIntervalSince1970: totalClockOutSeconds / Double(clockOuts.count))
+      } else {
+        self.averageClockOut = nil
+      }
+    }
   }
 }

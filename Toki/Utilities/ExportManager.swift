@@ -10,10 +10,7 @@ class ExportManager {
   private let appName = Expression<String>("app_name")
 
   private init() {
-    let path = NSSearchPathForDirectoriesInDomains(
-      .documentDirectory, .userDomainMask, true
-    ).first!
-    db = try! Connection("\(path)/activities.sqlite3")
+    db = try! Connection(Watcher.dbURL.path)
     activities = Table("activities")
   }
 
