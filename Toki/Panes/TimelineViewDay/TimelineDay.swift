@@ -37,18 +37,27 @@ struct TimelineDay: View {
 
   // MARK: - Header Section
   private var headerView: some View {
-    HStack {
-      VStackLayout(alignment: .leading) {
-        let dayName = formatDate(components: logic.selectedDate)
-        Text("\(dayName)'s Timeline")
-          .font(.largeTitle)
-          .contentTransition(.numericText()).animation(
-            .bouncy, value: logic.selectedDate)
-        let longDayName = formatDateLong(components: logic.selectedDate)
-        Text("\(longDayName)").font(.title3).foregroundStyle(.secondary)
-          .padding(.leading, Style.Layout.paddingSM)
-          .contentTransition(.numericText()).animation(
-            .bouncy, value: logic.selectedDate)
+    return HStack {
+      VStack(alignment: .leading) {
+        HStack(spacing: 1) {
+          Text(getDay(from: logic.selectedDate))
+            .font(.system(size: 36, weight: .medium, design: .default))
+            .contentTransition(.numericText()).animation(
+              .bouncy, value: logic.selectedDate)
+          VStack(alignment: .leading, spacing: 1) {
+            Text(getMonth(from: logic.selectedDate))
+              .font(.title3)
+              .padding(.leading, Style.Layout.paddingSM)
+              .contentTransition(.numericText()).animation(
+                .bouncy, value: logic.selectedDate)
+            Text(getWeekday(from: logic.selectedDate))
+              .font(.title3)
+              .opacity(0.5)
+              .padding(.leading, Style.Layout.paddingSM)
+              .contentTransition(.numericText()).animation(
+                .bouncy, value: logic.selectedDate)
+          }
+        }
       }
       Spacer()
       settingsButton.offset(y: -Style.Layout.paddingSM)

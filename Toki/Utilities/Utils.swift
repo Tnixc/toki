@@ -10,6 +10,27 @@ func triggerHapticFeedback() {
     .levelChange, performanceTime: .default)
 }
 
+func getDay(from dateComponents: DateComponents) -> String {
+  guard let date = Calendar.current.date(from: dateComponents) else {
+    return "Invalid Date"
+  }
+  return date.formatted(.dateTime.day(.twoDigits))
+}
+
+func getMonth(from dateComponents: DateComponents) -> String {
+  guard let date = Calendar.current.date(from: dateComponents) else {
+    return "Invalid Date"
+  }
+  return date.formatted(.dateTime.month(.abbreviated))
+}
+
+func getWeekday(from dateComponents: DateComponents) -> String {
+  guard let date = Calendar.current.date(from: dateComponents) else {
+    return "Invalid Date"
+  }
+  return date.formatted(.dateTime.weekday(.abbreviated))
+}
+
 func formatDate(components: DateComponents) -> String {
   guard let date = Calendar.current.date(from: components) else {
     return "Invalid date"
