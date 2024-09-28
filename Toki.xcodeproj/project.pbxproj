@@ -117,10 +117,10 @@
 		4180AEA12839753E0054FEA9 = {
 			isa = PBXGroup;
 			children = (
+				4180AEAB2839753E0054FEA9 /* Products */,
 				396338F82CA310A600365897 /* README.md */,
 				4180AEAC2839753E0054FEA9 /* Toki */,
 				393609182CA24038007FCA0F /* TokiLaunchHelper */,
-				4180AEAB2839753E0054FEA9 /* Products */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -138,17 +138,18 @@
 		4180AEAC2839753E0054FEA9 /* Toki */ = {
 			isa = PBXGroup;
 			children = (
+				4180AEB12839753F0054FEA9 /* Assets.xcassets */,
+				398A91552C9F371B00DF3012 /* Components */,
+				4180AEBC283975670054FEA9 /* MainScene.swift */,
+				4180AEC3283979530054FEA9 /* MainView.swift */,
+				398DCB7A2C9A64DC00BB9310 /* Menu Bar */,
+				4180AECA28397C3A0054FEA9 /* Panes */,
 				39B90BA22C9B2B0A0002823D /* Reader */,
 				39B90B9C2C9B1E1C0002823D /* Services */,
-				398DCB7A2C9A64DC00BB9310 /* Menu Bar */,
-				4180AEEC2839A0560054FEA9 /* Utilities */,
 				4180AEBE283976620054FEA9 /* Settings */,
-				4180AECA28397C3A0054FEA9 /* Panes */,
-				4180AEC3283979530054FEA9 /* MainView.swift */,
-				4180AEBC283975670054FEA9 /* MainScene.swift */,
-				4180AEAD2839753E0054FEA9 /* Toki.swift */,
-				4180AEB12839753F0054FEA9 /* Assets.xcassets */,
 				4180AEB62839753F0054FEA9 /* Toki.entitlements */,
+				4180AEAD2839753E0054FEA9 /* Toki.swift */,
+				4180AEEC2839A0560054FEA9 /* Utilities */,
 			);
 			path = Toki;
 			sourceTree = "<group>";
@@ -183,7 +184,6 @@
 				394E3A7F2CA0706A00DFC1AD /* ExportManager.swift */,
 				3958B61C2C9F5E17005FC95A /* TimelineUtils.swift */,
 				39B14DB12C9CE173003A457D /* Utils.swift */,
-				398A91552C9F371B00DF3012 /* Components */,
 				4180AEED2839A0660054FEA9 /* BundleExtensions.swift */,
 			);
 			path = Utilities;
