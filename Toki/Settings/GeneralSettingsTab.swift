@@ -16,7 +16,12 @@ struct GeneralSettingsTab: View {
   @State private var launchAtLogin: Bool
   @State private var showTimeUnderMinute: Bool
 
-  @State private var activeDropdown: String?
+  enum ActiveDropdown: Hashable {
+    case endOfDay
+    case firstDayOfWeek
+  }
+
+  @State private var activeDropdown: ActiveDropdown?
 
   private let timeOptions: [Date]
   private let timeFormatter: DateFormatter
@@ -86,14 +91,14 @@ struct GeneralSettingsTab: View {
               optionToString: { self.timeFormatter.string(from: $0) },
               width: 150,
               height: Style.Button.heightSM,
-              onClick: { self.activeDropdown = "endOfDay" }
+              onClick: { self.activeDropdown = .endOfDay }
             )
             .padding(Style.Layout.paddingSM + 2)
             .allowsHitTesting(true)
           }
         )
       }
-      .zIndex(activeDropdown == "endOfDay" ? 99 : 0)
+      .zIndex(self.activeDropdown == .endOfDay ? 99 : 0)
 
       ZStack {
         SettingItemGroup {
@@ -116,14 +121,14 @@ struct GeneralSettingsTab: View {
               optionToString: { Calendar.current.weekdaySymbols[$0 - 1] },
               width: 150,
               height: Style.Button.heightSM,
-              onClick: { self.activeDropdown = "firstDayOfWeek" }
+              onClick: { self.activeDropdown = .firstDayOfWeek }
             )
             .padding(Style.Layout.paddingSM + 2)
             .allowsHitTesting(true)
           }
         )
       }
-      .zIndex(activeDropdown == "firstDayOfWeek" ? 99 : 0)
+      .zIndex(activeDropdown == .firstDayOfWeek ? 99 : 0)
 
       SettingItem(
         title: "Launch at Login",
