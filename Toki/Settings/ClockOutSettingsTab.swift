@@ -53,7 +53,7 @@ struct ClockOutSettingsTab: View {
                 icon: "bell.badge"
               ) {
                 Toggle("", isOn: $clockOutEnabled)
-                  .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+                  .toggleStyle(SwitchToggleStyle(tint: Style.Colors.accent))
                   .scaleEffect(0.8, anchor: .topTrailing)
                   .onChange(of: clockOutEnabled) {
                     defaults.set(clockOutEnabled, forKey: "clockOutEnabled")
@@ -89,7 +89,7 @@ struct ClockOutSettingsTab: View {
                 icon: "circle.rectangle.filled.pattern.diagonalline"
               ) {
                 Toggle("", isOn: $clockOutUseOverlay)
-                  .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+                  .toggleStyle(SwitchToggleStyle(tint: Style.Colors.accent))
                   .scaleEffect(0.8, anchor: .trailing)
                   .onChange(of: clockOutUseOverlay) {
                     defaults.set(
@@ -143,7 +143,7 @@ struct ClockOutSettingsTab: View {
               ) {
                 Toggle("", isOn: $clockOutReminderEnabled)
                   .disabled(!clockOutEnabled)
-                  .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+                  .toggleStyle(SwitchToggleStyle(tint: Style.Colors.accent))
                   .scaleEffect(0.8, anchor: .topTrailing)
                   .onChange(of: clockOutReminderEnabled) {
                     defaults.set(
@@ -217,7 +217,7 @@ struct DayToggleButton: View {
         .font(.caption)
         .frame(width: 35, height: Style.Button.heightXS)
         .background(
-          isSelected ? AnyView(Color.accentColor) : AnyView(Rectangle().fill(Style.Button.bg))
+          isSelected ? AnyView(Style.Colors.accent) : AnyView(Rectangle().fill(Style.Button.bg))
         )
         .overlay(
           RoundedRectangle(cornerRadius: Style.Layout.cornerRadius / 2)

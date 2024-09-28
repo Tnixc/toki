@@ -86,11 +86,11 @@ struct TimelineWeek: View {
       }
       .background(
         RoundedRectangle(cornerRadius: 10)
-          .fill(Color.accentColor.opacity(0.1))
+          .fill(Style.Colors.accent.opacity(0.1))
       )
       .overlay(
         RoundedRectangle(cornerRadius: 10)
-          .stroke(Color.accentColor.opacity(0.3), lineWidth: 1)
+          .stroke(Style.Colors.accent.opacity(0.3), lineWidth: 1)
       )
     }
     .frame(height: 500)

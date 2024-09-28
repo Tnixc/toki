@@ -117,6 +117,6 @@ class TimelineWeekLogic: ObservableObject {
   }
 
   func colorForSegment(_ segment: Int, day: Date) -> Color {
-    Color.accentColor.opacity(0.8)
+    Style.Colors.accent.opacity(0.8)
   }
 }

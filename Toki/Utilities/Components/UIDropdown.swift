@@ -80,7 +80,7 @@ struct UIDropdown<T: Hashable>: View {
     .background(Style.Button.bg)
     .overlay(
       RoundedRectangle(cornerRadius: Style.Layout.cornerRadius + 2)
-        .stroke(Color.primary.opacity(0.2), lineWidth: 2)
+        .stroke(Color.secondary.opacity(0.2), lineWidth: 2)
     )
     .clipShape(RoundedRectangle(cornerRadius: Style.Layout.cornerRadius + 2))
     .frame(width: width)
@@ -91,7 +91,7 @@ struct UIDropdown<T: Hashable>: View {
     .transition(.blurReplace)
     .zIndex(50)
     .frame(maxHeight: height).fixedSize(horizontal: true, vertical: true)
-    .shadow(color: Color.black.opacity(0.1), radius: 9)
+    .shadow(color: Color.black.opacity(0.1), radius: 20)
   }
 
   private func dropdownMenuItem(for option: T) -> some View {

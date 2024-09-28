@@ -121,13 +121,13 @@ struct DateCell: View {
         } else if calendar.isDate(date, inSameDayAs: selectedDate) {
           Color.white
         } else if calendar.isDateInToday(date) {
-          Color.accentColor
+          Style.Colors.accent
         } else if calendar.component(.month, from: date)
           == calendar.component(.month, from: currentMonth)
         { Color.primary } else { Color.secondary }
       let bg =
         if calendar.isDate(date, inSameDayAs: selectedDate) {
-          Color.accentColor
+          Style.Colors.accent
         } else {
           Color.clear
         }

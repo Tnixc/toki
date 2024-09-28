@@ -196,7 +196,7 @@ class TimelineDayLogic: ObservableObject {
         return colorForApp(dominantApp)
       }
     }
-    return Color.accentColor.opacity(0.8)
+    return Style.Colors.accent.opacity(0.8)
   }
 
   func appsForSegment(_ segment: Int) -> [AppUsage] {

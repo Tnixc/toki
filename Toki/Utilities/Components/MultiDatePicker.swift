@@ -178,7 +178,7 @@ struct MultiDateCell: View {
     for date: Date, isInRange: Bool, isStartDate: Bool, isEndDate: Bool
   ) -> Color {
     if isStartDate || isEndDate {
-      return .accentColor
+      return Style.Colors.accent
     } else {
       return .clear
     }
@@ -192,7 +192,7 @@ struct MultiDateCell: View {
     } else if isStartDate || isEndDate {
       return .white
     } else if isInRange {
-      return .accentColor
+      return Style.Colors.accent
     } else if calendar.component(.month, from: date)
       == calendar.component(.month, from: currentMonth)
     {

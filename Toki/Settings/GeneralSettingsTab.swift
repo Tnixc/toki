@@ -66,7 +66,7 @@ struct GeneralSettingsTab: View {
         icon: "swatchpalette"
       ) {
         Toggle("", isOn: appColorBinding)
-          .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+          .toggleStyle(SwitchToggleStyle(tint: Style.Colors.accent))
           .scaleEffect(0.8, anchor: .trailing)
       }
 
@@ -136,7 +136,7 @@ struct GeneralSettingsTab: View {
         icon: "power"
       ) {
         Toggle("", isOn: launchAtLoginBinding)
-          .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+          .toggleStyle(SwitchToggleStyle(tint: Style.Colors.accent))
           .scaleEffect(0.8, anchor: .trailing)
       }
 
@@ -147,7 +147,7 @@ struct GeneralSettingsTab: View {
         icon: "clock"
       ) {
         Toggle("", isOn: showTimeUnderMinuteBinding)
-          .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+          .toggleStyle(SwitchToggleStyle(tint: Style.Colors.accent))
           .scaleEffect(0.8, anchor: .trailing)
       }
 

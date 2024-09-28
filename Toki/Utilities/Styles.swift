@@ -2,7 +2,10 @@
 import SwiftUI
 
 enum Style {
-  // MARK: - Layout
+  enum Colors {
+    static let accent: Color = Color.init(hex: "#6EA3FE")
+  }
+
   enum Layout {
     static let cornerRadius: CGFloat = 10
     static let padding: CGFloat = 10
@@ -10,7 +13,6 @@ enum Style {
     static let borderWidth: CGFloat = 1
   }
 
-  // MARK: - Buttons
   enum Button {
     static let height: CGFloat = 40
     static let heightSM: CGFloat = 36
@@ -21,28 +23,23 @@ enum Style {
     static let border = Color.secondary.opacity(0.3)
   }
 
-  // MARK: - Icons
   enum Icon {
     static let size: CGFloat = 20
     static let sizeSM: CGFloat = 14
   }
 
-  // MARK: - Timeline
   enum Timeline {
-    static let bg = Color.accentColor.opacity(0.1)
-    static let border = Color.accentColor.opacity(0.3)
+    static let bg = Colors.accent.opacity(0.1)
+    static let border = Colors.accent.opacity(0.3)
   }
 
-  // MARK: - Most Used Apps
   enum Box {
     static let bg = Color.secondary.opacity(0.1)
     static let border = Color.secondary.opacity(0.2)
   }
 
-  // MARK: - Settings
   enum Settings {
     static let itembg = Color.secondary.opacity(0.1)
     static let itemBorder = Color.secondary.opacity(0.2)
   }
-
 }
