@@ -146,17 +146,13 @@ class DatabaseManager {
         formatter.timeStyle = .short
         info.earliestEntry = formatter.string(from: earliestTimestamp)
       }
+      let attributes = try FileManager.default.attributesOfItem(
+        atPath: Watcher.dbURL.path)
 
-      if let dbPath = db.description.components(
-        separatedBy: Constants.dbFileName
-      ).first {
-        let fileURL = URL(fileURLWithPath: dbPath + Constants.dbFileName)
-        let attributes = try FileManager.default.attributesOfItem(
-          atPath: fileURL.path)
-        let fileSize = attributes[.size] as! Int64
-        info.dbSize = ByteCountFormatter.string(
-          fromByteCount: fileSize, countStyle: .file)
-      }
+      let fileSize = attributes[.size] as! Int64
+      info.dbSize = ByteCountFormatter.string(
+        fromByteCount: fileSize, countStyle: .file)
+
     } catch {
       print("Error getting database info: \(error)")
     }

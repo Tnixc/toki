@@ -13,10 +13,10 @@ enum Constants {
   static let defaultClockOutHour = 18
   static let defaultClockOutMinute = 0
   static let defaultReminderInterval = 15
-  static let segmentCount = 144
-  static let segmentDuration = 10
   static let overlayDismissTime: TimeInterval = 5.0
-  static let dbFileName = "activities.sqlite3"
+
+  static let segmentCount = 144  // 6 segments per hour * 24 hours
+  static let segmentDuration = 10
 
   enum TimelineDay {
     static let timelineHeight: CGFloat = 95

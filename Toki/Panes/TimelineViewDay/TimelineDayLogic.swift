@@ -21,6 +21,8 @@ class TimelineDayLogic: ObservableObject {
   @Published var activeTime: TimeInterval = 0
   @Published var isLoading = false
 
+  let segmentCount = Constants.segmentCount
+
   private let queue = DispatchQueue(
     label: "com.toki.dataLoading", qos: .userInitiated)
 
@@ -31,7 +33,6 @@ class TimelineDayLogic: ObservableObject {
   // Constants
   let timelineHeight: CGFloat = 95
   let segmentDuration: Int = 10
-  let segmentCount: Int = 144
   let hoverLineExtension: CGFloat = 10
 
   private var cachedActivities: [ActivityEntry] = []
@@ -46,6 +47,7 @@ class TimelineDayLogic: ObservableObject {
 
   func loadData(for dateComponents: DateComponents) {
     isLoading = true
+
     cachedActivities.removeAll()
     segmentData.removeAll()
 

@@ -185,7 +185,7 @@ struct TimelineWeek: View {
           RoundedRectangle(cornerRadius: 5)
             .fill(logic.colorForSegment(startSegment, day: day))
             .frame(height: barHeight)
-            .offset(y: startY + barHeight / 2)
+            .offset(y: startY)
         }
       }
       .frame(height: height - 20)
