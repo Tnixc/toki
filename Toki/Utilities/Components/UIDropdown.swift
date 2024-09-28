@@ -120,7 +120,7 @@ struct UIDropdown<T: Hashable>: View {
     onClick?()
     guard isButtonEnabled else { return }
 
-    withAnimation(.smooth(duration: 0.15)) {
+    withAnimation(.snappy(duration: 0.15)) {
       isExpanded.toggle()
     }
 
