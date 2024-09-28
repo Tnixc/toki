@@ -70,15 +70,13 @@ struct TimelineDay: View {
         hourLabelsView(width: timelineWidth)
         ZStack(alignment: .topLeading) {
           if logic.isLoading {
-            if showLoadingText {
-              loadingView(
-                width: timelineWidth,
-                height: Constants.TimelineDay.timelineHeight
-              ).transition(.blurReplace)
-            }
+            loadingView(
+              width: timelineWidth,
+              height: Constants.TimelineDay.timelineHeight
+            ).transition(.blurReplace)
           } else {
             timelineView(width: timelineWidth)
-              .transition(.blurReplace)
+              .transition(.asymmetric(insertion: .opacity, removal: .identity))
           }
           hoverInformationView(width: timelineWidth)
         }

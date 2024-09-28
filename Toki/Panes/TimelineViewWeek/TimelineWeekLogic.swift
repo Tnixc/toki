@@ -160,8 +160,8 @@ class TimelineWeekLogic: ObservableObject {
     }
 
     let opacity =
-      Double(activitiesInSegment.count)
-      / Double(Constants.segmentDuration / Watcher.INTERVAL)
+      (Double(activitiesInSegment.count) * Double(Watcher.INTERVAL))
+      / (Double(Constants.segmentDuration * 60))
 
     if showAppColors {
       let appCounts = activitiesInSegment.reduce(into: [:]) {
@@ -174,7 +174,7 @@ class TimelineWeekLogic: ObservableObject {
     }
     return Style.Colors.accent.opacity(opacity)
   }
-  
+
   func appsForSegment(_ segment: Int, day: Date) -> [AppUsage] {
     guard let dayActivities = activities[day] else { return [] }
 
@@ -196,6 +196,7 @@ class TimelineWeekLogic: ObservableObject {
     return appUsage.map { AppUsage(appName: $0.key, duration: $0.value) }
       .sorted { $0.duration > $1.duration }
   }
+
   func opacityForSegment(_ segment: Int, day: Date) -> Double {
     guard let dayActivities = activities[day] else { return 0 }
 
@@ -219,24 +220,19 @@ class TimelineWeekLogic: ObservableObject {
   }
 
   private func calculateWeekStats() {
-    var totalActiveTime: TimeInterval = 0
     var clockIns: [Date] = []
     var clockOuts: [Date] = []
+    var totalActiveTime: TimeInterval = 0
 
     for day in weekDays {
       if let activities = activities[day] {
-        let (clockIn, clockOut, activeTime) = TimelineUtils.calculateDayStats(
-          activities: activities)
-
-        if let clockIn = clockIn {
-          clockIns.append(clockIn)
+        totalActiveTime += Double(activities.count * Watcher.INTERVAL)
+        if !activities.isEmpty {
+          let first = activities.first?.timestamp
+          clockIns.append(first!)
+          let last = activities.last?.timestamp
+          clockOuts.append(last!)
         }
-
-        if let clockOut = clockOut {
-          clockOuts.append(clockOut)
-        }
-
-        totalActiveTime += activeTime
       }
     }
 

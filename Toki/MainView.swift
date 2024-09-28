@@ -15,18 +15,24 @@ struct MainView: View {
         switch selectedViewType {
         case .day:
           TimelineDay(selectedViewType: $selectedViewType)
-            .transition(.offset(y: 40).combined(with: .opacity))
+            .transition(
+              .offset(y: 40).combined(with: .opacity).combined(
+                with: .scale(scale: 0.9)))
         case .week:
           TimelineWeek(selectedViewType: $selectedViewType)
-            .transition(.offset(y: 40).combined(with: .opacity))
+            .transition(
+              .offset(y: 40).combined(with: .opacity).combined(
+                with: .scale(scale: 0.9)))
         case .month:
           Text("Month view not implemented yet")
-            .transition(.offset(y: 40).combined(with: .opacity))
-            .padding()
+            .transition(
+              .offset(y: 40).combined(with: .opacity).combined(
+                with: .scale(scale: 0.9))
+            )
         }
       }
+      .animation(.snappy(duration: 0.3), value: selectedViewType)
       .frame(maxWidth: 650, maxHeight: .infinity)
-      .animation(.smooth(duration: 0.3), value: selectedViewType)
       VStack {
         Spacer()
         if keyPressHandler.isCommandKeyHeld {

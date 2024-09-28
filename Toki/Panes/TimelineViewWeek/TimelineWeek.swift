@@ -10,7 +10,7 @@ struct TimelineWeek: View {
   private let displayedHours = Constants.TimelineWeek.displayedHours
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 10) {
+    VStack(alignment: .leading, spacing: Style.Layout.padding) {
       headerView
       weekConfigView()
       weekStatsView
@@ -19,6 +19,7 @@ struct TimelineWeek: View {
     .onAppear {
       logic.loadData()
     }
+
     .onReceive(
       NotificationCenter.default.publisher(for: .firstDayOfWeekChanged)
     ) { _ in
@@ -35,7 +36,7 @@ struct TimelineWeek: View {
         Text("\(logic.weekStartString) - \(logic.weekEndString)")
           .font(.title3)
           .foregroundStyle(.secondary)
-      }
+      }.padding(.horizontal)
       Spacer()
     }
   }
