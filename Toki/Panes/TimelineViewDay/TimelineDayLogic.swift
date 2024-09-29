@@ -203,8 +203,7 @@ class TimelineDayLogic: ObservableObject {
         appUsages: apps, segmentDuration: TimeInterval(segmentDuration * 60))
       : 1
     if useColors {
-      if let dominantApp = apps.max(by: { $0.duration < $1.duration })?.appName
-      {
+      if let dominantApp = apps.max(by: { $0.duration < $1.duration })?.appName {
         return colorForApp(dominantApp).opacity(opacity)
       }
     }
