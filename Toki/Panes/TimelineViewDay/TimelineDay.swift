@@ -337,13 +337,14 @@ struct TimelineDay: View {
     }.zIndex(10)
   }
 
-  @Environment(\.openSettingsLegacy) private var openSettingsLegacy
+  @Environment(\.openWindow) private var openWindow
   private var settingsButton: some View {
-    Button(action: { try? openSettingsLegacy() }) {
+    Button(action: { openWindow(id: "settings") }) {
       Image(systemName: "slider.horizontal.3")
         .foregroundColor(.secondary)
         .font(.system(size: Style.Icon.size))
     }
+    .keyboardShortcut(",")
     .buttonStyle(PlainButtonStyle())
   }
 

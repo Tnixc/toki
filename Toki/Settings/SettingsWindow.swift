@@ -18,17 +18,11 @@ struct SettingsWindow: View {
 
   var body: some View {
     HStack {
-      sidebar
+      sidebar.padding(.bottom, Style.Layout.padding)
       Spacer()
-      tabContent
+      tabContent.padding(.bottom, Style.Layout.padding)
       Spacer()
     }
-    .frame(
-      width: Constants.Settings.windowWidth,
-      height: Constants.Settings.windowHeight
-    )
-    .background(VisualEffect().ignoresSafeArea())
-    .padding(Style.Layout.padding)
   }
 
   var sidebar: some View {
@@ -75,7 +69,7 @@ struct SettingsWindow: View {
         Spacer()
       }
       Divider()
-    }
+    }.padding(.leading, Style.Layout.padding)
   }
 
   @ViewBuilder

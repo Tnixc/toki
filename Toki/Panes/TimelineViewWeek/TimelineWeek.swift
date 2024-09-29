@@ -17,9 +17,13 @@ struct TimelineWeek: View {
       weekTimelineView
     }
     .onAppear {
+      logic.updateWeekStrings()
       logic.loadData()
     }
-
+    .onChange(of: logic.weekStart) {
+      logic.updateWeekStrings()
+      logic.loadData()
+    }
     .onReceive(
       NotificationCenter.default.publisher(for: .firstDayOfWeekChanged)
     ) { _ in
@@ -58,7 +62,7 @@ struct TimelineWeek: View {
       navigationButton(
         action: { logic.changeWeek(by: 1) }, iconName: "chevron.right"
       )
-      .disabled(logic.isCurrentWeek)
+      //      .disabled($logic.isCurrentWeek)
     }
   }
 

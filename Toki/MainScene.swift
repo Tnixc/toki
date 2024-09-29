@@ -5,7 +5,6 @@ struct MainScene: Scene {
   var body: some Scene {
     Window("Toki", id: "main") {
       MainView()
-        .openSettingsAccess()
         .frame(
           minWidth: 400,
           maxWidth: .infinity,
@@ -14,8 +13,7 @@ struct MainScene: Scene {
         )
         .padding(.top, 1)
         .padding(.horizontal)
-        .toolbar { Text("Toki").fontWeight(.bold) }
-
+        .toolbar { Text("Toki").fontWeight(.semibold) }
         .background(VisualEffect().ignoresSafeArea())
     }
     .defaultSize(width: 800, height: 600)
@@ -26,12 +24,22 @@ struct MainScene: Scene {
       CommandGroup(replacing: .newItem) {}
     }
 
-    Settings {
+    Window("Toki Settings", id: "settings") {
       SettingsWindow()
         .background(VisualEffect().ignoresSafeArea())
+        .frame(
+          minWidth: Constants.Settings.windowWidth,
+          minHeight: Constants.Settings.windowHeight
+        )
+        .toolbar { Text("Toki Settings").fontWeight(.semibold) }
     }
+    .windowResizability(WindowResizability.contentSize)
+    .defaultSize(
+      width: Constants.Settings.windowWidth,
+      height: Constants.Settings.windowHeight
+    )
     .windowStyle(.hiddenTitleBar)
-    .windowToolbarStyle(.automatic)
+    .windowToolbarStyle(.unified(showsTitle: true))
   }
 }
 

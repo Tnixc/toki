@@ -10,6 +10,9 @@ class TimelineWeekLogic: ObservableObject {
   @Published var averageClockIn: Date?
   @Published var averageClockOut: Date?
   @Published var averageActiveTime: TimeInterval = 0
+  @Published var weekStartString: String = ""
+  @Published var weekEndString: String = ""
+  @Published var weekRangeString: String = ""
 
   @AppStorage("showAppColors") private var showAppColors: Bool = true
 
@@ -31,27 +34,6 @@ class TimelineWeekLogic: ObservableObject {
       firstDayOfWeek: UserDefaults.standard.integer(forKey: "firstDayOfWeek"))
   }
 
-  var weekStartString: String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "MMM d"
-    return formatter.string(from: weekStart)
-  }
-
-  var weekEndString: String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "MMM d, yyyy"
-    return formatter.string(
-      from: calendar.date(byAdding: .day, value: 6, to: weekStart)!)
-  }
-
-  var weekRangeString: String {
-    "\(weekStartString) - \(weekEndString)"
-  }
-
-  var isCurrentWeek: Bool {
-    calendar.isDate(weekStart, equalTo: Date(), toGranularity: .weekOfYear)
-  }
-
   func loadData() {
     isLoading = true
     activities.removeAll()
@@ -70,11 +52,13 @@ class TimelineWeekLogic: ObservableObject {
       }
     }
 
-    group.notify(queue: .main) { [weak self] in
+    group.notify(queue: .global(qos: .userInitiated)) { [weak self] in
       guard let self = self else { return }
       self.calculateWeekStats()
-      self.isLoading = false
-      self.objectWillChange.send()
+      DispatchQueue.main.async {
+        self.isLoading = false
+        self.objectWillChange.send()
+      }
     }
   }
 
@@ -96,12 +80,6 @@ class TimelineWeekLogic: ObservableObject {
     weekDays = (0...6).map {
       calendar.date(byAdding: .day, value: $0, to: adjustedWeekStart)!
     }
-  }
-
-  func formatWeekday(_ date: Date) -> String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "EEE"
-    return formatter.string(from: date)
   }
 
   func mergeAdjacentSegments(for day: Date) -> [(Int, Int)] {
@@ -175,50 +153,6 @@ class TimelineWeekLogic: ObservableObject {
     return Style.Colors.accent.opacity(opacity)
   }
 
-  func appsForSegment(_ segment: Int, day: Date) -> [AppUsage] {
-    guard let dayActivities = activities[day] else { return [] }
-
-    let segmentStart = calendar.date(
-      byAdding: .minute, value: segment * Constants.segmentDuration,
-      to: calendar.startOfDay(for: day))!
-    let segmentEnd = calendar.date(
-      byAdding: .minute, value: (segment + 1) * Constants.segmentDuration,
-      to: calendar.startOfDay(for: day))!
-
-    var appUsage: [String: TimeInterval] = [:]
-
-    for activity in dayActivities {
-      if activity.timestamp >= segmentStart && activity.timestamp < segmentEnd {
-        appUsage[activity.appName, default: 0] += Double(Watcher.INTERVAL)
-      }
-    }
-
-    return appUsage.map { AppUsage(appName: $0.key, duration: $0.value) }
-      .sorted { $0.duration > $1.duration }
-  }
-
-  func opacityForSegment(_ segment: Int, day: Date) -> Double {
-    guard let dayActivities = activities[day] else { return 0 }
-
-    let segmentStart = calendar.date(
-      byAdding: .minute, value: segment * Constants.segmentDuration,
-      to: calendar.startOfDay(for: day))!
-    let segmentEnd = calendar.date(
-      byAdding: .minute, value: (segment + 1) * Constants.segmentDuration,
-      to: calendar.startOfDay(for: day))!
-
-    let activitiesInSegment = dayActivities.filter { activity in
-      activity.timestamp >= segmentStart && activity.timestamp < segmentEnd
-    }
-
-    return Double(activitiesInSegment.count)
-      / Double(Constants.segmentDuration / Watcher.INTERVAL)
-  }
-
-  func yPositionForSegment(_ segment: Int, height: CGFloat) -> CGFloat {
-    CGFloat(segment) / CGFloat(segmentCount) * height
-  }
-
   private func calculateWeekStats() {
     var clockIns: [Date] = []
     var clockOuts: [Date] = []
@@ -228,36 +162,58 @@ class TimelineWeekLogic: ObservableObject {
       if let activities = activities[day] {
         totalActiveTime += Double(activities.count * Watcher.INTERVAL)
         if !activities.isEmpty {
-          let first = activities.first?.timestamp
-          clockIns.append(first!)
-          let last = activities.last?.timestamp
-          clockOuts.append(last!)
+          clockIns.append(activities.first!.timestamp)
+          clockOuts.append(activities.last!.timestamp)
         }
       }
     }
 
-    averageActiveTime = totalActiveTime / Double(weekDays.count)
-    earliestClockIn = clockIns.min()
-    latestClockOut = clockOuts.max()
+    DispatchQueue.main.async { [weak self] in
+      guard let self = self else { return }
+      self.averageActiveTime = totalActiveTime / Double(self.weekDays.count)
+      self.earliestClockIn = clockIns.min()
+      self.latestClockOut = clockOuts.max()
 
-    if !clockIns.isEmpty {
-      let totalClockInSeconds = clockIns.reduce(0) {
-        $0 + $1.timeIntervalSince1970
+      if !clockIns.isEmpty {
+        let totalClockInSeconds = clockIns.reduce(0) {
+          $0 + $1.timeIntervalSince1970
+        }
+        self.averageClockIn = Date(
+          timeIntervalSince1970: totalClockInSeconds / Double(clockIns.count))
+      } else {
+        self.averageClockIn = nil
       }
-      averageClockIn = Date(
-        timeIntervalSince1970: totalClockInSeconds / Double(clockIns.count))
-    } else {
-      averageClockIn = nil
-    }
 
-    if !clockOuts.isEmpty {
-      let totalClockOutSeconds = clockOuts.reduce(0) {
-        $0 + $1.timeIntervalSince1970
+      if !clockOuts.isEmpty {
+        let totalClockOutSeconds = clockOuts.reduce(0) {
+          $0 + $1.timeIntervalSince1970
+        }
+        self.averageClockOut = Date(
+          timeIntervalSince1970: totalClockOutSeconds / Double(clockOuts.count))
+      } else {
+        self.averageClockOut = nil
       }
-      averageClockOut = Date(
-        timeIntervalSince1970: totalClockOutSeconds / Double(clockOuts.count))
-    } else {
-      averageClockOut = nil
     }
+  }
+  func updateWeekStrings() {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "MMM d"
+    weekStartString = formatter.string(from: weekStart)
+
+    formatter.dateFormat = "MMM d, yyyy"
+    weekEndString = formatter.string(
+      from: calendar.date(byAdding: .day, value: 6, to: weekStart)!)
+
+    weekRangeString = "\(weekStartString) - \(weekEndString)"
+  }
+
+  func formatWeekday(_ date: Date) -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "EEE"
+    return formatter.string(from: date)
+  }
+
+  func yPositionForSegment(_ segment: Int, height: CGFloat) -> CGFloat {
+    CGFloat(segment) / CGFloat(segmentCount) * height
   }
 }

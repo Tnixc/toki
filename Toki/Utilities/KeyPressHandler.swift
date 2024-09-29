@@ -12,9 +12,11 @@ class KeyPressHandler: ObservableObject {
   @Published var isCommandKeyHeld = false
   private var commandKeyTimer: Timer?
 
+  @Environment(\.openWindow) private var openWindow
   static func handleKeyPress(
-    key: String, selectedViewType: Binding<TimelineViewType>
+    event: NSEvent, selectedViewType: Binding<TimelineViewType>
   ) {
+    let key = event.charactersIgnoringModifiers
     switch key {
     case "1":
       withAnimation {

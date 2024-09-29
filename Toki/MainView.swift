@@ -51,10 +51,10 @@ struct MainView: View {
     ]) { event in
       switch event.type {
       case .keyDown:
-        if let key = event.charactersIgnoringModifiers {
-          KeyPressHandler.handleKeyPress(
-            key: key, selectedViewType: $selectedViewType)
-        }
+        KeyPressHandler.handleKeyPress(
+          event: event,
+          selectedViewType: $selectedViewType
+        )
       case .flagsChanged:
         if event.modifierFlags.contains(.command) {
           keyPressHandler.startCommandKeyTimer()
