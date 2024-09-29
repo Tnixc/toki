@@ -5,11 +5,13 @@ struct AppearanceSettingsTab: View {
     .system
   @Environment(\.colorScheme) var colorScheme
 
-  @State private var showAppColors: Bool
+  @State var showAppColors: Bool
+  @State var useOpacity: Bool
 
   init() {
     let defaults = UserDefaults.standard
     _showAppColors = State(initialValue: defaults.bool(forKey: "showAppColors"))
+    _useOpacity = State(initialValue: defaults.bool(forKey: "useOpacity"))
   }
 
   var body: some View {
@@ -22,6 +24,16 @@ struct AppearanceSettingsTab: View {
         icon: "swatchpalette"
       ) {
         Toggle("", isOn: appColorBinding)
+          .toggleStyle(SwitchToggleStyle(tint: Style.Colors.accent))
+          .scaleEffect(0.8, anchor: .trailing)
+      }
+
+      SettingItem(
+        title: "Use Opacity",
+        description: "Vary opacity for each segment depending on usage.",
+        icon: "rectangle.leadinghalf.filled"
+      ) {
+        Toggle("", isOn: useOpacityBinding)
           .toggleStyle(SwitchToggleStyle(tint: Style.Colors.accent))
           .scaleEffect(0.8, anchor: .trailing)
       }
@@ -63,6 +75,16 @@ struct AppearanceSettingsTab: View {
       set: {
         self.showAppColors = $0
         UserDefaults.standard.set($0, forKey: "showAppColors")
+      }
+    )
+  }
+
+  private var useOpacityBinding: Binding<Bool> {
+    Binding(
+      get: { self.useOpacity },
+      set: {
+        self.useOpacity = $0
+        UserDefaults.standard.set($0, forKey: "useOpacity")
       }
     )
   }

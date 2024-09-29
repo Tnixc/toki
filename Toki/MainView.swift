@@ -16,22 +16,28 @@ struct MainView: View {
         case .day:
           TimelineDay(selectedViewType: $selectedViewType)
             .transition(
-              .offset(y: 40).combined(with: .opacity).combined(
-                with: .scale(scale: 0.9)))
-        case .week:
-          TimelineWeek(selectedViewType: $selectedViewType)
-            .transition(
-              .offset(y: 40).combined(with: .opacity).combined(
-                with: .scale(scale: 0.9)))
-        case .month:
-          Text("Month view not implemented yet")
-            .transition(
-              .offset(y: 40).combined(with: .opacity).combined(
-                with: .scale(scale: 0.9))
+              .blurReplace.combined(with: .opacity).combined(
+                with: .scale(0.9, anchor: .center))
             )
+        case .week:
+          Text("Week view not implemented yet. Press 1 to go back to day view.")
+            .frame(minWidth: 650)
+            .transition(
+              .blurReplace.combined(with: .opacity).combined(
+                with: .scale(0.9, anchor: .center))
+            )
+        case .month:
+          Text(
+            "Month view not implemented yet. Press 1 to go back to day view."
+          ).frame(minWidth: 650)
+            .transition(
+              .blurReplace.combined(with: .opacity).combined(
+                with: .scale(0.9, anchor: .center))
+            )
+
         }
       }
-      .animation(.snappy(duration: 0.3), value: selectedViewType)
+      .animation(.smooth(duration: 0.3), value: selectedViewType)
       .frame(maxWidth: 650, maxHeight: .infinity)
       VStack {
         Spacer()

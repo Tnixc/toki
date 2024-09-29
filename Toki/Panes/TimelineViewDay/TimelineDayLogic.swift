@@ -2,12 +2,6 @@ import Combine
 import SwiftUI
 
 class TimelineDayLogic: ObservableObject {
-  @AppStorage("showAppColors") private var showAppColors: Bool = true {
-    didSet {
-      objectWillChange.send()
-    }
-  }
-
   @Published var hoveredSegment: Int? = nil
   @Published var isHovering: Bool = false
   @Published var hoverPosition: CGFloat = 0
@@ -27,6 +21,8 @@ class TimelineDayLogic: ObservableObject {
     label: "com.toki.dataLoading", qos: .userInitiated)
 
   let useColors = SettingsManager.shared.bool(forKey: "showAppColors")
+  let useOpacity = SettingsManager.shared.bool(forKey: "useOpacity")
+
   let calendar = Calendar.current
   let day = Day()
 
@@ -201,10 +197,14 @@ class TimelineDayLogic: ObservableObject {
   }
 
   func colorForSegment(_ segment: Int, apps: [AppUsage]) -> Color {
-    let opacity = calculateActivityRatio(
-      appUsages: apps, segmentDuration: TimeInterval(segmentDuration * 60))
+    let opacity =
+      useOpacity
+      ? calculateActivityRatio(
+        appUsages: apps, segmentDuration: TimeInterval(segmentDuration * 60))
+      : 1
     if useColors {
-      if let dominantApp = apps.max(by: { $0.duration < $1.duration })?.appName {
+      if let dominantApp = apps.max(by: { $0.duration < $1.duration })?.appName
+      {
         return colorForApp(dominantApp).opacity(opacity)
       }
     }
