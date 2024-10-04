@@ -2,6 +2,8 @@
 
 ## Core
 
+<img width="878" alt="image" src="https://github.com/user-attachments/assets/e3f79968-4b7c-424f-b0df-47dbae11151e">
+
 
 - [ ] hotkey to summon window
 - [ ] Week view
