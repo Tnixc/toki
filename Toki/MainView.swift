@@ -61,12 +61,12 @@ struct MainView: View {
           event: event,
           selectedViewType: $selectedViewType
         )
-      case .flagsChanged:
-        if event.modifierFlags.contains(.command) {
-          keyPressHandler.startCommandKeyTimer()
-        } else {
-          keyPressHandler.stopCommandKeyTimer()
-        }
+//      case .flagsChanged:
+//        if event.modifierFlags.contains(.command) {
+//          keyPressHandler.startCommandKeyTimer()
+//        } else {
+//          keyPressHandler.stopCommandKeyTimer()
+//        }
       default:
         break
       }

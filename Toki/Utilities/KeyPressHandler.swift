@@ -35,21 +35,21 @@ class KeyPressHandler: ObservableObject {
     }
   }
 
-  func startCommandKeyTimer() {
-    commandKeyTimer = Timer.scheduledTimer(
-      withTimeInterval: 0.5, repeats: false
-    ) { [weak self] _ in
-      withAnimation(.spring(duration: 0.3)) {
-        self?.isCommandKeyHeld = true
-      }
-    }
-  }
-
-  func stopCommandKeyTimer() {
-    commandKeyTimer?.invalidate()
-    commandKeyTimer = nil
-    withAnimation(.spring(duration: 0.3)) {
-      isCommandKeyHeld = false
-    }
-  }
+//  func startCommandKeyTimer() {
+//    commandKeyTimer = Timer.scheduledTimer(
+//      withTimeInterval: 0.5, repeats: false
+//    ) { [weak self] _ in
+//      withAnimation(.spring(duration: 0.3)) {
+//        self?.isCommandKeyHeld = true
+//      }
+//    }
+//  }
+//
+//  func stopCommandKeyTimer() {
+//    commandKeyTimer?.invalidate()
+//    commandKeyTimer = nil
+//    withAnimation(.spring(duration: 0.3)) {
+//      isCommandKeyHeld = false
+//    }
+//  }
 }
